@@ -3,7 +3,7 @@
  * @param {string} _source source string
  * @param {real} _width max width of text before line breaks occur
  */
-function StyleableText(_source, _width = 300) constructor {
+function StyleableText(_source, _width = 500) constructor {
 	if (string_length(_source) == 0) {
 		show_error("Cannot create StyleableText with empty string!", true);
 	}
@@ -63,24 +63,55 @@ function StyleableText(_source, _width = 300) constructor {
 		}
 	};
 	
-	calculate_xy();
-	
-	draw = function(_x, _y) {
-		for (var _i = 0; _i < array_length(character_array); _i++) {
-			var _char = character_array[_i];
-			var _style = _char.style;
-			var _draw_x = _x + _style.mod_x + _char.position_x;
-			var _draw_y = _y + _style.mod_y + _char.position_y;
-			if (_char.sprite == spr_styleable_text_sprite_default) {
-				draw_set_font(_style.font);
-				draw_set_alpha(_style.alpha);
-				draw_set_color(_style.style_color);
-				draw_text_transformed(_draw_x, _draw_y, _char.character, _style.scale_x, _style.scale_y, _style.mod_angle);
+	calculate_default_drawables = function() {
+		calculate_xy();
+		var _result = undefined;
+		var _result_end = undefined;
+		var _index_start = 0;
+		var _index_end = 0;
+		for (var _i = 1; _i < array_length(character_array); _i++) {
+			var _char_checking = character_array[_i];
+			var _char_against = character_array[_index_start];
+			var _sprite_values_allow_merge = _char_checking.sprite == spr_styleable_text_sprite_default && _char_against.sprite == spr_styleable_text_sprite_default;
+			var _style_values_allow_merge = _char_checking.style.is_equal(_char_against.style);
+			var _line_indexes_allow_merge = _char_checking.line_index == _char_against.line_index;
+			if (_sprite_values_allow_merge && _style_values_allow_merge && _line_indexes_allow_merge) {
+				_index_end = _i;
 			} else {
-				draw_sprite_ext(_char.sprite, 0, _draw_x, _char.position_y, _draw_x, _style.scale_y, _style.mod_angle, _style.style_color, _style.alpha);
+				var _drawable = new StyleableTextDrawable(character_array, _index_start, _index_end);
+				if (_result == undefined) {
+					_result = _drawable;
+					_result_end = _drawable;
+				} else {
+					_result_end.next = _drawable;
+					_drawable.previous = _result_end;
+					_result_end = _drawable;
+				}
+				_index_start = _i;
+				_index_end = _i;
 			}
 		}
+		
+		var _drawable = new StyleableTextDrawable(character_array, _index_start, _index_end);
+		if (_result == undefined) {
+			_result = _drawable;
+			_result_end = _drawable;
+		} else {
+			_result_end.next = _drawable;
+			_drawable.previous = _result_end;
+			_result_end = _drawable;
+		}
+		
+		return _result;
 	};
 	
+	drawables = calculate_default_drawables();
 	
+	draw = function(_x, _y) {
+		var _cursor = drawables;
+		while (_cursor != undefined) {
+			_cursor.draw(_x, _y);
+			_cursor = _cursor.next;
+		}
+	};
 }

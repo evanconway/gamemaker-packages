@@ -12,6 +12,22 @@ function StyleableTextStyle() constructor {
 	mod_angle = 0;
 	
 	/**
+	 * Get boolean indicating if the given style is equal to this one.
+	 * @param {struct.StyleableTextStyle} _style style
+	 */
+	is_equal = function(_style) {
+		if (_style.font != font) return false;
+		if (_style.style_color != style_color) return false;
+		if (_style.alpha != alpha) return false;
+		if (_style.scale_x != scale_x) return false;
+		if (_style.scale_y != scale_y) return false;
+		if (_style.mod_x != mod_x) return false;
+		if (_style.mod_y != mod_y) return false;
+		if (_style.mod_angle != mod_angle) return false;
+		return true;
+	};
+	
+	/**
 	 * Returns a new style object that's an exact copy of this one.
 	 */
 	copy = function() {
@@ -25,5 +41,5 @@ function StyleableTextStyle() constructor {
 		_result.mod_y = mod_y;
 		_result.mod_angle = mod_angle;
 		return _result;
-	}
+	};
 }
