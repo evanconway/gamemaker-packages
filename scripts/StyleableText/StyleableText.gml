@@ -117,10 +117,63 @@ function StyleableText(_source, _width = 500) constructor {
 	};
 	
 	set_default_sprite = function(_index, _sprite) {
-		if (_index < 0 || _index >= array_length(character_array)) {
-			show_error("set_default_sprite given index is out of bounds", true);
-		}
 		character_array[_index].sprite = _sprite;
+		calculate_default_drawables();
+	};
+	
+	set_default_scale_x = function(_index_start, _index_end, _scale_x) {
+		for (var _i = _index_start; _i <= _index_end; _i++) {
+			character_array[_i].style.scale_x = _scale_x;
+		}
+		calculate_default_drawables();
+	};
+	
+	set_default_scale_y = function(_index_start, _index_end, _scale_y) {
+		for (var _i = _index_start; _i <= _index_end; _i++) {
+			character_array[_i].style.scale_y = _scale_y;
+		}
+		calculate_default_drawables();
+	};
+	
+	set_default_font = function(_index_start, _index_end, _font) {
+		for (var _i = _index_start; _i <= _index_end; _i++) {
+			character_array[_i].style.font = _font;
+		}
+		calculate_default_drawables();
+	};
+	
+	set_default_color = function(_index_start, _index_end, _color) {
+		for (var _i = _index_start; _i <= _index_end; _i++) {
+			character_array[_i].style.style_color = _color;
+		}
+		calculate_default_drawables();
+	};
+	
+	set_default_alpha = function(_index_start, _index_end, _alpha) {
+		for (var _i = _index_start; _i <= _index_end; _i++) {
+			character_array[_i].style.alpha = _alpha;
+		}
+		calculate_default_drawables();
+	};
+	
+	set_default_mod_x = function(_index_start, _index_end, _mod_x) {
+		for (var _i = _index_start; _i <= _index_end; _i++) {
+			character_array[_i].style.mod_x = _mod_x;
+		}
+		calculate_default_drawables();
+	};
+	
+	set_default_mod_y = function(_index_start, _index_end, _mod_y) {
+		for (var _i = _index_start; _i <= _index_end; _i++) {
+			character_array[_i].style.mod_y = _mod_y;
+		}
+		calculate_default_drawables();
+	};
+	
+	set_default_mod_angle = function(_index_start, _index_end, _mod_angle) {
+		for (var _i = _index_start; _i <= _index_end; _i++) {
+			character_array[_i].style.mod_angle = _mod_angle;
+		}
 		calculate_default_drawables();
 	};
 }
