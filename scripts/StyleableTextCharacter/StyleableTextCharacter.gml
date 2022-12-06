@@ -15,8 +15,6 @@ function StyleableTextCharacter(_character) constructor {
 	get_width = function() {
 		if (sprite != spr_styleable_text_sprite_default) {
 			return sprite_get_width(sprite) * style.scale_x;
-			draw_set_font(style.font);
-			return string_width(character) * style.scale_x;
 		}
 		draw_set_font(style.font);
 		return string_width(character) * style.scale_x;
@@ -24,8 +22,6 @@ function StyleableTextCharacter(_character) constructor {
 	get_height = function() {
 		if (sprite != spr_styleable_text_sprite_default) {
 			return sprite_get_height(sprite) * style.scale_y;
-			draw_set_font(style.font);
-			return string_height(character) * style.scale_y;
 		}
 		draw_set_font(style.font);
 		return string_height(character) * style.scale_y;

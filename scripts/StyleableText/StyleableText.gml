@@ -63,6 +63,7 @@ function StyleableText(_source, _width = 500) constructor {
 		}
 	};
 	
+	drawables = undefined;
 	calculate_default_drawables = function() {
 		calculate_xy();
 		var _result = undefined;
@@ -102,10 +103,10 @@ function StyleableText(_source, _width = 500) constructor {
 			_result_end = _drawable;
 		}
 		
-		return _result;
+		drawables = _result;
 	};
 	
-	drawables = calculate_default_drawables();
+	calculate_default_drawables();
 	
 	draw = function(_x, _y) {
 		var _cursor = drawables;
@@ -113,5 +114,13 @@ function StyleableText(_source, _width = 500) constructor {
 			_cursor.draw(_x, _y);
 			_cursor = _cursor.next;
 		}
+	};
+	
+	set_default_sprite = function(_index, _sprite) {
+		if (_index < 0 || _index >= array_length(character_array)) {
+			show_error("set_default_sprite given index is out of bounds", true);
+		}
+		character_array[_index].sprite = _sprite;
+		calculate_default_drawables();
 	};
 }

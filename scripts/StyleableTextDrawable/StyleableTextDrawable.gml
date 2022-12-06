@@ -46,7 +46,7 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 			draw_set_color(_style.style_color);
 			draw_text_transformed(_draw_x, _draw_y, content, _style.scale_x, _style.scale_y, _style.mod_angle);
 		} else {
-			draw_sprite_ext(_char.sprite, 0, _draw_x, _char.position_y, _draw_x, _style.scale_y, _style.mod_angle, _style.style_color, _style.alpha);
+			draw_sprite_ext(_char.sprite, 0, _draw_x, _draw_y, _style.scale_x, _style.scale_y, _style.mod_angle, _style.style_color, _style.alpha);
 		}
 	};
 }
