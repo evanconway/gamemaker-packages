@@ -63,8 +63,11 @@ function StyleableText(_source, _width = 500) constructor {
 		}
 	};
 	
+	// Mapping of character indexes to the drawable that draws them.
+	character_drawables_map = ds_map_create();
+	
 	drawables = undefined;
-	calculate_default_drawables = function() {
+	init_drawables = function() {
 		calculate_xy();
 		var _result = undefined;
 		var _result_end = undefined;
@@ -80,6 +83,9 @@ function StyleableText(_source, _width = 500) constructor {
 				_index_end = _i;
 			} else {
 				var _drawable = new StyleableTextDrawable(character_array, _index_start, _index_end);
+				for (var _k = _index_start; _k <= _index_end; _k++) {
+					ds_map_set(character_drawables_map, _k, _drawable);
+				}
 				if (_result == undefined) {
 					_result = _drawable;
 					_result_end = _drawable;
@@ -94,6 +100,9 @@ function StyleableText(_source, _width = 500) constructor {
 		}
 		
 		var _drawable = new StyleableTextDrawable(character_array, _index_start, _index_end);
+		for (var _k = _index_start; _k <= _index_end; _k++) {
+			ds_map_set(character_drawables_map, _k, _drawable);
+		}
 		if (_result == undefined) {
 			_result = _drawable;
 			_result_end = _drawable;
@@ -106,14 +115,26 @@ function StyleableText(_source, _width = 500) constructor {
 		drawables = _result;
 	};
 	
-	calculate_default_drawables();
+	init_drawables();
+	
+	/**
+	 * Separates the drawables linked list at the given indexes so a drawable starts at _index_start and one ends at _index_end.
+	 * @param {real} _index_start
+	 * @param {real} _index_end
+	 */
+	separate_drawables_at = function(_index_start, _index_end) {
+		
+	};
 	
 	draw = function(_x, _y) {
 		var _cursor = drawables;
+		var _draw_calls = 0;
 		while (_cursor != undefined) {
 			_cursor.draw(_x, _y);
+			_draw_calls++;
 			_cursor = _cursor.next;
 		}
+		return _draw_calls;
 	};
 	
 	set_default_sprite = function(_index, _sprite) {
