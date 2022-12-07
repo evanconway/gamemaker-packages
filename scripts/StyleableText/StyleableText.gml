@@ -154,6 +154,15 @@ function StyleableText(_source, _width = 600) constructor {
 	};
 	
 	/**
+	 * Merges all drawables with given index range, as well as at the ends.
+	 * @param {real} _index_start
+	 * @param {real} _index_end
+	 */
+	merge_drawables_at = function(_index_start, _index_end) {
+		
+	}
+	
+	/**
 	 * Draw this StyleableText instance at the given x and y positions.
 	 * @param {real} _x x position
 	 * @param {real} _y y position

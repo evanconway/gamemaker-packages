@@ -11,7 +11,7 @@
 */
 
 if (keyboard_check(vk_space)) {
-	test.set_mod_angle(600, 900, 5);
+	test.set_color(600, 900, c_yellow);
 }
 
 test.draw(40, 40);
