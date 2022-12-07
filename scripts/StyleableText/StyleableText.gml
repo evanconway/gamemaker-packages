@@ -118,11 +118,11 @@ function StyleableText(_source, _width = 500) constructor {
 	init_drawables();
 	
 	/**
-	 * Separates the drawables linked list at the given indexes so a drawable starts at _index_start and one ends at _index_end.
+	 * Splits the drawables linked list at the given indexes so a drawable starts at _index_start and one ends at _index_end.
 	 * @param {real} _index_start
 	 * @param {real} _index_end
 	 */
-	separate_drawables_at = function(_index_start, _index_end) {
+	split_drawables_at = function(_index_start, _index_end) {
 		var _left_drawable = ds_map_find_value(character_drawables_map, _index_start);
 		if (_index_start > _left_drawable.get_index_start()) {
 			var _drawable = new StyleableTextDrawable(character_array, _index_start, _left_drawable.get_index_end());
