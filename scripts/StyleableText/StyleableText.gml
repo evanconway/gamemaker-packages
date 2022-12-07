@@ -126,7 +126,7 @@ function StyleableText(_source, _width = 500) constructor {
 		
 	};
 	
-	draw = function(_x, _y) {
+	draw_drawables = function(_x, _y) {
 		var _cursor = drawables;
 		var _draw_calls = 0;
 		while (_cursor != undefined) {
@@ -137,64 +137,110 @@ function StyleableText(_source, _width = 500) constructor {
 		return _draw_calls;
 	};
 	
+	draw_x = 0;
+	draw_y = 0;
+	
+	draw_array = function(_x, _y) {
+		draw_x = _x;
+		draw_y = _y;
+		var _draw = function(_char) {
+			var _style = _char.style;
+			var _draw_x = draw_x + _style.mod_x + _char.position_x;
+			var _draw_y = draw_y + _style.mod_y + _char.position_y;
+			if (_char.sprite == spr_styleable_text_sprite_default) {
+				draw_set_font(_style.font);
+				draw_set_alpha(_style.alpha);
+				draw_set_color(_style.style_color);
+				draw_text_transformed(_draw_x, _draw_y, _char.character, _style.scale_x, _style.scale_y, _style.mod_angle);
+			} else {
+				draw_sprite_ext(_char.sprite, 0, _draw_x, _draw_y, _style.scale_x, _style.scale_y, _style.mod_angle, _style.style_color, _style.alpha);
+			}
+		};
+		
+		array_foreach(character_array, _draw);
+		/*
+		for (var _i = 0; _i < array_length(character_array); _i++) {
+			var _char = character_array[_i];
+			var _style = _char.style;
+			var _draw_x = _x + _style.mod_x + _char.position_x;
+			var _draw_y = _y + _style.mod_y + _char.position_y;
+			if (_char.sprite == spr_styleable_text_sprite_default) {
+				draw_set_font(_style.font);
+				draw_set_alpha(_style.alpha);
+				draw_set_color(_style.style_color);
+				draw_text_transformed(_draw_x, _draw_y, _char.character, _style.scale_x, _style.scale_y, _style.mod_angle);
+			} else {
+				draw_sprite_ext(_char.sprite, 0, _draw_x, _draw_y, _style.scale_x, _style.scale_y, _style.mod_angle, _style.style_color, _style.alpha);
+			}
+		}
+		*/
+	};
+	
+	draw = draw_drawables;
+	
+	switch_draw_function = function() {
+		if (draw == draw_drawables) draw = draw_array;
+		else draw = draw_drawables;
+	};
+	
 	set_default_sprite = function(_index, _sprite) {
 		character_array[_index].sprite = _sprite;
-		calculate_default_drawables();
+		init_drawables();
 	};
 	
 	set_default_scale_x = function(_index_start, _index_end, _scale_x) {
 		for (var _i = _index_start; _i <= _index_end; _i++) {
 			character_array[_i].style.scale_x = _scale_x;
 		}
-		calculate_default_drawables();
+		init_drawables();
 	};
 	
 	set_default_scale_y = function(_index_start, _index_end, _scale_y) {
 		for (var _i = _index_start; _i <= _index_end; _i++) {
 			character_array[_i].style.scale_y = _scale_y;
 		}
-		calculate_default_drawables();
+		init_drawables();
 	};
 	
 	set_default_font = function(_index_start, _index_end, _font) {
 		for (var _i = _index_start; _i <= _index_end; _i++) {
 			character_array[_i].style.font = _font;
 		}
-		calculate_default_drawables();
+		init_drawables();
 	};
 	
 	set_default_color = function(_index_start, _index_end, _color) {
 		for (var _i = _index_start; _i <= _index_end; _i++) {
 			character_array[_i].style.style_color = _color;
 		}
-		calculate_default_drawables();
+		init_drawables();
 	};
 	
 	set_default_alpha = function(_index_start, _index_end, _alpha) {
 		for (var _i = _index_start; _i <= _index_end; _i++) {
 			character_array[_i].style.alpha = _alpha;
 		}
-		calculate_default_drawables();
+		init_drawables();
 	};
 	
 	set_default_mod_x = function(_index_start, _index_end, _mod_x) {
 		for (var _i = _index_start; _i <= _index_end; _i++) {
 			character_array[_i].style.mod_x = _mod_x;
 		}
-		calculate_default_drawables();
+		init_drawables();
 	};
 	
 	set_default_mod_y = function(_index_start, _index_end, _mod_y) {
 		for (var _i = _index_start; _i <= _index_end; _i++) {
 			character_array[_i].style.mod_y = _mod_y;
 		}
-		calculate_default_drawables();
+		init_drawables();
 	};
 	
 	set_default_mod_angle = function(_index_start, _index_end, _mod_angle) {
 		for (var _i = _index_start; _i <= _index_end; _i++) {
 			character_array[_i].style.mod_angle = _mod_angle;
 		}
-		calculate_default_drawables();
+		init_drawables();
 	};
 }
