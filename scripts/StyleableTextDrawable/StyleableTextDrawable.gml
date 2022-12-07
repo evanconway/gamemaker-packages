@@ -18,16 +18,21 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 	previous = undefined;
 	
 	/// @ignore
-	calculate_content = function() {
-		var _result = "";
-		for (var _i = index_start; _i <= index_end; _i++) {
-			_result += character_array[_i].character;
-		}
-		return _result;
-	};
+	content = "";
 	
 	/// @ignore
-	content = calculate_content();
+	calculate_content = function() {
+		content = "";
+		for (var _i = index_start; _i <= index_end; _i++) {
+			content += character_array[_i].character;
+		}
+	};
+	
+	calculate_content();
+	
+	get_content = function() {
+		return content;
+	};
 	
 	get_index_start = function() {
 		return index_start;
@@ -51,10 +56,6 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 	set_index_end = function(_new_index_end) {
 		index_end = _new_index_end;
 		calculate_content();
-	};
-	
-	get_content = function() {
-		return content;
 	};
 	
 	/**

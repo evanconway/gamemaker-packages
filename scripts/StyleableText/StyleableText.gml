@@ -3,7 +3,7 @@
  * @param {string} _source source string
  * @param {real} _width max width of text before line breaks occur
  */
-function StyleableText(_source, _width = 500) constructor {
+function StyleableText(_source, _width = 600) constructor {
 	if (string_length(_source) == 0) {
 		show_error("Cannot create StyleableText with empty string!", true);
 	}
