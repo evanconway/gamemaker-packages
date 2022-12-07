@@ -5,8 +5,11 @@
  * @param {real} _index_end index of last character this drawable references, inclusive
  */
 function StyleableTextDrawable(_character_array, _index_start, _index_end) constructor {
+	/// @ignore
 	character_array = _character_array;
+	/// @ignore
 	index_start = _index_start;
+	/// @ignore
 	index_end = _index_end;
 	
 	next = self;
@@ -14,6 +17,7 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 	next = undefined; // helps with typing
 	previous = undefined;
 	
+	/// @ignore
 	calculate_content = function() {
 		var _result = "";
 		for (var _i = index_start; _i <= index_end; _i++) {
@@ -21,7 +25,37 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 		}
 		return _result;
 	};
+	
+	/// @ignore
 	content = calculate_content();
+	
+	get_index_start = function() {
+		return index_start;
+	};
+	
+	get_index_end = function() {
+		return index_end;
+	};
+	
+	/**
+	 * @param {real} _new_index_start the new starting index in the character array of this drawable
+	 */
+	set_index_start = function(_new_index_start) {
+		index_start = _new_index_start;
+		calculate_content();
+	};
+	
+	/**
+	 * @param {real} _new_index_end the new ending index in the character array of this drawable
+	 */
+	set_index_end = function(_new_index_end) {
+		index_end = _new_index_end;
+		calculate_content();
+	};
+	
+	get_content = function() {
+		return content;
+	};
 	
 	/**
 	 * Draw this drawables contents and the given position.
