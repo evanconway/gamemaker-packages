@@ -42,4 +42,19 @@ function StyleableTextStyle() constructor {
 		_result.mod_angle = mod_angle;
 		return _result;
 	};
+	
+	/**
+	 * Sets this styles parameters to the same as the given style.
+	 * @param {struct.StyleableTextStyle} _style the style to copy
+	 */
+	set_to = function(_style) {
+		font = _style.font;
+		style_color = _style.style_color;
+		alpha = _style.alpha;
+		scale_x = _style.scale_x;
+		scale_y = _style.scale_y;
+		mod_x = _style.mod_x;
+		mod_y = _style.mod_y;
+		mod_angle = _style.mod_angle;
+	};
 }

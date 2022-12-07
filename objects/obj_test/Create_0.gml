@@ -2,7 +2,6 @@ test = new StyleableText("Call me Ishmael. Some years ago-never mind how long pr
 
 test.split_drawables_at( 30, 40);
 
-/*
 test.set_default_scale_x(0, 10, 2);
 test.set_default_scale_y(20, 30, 2);
 test.set_default_font(40, 55, fnt_handwriting);
@@ -12,4 +11,3 @@ test.set_default_alpha(90, 100, 0.4);
 test.set_default_mod_x(110, 120, -5);
 test.set_default_mod_y(130, 140, 5);
 test.set_default_mod_angle(150, 160, 30);
-*/

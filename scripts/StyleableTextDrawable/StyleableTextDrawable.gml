@@ -5,6 +5,13 @@
  * @param {real} _index_end index of last character this drawable references, inclusive
  */
 function StyleableTextDrawable(_character_array, _index_start, _index_end) constructor {
+	if (_index_start < 0) {
+		show_error("cannot create drawable with start index less than 0", true);
+	}
+	if (_index_end >= array_length(_character_array)) {
+		show_error("cannot create drawable with end index greater than or equal to length of character array", true);
+	}
+	
 	/// @ignore
 	character_array = _character_array;
 	/// @ignore
@@ -17,6 +24,16 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 	next = undefined; // helps with typing
 	previous = undefined;
 	
+	style = new StyleableTextStyle();
+	sprite = spr_styleable_text_sprite_default;
+	
+	init_styles = function() {
+		if (index_start < array_length(character_array)) {
+			style.set_to(character_array[index_start].style);
+			sprite = character_array[index_start].sprite;
+		}
+	};
+	
 	/// @ignore
 	content = "";
 	
@@ -26,6 +43,7 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 		for (var _i = index_start; _i <= index_end; _i++) {
 			content += character_array[_i].character;
 		}
+		init_styles();
 	};
 	
 	calculate_content();
@@ -71,17 +89,17 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 		thanks to our merging logic.
 		*/
 		var _char = character_array[index_start];
-		var _style = _char.style;
-		var _sprite = _char.sprite;
-		var _draw_x = _x + _style.mod_x + _char.position_x;
-		var _draw_y = _y + _style.mod_y + _char.position_y;
-		if (_char.sprite == spr_styleable_text_sprite_default) {
-			draw_set_font(_style.font);
-			draw_set_alpha(_style.alpha);
-			draw_set_color(_style.style_color);
-			draw_text_transformed(_draw_x, _draw_y, content, _style.scale_x, _style.scale_y, _style.mod_angle);
+		var _draw_x = _x + _char.position_x + style.mod_x;
+		var _draw_y = _y + _char.position_y + style.mod_y;
+		if (sprite == spr_styleable_text_sprite_default) {
+			draw_set_font(style.font);
+			draw_set_alpha(style.alpha);
+			draw_set_color(style.style_color);
+			draw_text_transformed(_draw_x, _draw_y, content, style.scale_x, style.scale_y, style.mod_angle);
 		} else {
-			draw_sprite_ext(_char.sprite, 0, _draw_x, _draw_y, _style.scale_x, _style.scale_y, _style.mod_angle, _style.style_color, _style.alpha);
+			draw_sprite_ext(sprite, 0, _draw_x, _draw_y, style.scale_x, style.scale_y, style.mod_angle, style.style_color, style.alpha);
 		}
+		
+		init_styles();
 	};
 }

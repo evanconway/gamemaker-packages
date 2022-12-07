@@ -169,6 +169,8 @@ function StyleableText(_source, _width = 600) constructor {
 		return _draw_calls;
 	};
 	
+	// set default styles
+	
 	set_default_sprite = function(_index, _sprite) {
 		character_array[_index].sprite = _sprite;
 		init_drawables();
@@ -228,5 +230,84 @@ function StyleableText(_source, _width = 600) constructor {
 			character_array[_i].style.mod_angle = _mod_angle;
 		}
 		init_drawables();
+	};
+	
+	// affect temporary styles
+	
+	set_sprite = function(_index, _sprite) {
+		split_drawables_at(_index, _index);
+		ds_map_find_value(character_drawables_map, _index).sprite = _sprite;
+	};
+	
+	set_scale_x = function(_index_start, _index_end, _scale_x) {
+		split_drawables_at(_index_start, _index_end);
+		var _cursor = ds_map_find_value(character_drawables_map, _index_start);
+		while (_cursor.get_index_end() <= _index_end) {
+			_cursor.style.scale_x *= _scale_x;
+			_cursor = _cursor.next;
+		}
+	};
+	
+	set_scale_y = function(_index_start, _index_end, _scale_y) {
+		split_drawables_at(_index_start, _index_end);
+		var _cursor = ds_map_find_value(character_drawables_map, _index_start);
+		while (_cursor.get_index_end() <= _index_end) {
+			_cursor.style.scale_y *= _scale_y;
+			_cursor = _cursor.next;
+		}
+	};
+	
+	set_font = function(_index_start, _index_end, _font) {
+		split_drawables_at(_index_start, _index_end);
+		var _cursor = ds_map_find_value(character_drawables_map, _index_start);
+		while (_cursor.get_index_end() <= _index_end) {
+			_cursor.style.font = _font;
+			_cursor = _cursor.next;
+		}
+	};
+	
+	set_color = function(_index_start, _index_end, _color) {
+		split_drawables_at(_index_start, _index_end);
+		var _cursor = ds_map_find_value(character_drawables_map, _index_start);
+		while (_cursor.get_index_end() <= _index_end) {
+			_cursor.style.style_color = _color;
+			_cursor = _cursor.next;
+		}
+	};
+	
+	set_alpha = function(_index_start, _index_end, _alpha) {
+		split_drawables_at(_index_start, _index_end);
+		var _cursor = ds_map_find_value(character_drawables_map, _index_start);
+		while (_cursor.get_index_end() <= _index_end) {
+			_cursor.style.alpha *= _alpha;
+			_cursor = _cursor.next;
+		}
+	};
+	
+	set_mod_x = function(_index_start, _index_end, _mod_x) {
+		split_drawables_at(_index_start, _index_end);
+		var _cursor = ds_map_find_value(character_drawables_map, _index_start);
+		while (_cursor.get_index_end() <= _index_end) {
+			_cursor.style.mod_x += _mod_x;
+			_cursor = _cursor.next;
+		}
+	};
+	
+	set_mod_y = function(_index_start, _index_end, _mod_y) {
+		split_drawables_at(_index_start, _index_end);
+		var _cursor = ds_map_find_value(character_drawables_map, _index_start);
+		while (_cursor.get_index_end() <= _index_end) {
+			_cursor.style.mod_y += _mod_y;
+			_cursor = _cursor.next;
+		}
+	};
+	
+	set_mod_angle = function(_index_start, _index_end, _mod_angle) {
+		split_drawables_at(_index_start, _index_end);
+		var _cursor = ds_map_find_value(character_drawables_map, _index_start);
+		while (_cursor.get_index_end() <= _index_end) {
+			_cursor.style.mod_angle += _mod_angle;
+			_cursor = _cursor.next;
+		}
 	};
 }
