@@ -159,6 +159,15 @@ function StyleableText(_source, _width = 600) constructor {
 	 * @param {real} _index_end
 	 */
 	merge_drawables_at = function(_index_start, _index_end) {
+		var _merging_drawable = ds_map_find_value(character_drawables_map, _index_start);
+		/*
+		If drawable at _index_start begins with _index_start, we need to set it back to previous to
+		make sure that _index_start is also merged. The only scenario we don't do this is if previous
+		is undefined (the drawable is the start of the linked list).
+		*/
+		if (_merging_drawable.get_index_start() == _index_start && _merging_drawable.previous != undefined) {
+			_merging_drawable = _merging_drawable.previous;
+		}
 		
 	}
 	
