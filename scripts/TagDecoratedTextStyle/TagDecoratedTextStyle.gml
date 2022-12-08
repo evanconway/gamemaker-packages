@@ -44,7 +44,7 @@ function TagDecoratedTextStyle() constructor {
 					show_error("TDS: Incorrect number of args for font style.", true);
 				}
 				if (asset_get_type(_aargs[0]) != asset_font) {
-					show_error("TDS: Unrecognized font name: " + _aargs[0], true);
+					show_error("TDS: Unrecognized font name: " + string(_aargs[0]), true);
 				}
 				_result.font = asset_get_index(_aargs[0]);
 			}

@@ -99,7 +99,7 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 		} else {
 			draw_sprite_ext(sprite, 0, _draw_x, _draw_y, style.scale_x, style.scale_y, style.mod_angle, style.style_color, style.alpha);
 		}
-		
+		global.drawables_drawn++;
 		init_styles();
 	};
 }

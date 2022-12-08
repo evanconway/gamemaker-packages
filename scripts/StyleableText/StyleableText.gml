@@ -66,6 +66,18 @@ function StyleableText(_source, _width = 600) constructor {
 	// Mapping of character indexes to the drawable that draws them.
 	character_drawables_map = ds_map_create();
 	
+	/**
+	 * Set character mapping at all indexes in the given range to the given drawable.
+	 * @param {real} _index_start the starting index
+	 * @param {real} _index_end the last index, inclusive
+	 * @param {struct.StyleableTextDrawable} _drawable the drawable to assign to the given index range
+	 */
+	character_drawables_map_set = function(_index_start, _index_end, _drawable) {
+		for (var _i = _index_start; _i <= _index_end; _i++) {
+			ds_map_set(character_drawables_map, _i, _drawable);
+		}
+	};
+	
 	drawables = undefined;
 	init_drawables = function() {
 		calculate_xy();
@@ -83,9 +95,7 @@ function StyleableText(_source, _width = 600) constructor {
 				_index_end = _i;
 			} else {
 				var _drawable = new StyleableTextDrawable(character_array, _index_start, _index_end);
-				for (var _k = _index_start; _k <= _index_end; _k++) {
-					ds_map_set(character_drawables_map, _k, _drawable);
-				}
+				character_drawables_map_set(_index_start, _index_end, _drawable);
 				if (_result == undefined) {
 					_result = _drawable;
 					_result_end = _drawable;
@@ -100,9 +110,7 @@ function StyleableText(_source, _width = 600) constructor {
 		}
 		
 		var _drawable = new StyleableTextDrawable(character_array, _index_start, _index_end);
-		for (var _k = _index_start; _k <= _index_end; _k++) {
-			ds_map_set(character_drawables_map, _k, _drawable);
-		}
+		character_drawables_map_set(_index_start, _index_end, _drawable);
 		if (_result == undefined) {
 			_result = _drawable;
 			_result_end = _drawable;
@@ -168,7 +176,27 @@ function StyleableText(_source, _width = 600) constructor {
 		if (_merging_drawable.get_index_start() == _index_start && _merging_drawable.previous != undefined) {
 			_merging_drawable = _merging_drawable.previous;
 		}
-		
+		/* 
+		Now we merge drawables left -> right until the drawable we're merging has and end_index greater
+		than the given, or end_index equals the given and next is undefined (at end of list).
+		*/
+		var _cursor = _merging_drawable;
+		while (_cursor.get_index_end() < _index_end || _cursor.get_index_end() == _index_end && _cursor.next != undefined) {
+			if (
+				_cursor.style.is_equal(_cursor.next.style) &&
+				_cursor.sprite == spr_styleable_text_sprite_default &&
+				_cursor.next.sprite == spr_styleable_text_sprite_default &&
+				character_array[_cursor.get_index_start()].line_index == character_array[_cursor.next.get_index_start()].line_index
+			) {
+				var _next = _cursor.next;
+				_cursor.next = _next.next;
+				if (_next.next != undefined) _next.next.previous = _cursor;
+				_cursor.set_index_end(_next.get_index_end());
+				character_drawables_map_set(_cursor.get_index_start(), _cursor.get_index_end(), _cursor);
+			} else {
+				_cursor = _cursor.next;
+			}
+		}
 	}
 	
 	/**
