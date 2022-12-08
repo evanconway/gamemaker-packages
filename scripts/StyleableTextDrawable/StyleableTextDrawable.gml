@@ -81,6 +81,44 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 	}
 	
 	/**
+	 * Split drawable at index on the left. [abc] split at index 1 becomes [a]-[bc]
+	 * @param {real} _index index to split at
+	 */
+	split_left_at_index = function(_index) {
+		if (_index < get_index_start() || _index > get_index_end()) show_error("cannot split index outside of drawable range", true);
+		
+		if (get_index_start() == _index) return;
+		 // think of this drawable as now ending at _index - 1, create new link to right
+		var _new_right = new StyleableTextDrawable(character_array, _index, get_index_end());
+		set_index_end(_index - 1);
+		
+		_new_right.previous = self;
+		_new_right.next = next;
+		if (_new_right.next != undefined) _new_right.next.previous = _new_right;
+		
+		next = _new_right;
+	};
+	
+	/**
+	 * Split drawable at index on the right. [abc] split at index 1 becomes [ab]-[c]
+	 * @param {real} _index index to split at
+	 */
+	split_right_at_index = function(_index) {
+		if (_index < get_index_start() || _index > get_index_end()) show_error("cannot split index outside of drawable range", true);
+		
+		if (get_index_end() == _index) return;
+		// think of this drawable as now ending at _index, create new link to right
+		var _new_right = new StyleableTextDrawable(character_array, _index + 1, get_index_end());
+		set_index_end(_index);
+		
+		_new_right.previous = self;
+		_new_right.next = next;
+		if (_new_right.next != undefined) _new_right.next.previous = _new_right;
+		
+		next = _new_right;
+	};
+	
+	/**
 	 * Returns true if this drawable can merge with the next drawable in the linked list.
 	 */
 	can_merge_with_next = function() {

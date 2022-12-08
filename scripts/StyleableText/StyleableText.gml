@@ -114,7 +114,10 @@ function StyleableText(_source, _width = 600) constructor {
 	 */
 	get_drawable_for_character_at = function(_index) {
 		var _cursor = drawables;
-		while (_cursor.get_index_start() > _index) _cursor = _cursor.next;
+		while (_cursor != undefined) {
+			if (_cursor.get_index_start() <= _index && _cursor.get_index_end() >= _index) return _cursor;
+			_cursor = _cursor.next;
+		}
 		return _cursor;
 	};
 	
@@ -124,6 +127,13 @@ function StyleableText(_source, _width = 600) constructor {
 	 * @param {real} _index_end
 	 */
 	split_drawables_at = function(_index_start, _index_end) {
+		var _start_drawable = get_drawable_for_character_at(_index_start);
+		_start_drawable.split_left_at_index(_index_start);
+		var _end_drawable = get_drawable_for_character_at(_index_end);
+		_end_drawable.split_right_at_index(_index_end);
+		var _t = 0;
+		// old version 
+		/*
 		var _left_drawable = get_drawable_for_character_at(_index_start);
 		if (_index_start > _left_drawable.get_index_start()) {
 			var _drawable = new StyleableTextDrawable(character_array, _index_start, _left_drawable.get_index_end());
@@ -140,6 +150,7 @@ function StyleableText(_source, _width = 600) constructor {
 			_right_drawable.next = _drawable;
 			_right_drawable.set_index_end(_drawable.get_index_start() - 1);
 		}
+		*/
 	};
 	
 	/**

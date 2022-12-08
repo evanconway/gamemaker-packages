@@ -45,9 +45,9 @@
   ],
   "Folders": [
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"NewTextSystem","folderPath":"folders/NewTextSystem.yy","order":20,},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"AnimatedText","folderPath":"folders/NewTextSystem/AnimatedText.yy","order":2,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"StyleableText","folderPath":"folders/NewTextSystem/StyleableText.yy","order":1,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"TagDecoratedText","folderPath":"folders/TagDecoratedText.yy","order":16,},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"AnimatedText","folderPath":"folders/NewTextSystem/AnimatedText.yy","order":2,},
   ],
   "AudioGroups": [
     {"resourceType":"GMAudioGroup","resourceVersion":"1.3","name":"audiogroup_default","targets":-1,},
