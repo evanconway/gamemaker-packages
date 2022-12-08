@@ -63,21 +63,6 @@ function StyleableText(_source, _width = 600) constructor {
 		}
 	};
 	
-	// Mapping of character indexes to the drawable that draws them.
-	character_drawables_map = ds_map_create();
-	
-	/**
-	 * Set character mapping at all indexes in the given range to the given drawable.
-	 * @param {real} _index_start the starting index
-	 * @param {real} _index_end the last index, inclusive
-	 * @param {struct.StyleableTextDrawable} _drawable the drawable to assign to the given index range
-	 */
-	character_drawables_map_set = function(_index_start, _index_end, _drawable) {
-		for (var _i = _index_start; _i <= _index_end; _i++) {
-			ds_map_set(character_drawables_map, _i, _drawable);
-		}
-	};
-	
 	drawables = undefined;
 	init_drawables = function() {
 		calculate_xy();
@@ -95,7 +80,6 @@ function StyleableText(_source, _width = 600) constructor {
 				_index_end = _i;
 			} else {
 				var _drawable = new StyleableTextDrawable(character_array, _index_start, _index_end);
-				character_drawables_map_set(_index_start, _index_end, _drawable);
 				if (_result == undefined) {
 					_result = _drawable;
 					_result_end = _drawable;
@@ -110,7 +94,6 @@ function StyleableText(_source, _width = 600) constructor {
 		}
 		
 		var _drawable = new StyleableTextDrawable(character_array, _index_start, _index_end);
-		character_drawables_map_set(_index_start, _index_end, _drawable);
 		if (_result == undefined) {
 			_result = _drawable;
 			_result_end = _drawable;
@@ -126,38 +109,36 @@ function StyleableText(_source, _width = 600) constructor {
 	init_drawables();
 	
 	/**
+	 * Get the drawable instance that's drawing character at the given index.
+	 * @param {real} _index character index
+	 */
+	get_drawable_for_character_at = function(_index) {
+		var _cursor = drawables;
+		while (_cursor.get_index_start() > _index) _cursor = _cursor.next;
+		return _cursor;
+	};
+	
+	/**
 	 * Splits the drawables linked list at the given indexes so a drawable starts at _index_start and one ends at _index_end.
 	 * @param {real} _index_start
 	 * @param {real} _index_end
 	 */
 	split_drawables_at = function(_index_start, _index_end) {
-		var _left_drawable = ds_map_find_value(character_drawables_map, _index_start);
+		var _left_drawable = get_drawable_for_character_at(_index_start);
 		if (_index_start > _left_drawable.get_index_start()) {
 			var _drawable = new StyleableTextDrawable(character_array, _index_start, _left_drawable.get_index_end());
 			_drawable.previous = _left_drawable;
 			_drawable.next = _left_drawable.next;
 			_left_drawable.next = _drawable;
 			_left_drawable.set_index_end(_drawable.get_index_start() - 1);
-			for (var _i = _left_drawable.get_index_start(); _i <= _left_drawable.get_index_end(); _i++) {
-				ds_map_set(character_drawables_map, _i, _left_drawable);
-			}
-			for (var _i = _drawable.get_index_start(); _i <= _drawable.get_index_end(); _i++) {
-				ds_map_set(character_drawables_map, _i, _drawable);
-			}
 		}
-		var _right_drawable = ds_map_find_value(character_drawables_map, _index_end);
+		var _right_drawable = get_drawable_for_character_at(_index_start);
 		if (_index_end < _right_drawable.get_index_end()) {
 			var _drawable = new StyleableTextDrawable(character_array, _index_end + 1, _right_drawable.get_index_end());
 			_drawable.previous = _right_drawable;
 			_drawable.next = _right_drawable.next;
 			_right_drawable.next = _drawable;
 			_right_drawable.set_index_end(_drawable.get_index_start() - 1);
-			for (var _i = _right_drawable.get_index_start(); _i <= _right_drawable.get_index_end(); _i++) {
-				ds_map_set(character_drawables_map, _i, _right_drawable);
-			}
-			for (var _i = _drawable.get_index_start(); _i <= _drawable.get_index_end(); _i++) {
-				ds_map_set(character_drawables_map, _i, _drawable);
-			}
 		}
 	};
 	
@@ -167,7 +148,7 @@ function StyleableText(_source, _width = 600) constructor {
 	 * @param {real} _index_end
 	 */
 	merge_drawables_at = function(_index_start, _index_end) {
-		var _merging_drawable = ds_map_find_value(character_drawables_map, _index_start);
+		var _merging_drawable = get_drawable_for_character_at(_index_start);
 		/*
 		If drawable at _index_start begins with _index_start, we need to set it back to previous to
 		make sure that _index_start is also merged. The only scenario we don't do this is if previous
@@ -182,17 +163,8 @@ function StyleableText(_source, _width = 600) constructor {
 		*/
 		var _cursor = _merging_drawable;
 		while (_cursor.get_index_end() < _index_end || _cursor.get_index_end() == _index_end && _cursor.next != undefined) {
-			if (
-				_cursor.style.is_equal(_cursor.next.style) &&
-				_cursor.sprite == spr_styleable_text_sprite_default &&
-				_cursor.next.sprite == spr_styleable_text_sprite_default &&
-				character_array[_cursor.get_index_start()].line_index == character_array[_cursor.next.get_index_start()].line_index
-			) {
-				var _next = _cursor.next;
-				_cursor.next = _next.next;
-				if (_next.next != undefined) _next.next.previous = _cursor;
-				_cursor.set_index_end(_next.get_index_end());
-				character_drawables_map_set(_cursor.get_index_start(), _cursor.get_index_end(), _cursor);
+			if (_cursor.can_merge_with_next()) {
+				_cursor.merge_with_next();
 			} else {
 				_cursor = _cursor.next;
 			}
@@ -282,13 +254,13 @@ function StyleableText(_source, _width = 600) constructor {
 	
 	set_sprite = function(_index, _sprite) {
 		split_drawables_at(_index, _index);
-		ds_map_find_value(character_drawables_map, _index).sprite = _sprite;
+		get_drawable_for_character_at(_index).sprite = _sprite;
 	};
 	
 	set_scale_x = function(_index_start, _index_end, _scale_x) {
 		split_drawables_at(_index_start, _index_end);
-		var _cursor = ds_map_find_value(character_drawables_map, _index_start);
-		while (_cursor.get_index_end() <= _index_end) {
+		var _cursor = get_drawable_for_character_at(_index_start);
+		while (_cursor != undefined && _cursor.get_index_end() <= _index_end) {
 			_cursor.style.scale_x *= _scale_x;
 			_cursor = _cursor.next;
 		}
@@ -296,8 +268,8 @@ function StyleableText(_source, _width = 600) constructor {
 	
 	set_scale_y = function(_index_start, _index_end, _scale_y) {
 		split_drawables_at(_index_start, _index_end);
-		var _cursor = ds_map_find_value(character_drawables_map, _index_start);
-		while (_cursor.get_index_end() <= _index_end) {
+		var _cursor = get_drawable_for_character_at(_index_start);
+		while (_cursor != undefined && _cursor.get_index_end() <= _index_end) {
 			_cursor.style.scale_y *= _scale_y;
 			_cursor = _cursor.next;
 		}
@@ -305,8 +277,8 @@ function StyleableText(_source, _width = 600) constructor {
 	
 	set_font = function(_index_start, _index_end, _font) {
 		split_drawables_at(_index_start, _index_end);
-		var _cursor = ds_map_find_value(character_drawables_map, _index_start);
-		while (_cursor.get_index_end() <= _index_end) {
+		var _cursor = get_drawable_for_character_at(_index_start);
+		while (_cursor != undefined && _cursor.get_index_end() <= _index_end) {
 			_cursor.style.font = _font;
 			_cursor = _cursor.next;
 		}
@@ -314,8 +286,8 @@ function StyleableText(_source, _width = 600) constructor {
 	
 	set_color = function(_index_start, _index_end, _color) {
 		split_drawables_at(_index_start, _index_end);
-		var _cursor = ds_map_find_value(character_drawables_map, _index_start);
-		while (_cursor.get_index_end() <= _index_end) {
+		var _cursor = get_drawable_for_character_at(_index_start);
+		while (_cursor != undefined && _cursor.get_index_end() <= _index_end) {
 			_cursor.style.style_color = _color;
 			_cursor = _cursor.next;
 		}
@@ -323,8 +295,8 @@ function StyleableText(_source, _width = 600) constructor {
 	
 	set_alpha = function(_index_start, _index_end, _alpha) {
 		split_drawables_at(_index_start, _index_end);
-		var _cursor = ds_map_find_value(character_drawables_map, _index_start);
-		while (_cursor.get_index_end() <= _index_end) {
+		var _cursor = get_drawable_for_character_at(_index_start);
+		while (_cursor != undefined && _cursor.get_index_end() <= _index_end) {
 			_cursor.style.alpha *= _alpha;
 			_cursor = _cursor.next;
 		}
@@ -332,8 +304,8 @@ function StyleableText(_source, _width = 600) constructor {
 	
 	set_mod_x = function(_index_start, _index_end, _mod_x) {
 		split_drawables_at(_index_start, _index_end);
-		var _cursor = ds_map_find_value(character_drawables_map, _index_start);
-		while (_cursor.get_index_end() <= _index_end) {
+		var _cursor = get_drawable_for_character_at(_index_start);
+		while (_cursor != undefined && _cursor.get_index_end() <= _index_end) {
 			_cursor.style.mod_x += _mod_x;
 			_cursor = _cursor.next;
 		}
@@ -341,8 +313,8 @@ function StyleableText(_source, _width = 600) constructor {
 	
 	set_mod_y = function(_index_start, _index_end, _mod_y) {
 		split_drawables_at(_index_start, _index_end);
-		var _cursor = ds_map_find_value(character_drawables_map, _index_start);
-		while (_cursor.get_index_end() <= _index_end) {
+		var _cursor = get_drawable_for_character_at(_index_start);
+		while (_cursor != undefined && _cursor.get_index_end() <= _index_end) {
 			_cursor.style.mod_y += _mod_y;
 			_cursor = _cursor.next;
 		}
@@ -350,10 +322,41 @@ function StyleableText(_source, _width = 600) constructor {
 	
 	set_mod_angle = function(_index_start, _index_end, _mod_angle) {
 		split_drawables_at(_index_start, _index_end);
-		var _cursor = ds_map_find_value(character_drawables_map, _index_start);
-		while (_cursor.get_index_end() <= _index_end) {
+		var _cursor = get_drawable_for_character_at(_index_start);
+		while (_cursor != undefined && _cursor.get_index_end() <= _index_end) {
 			_cursor.style.mod_angle += _mod_angle;
 			_cursor = _cursor.next;
+		}
+	};
+	
+	/**
+	 * Get if character at given index is hidden.
+	 * @param {real} _index character index
+	 */
+	get_character_hidden = function(_index) {
+		return character_array[_index].hidden;
+	};
+	
+	/**
+	 * Set hidden state of character at given index.
+	 * @param {real} _index character index
+	 * @param {bool} _hidden new hidden value of character
+	 */
+	set_character_hidden = function(_index, _hidden) {
+		if (get_character_hidden(_index) == _hidden) return;
+		split_drawables_at(_index, _index);
+		character_array[_index].hidden = _hidden;
+		merge_drawables_at(_index, _index);
+	};
+	
+	/**
+	 * @param {real} _index_start
+	 * @param {real} _index_end
+	 * @param {bool} _hidden
+	 */
+	set_characters_hidden = function(_index_start, _index_end, _hidden) {
+		for (var _i = _index_start; _i <= _index_end; _i++) {
+			set_character_hidden(_i, _hidden);
 		}
 	};
 }

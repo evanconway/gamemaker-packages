@@ -26,6 +26,7 @@ function StyleableTextCharacter(_character) constructor {
 		draw_set_font(style.font);
 		return string_height(character) * style.scale_y;
 	};
+	hidden = false;
 }
 
 function styleable_text_get_empty_array_character() {

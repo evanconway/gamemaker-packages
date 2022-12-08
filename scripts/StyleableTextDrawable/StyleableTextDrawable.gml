@@ -76,12 +76,41 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 		calculate_content();
 	};
 	
+	is_hidden = function() {
+		return character_array[get_index_start()].hidden;
+	}
+	
+	/**
+	 * Returns true if this drawable can merge with the next drawable in the linked list.
+	 */
+	can_merge_with_next = function() {
+		if (next == undefined) return false;
+		if (is_hidden() != next.is_hidden()) return false;
+		if (!style.is_equal(next.style)) return false;
+		if (sprite != spr_styleable_text_sprite_default) return false;
+		if (next.sprite != spr_styleable_text_sprite_default) return false;
+		if (character_array[get_index_start()].line_index != character_array[next.get_index_start()].line_index) return false;
+		return true;
+	}
+	
+	merge_with_next = function() {
+		if (!can_merge_with_next()) return;
+		var _next = next;
+		next = _next.next;
+		if (_next.next != undefined) _next.next.previous = self;
+		set_index_end(_next.get_index_end());
+	};
+	
 	/**
 	 * Draw this drawables contents and the given position.
 	 * @param {real} _x x position
 	 * @param {real} _y y position
 	 */
 	draw = function(_x, _y) {
+		if (is_hidden()) {
+			init_styles();
+			return;
+		}
 		/*
 		For now we only use default styles, and for that we only
 		need the first character referenced, because we can be

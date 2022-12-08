@@ -1,45 +1,30 @@
 /*
-	set_sprite
-	set_scale_x
-	set_scale_y
-	set_font
-	set_color
-	set_alpha
-	set_mod_x
-	set_mod_y
-	set_mod_angle
+if (entry_exit_state == "entry") {
+	if (entry_exit_index < test.get_character_count()) {
+		test.add_animation(ANIMATED_TEXT_ANIMATIONS.FADEIN, entry_exit_index, entry_exit_index, []);
+		entry_exit_index++;
+	} else {
+		entry_exit_state = "wait";
+		entry_exit_index = 0;
+	}
+}
 */
 
-// 0-81 are line index 0
-if (keyboard_check(vk_space)) {
-	test.set_color(10, 19, c_red);
-	test.set_color(20, 29, c_green);
-	test.set_color(30, 49, c_blue);
-}
-// merge everything
-if (keyboard_check(ord("1"))) {
-	test.merge_drawables_at(0, 1106);
+if (keyboard_check_pressed(ord("1"))) {
+	test.add_animation(ANIMATED_TEXT_ANIMATIONS.FADEIN, 0, 0, []);
 }
 
-// merge starting and ending middle of drawables
-if (keyboard_check(ord("2"))) {
-	test.merge_drawables_at(15, 35);
+if (keyboard_check_pressed(ord("2"))) {
+	test.add_animation(ANIMATED_TEXT_ANIMATIONS.FADEIN, 1, 1, []);
 }
 
-// merge start at edge end in middle
-if (keyboard_check(ord("3"))) {
-	test.merge_drawables_at(0, 35);
-}
-
-// marge start in middle end at edge
-if (keyboard_check(ord("4"))) {
-	test.merge_drawables_at(15, 81);
-}
+if (keyboard_check_pressed(ord("R"))) game_restart();
 
 global.drawables_drawn = 0;
 
-test.draw(40, 40);
+test.draw(40, 80);
 
 draw_set_color(c_lime);
+draw_set_alpha(1);
 draw_text(0, 0, fps_real);
 draw_text(0, 20, "drawables: " + string(global.drawables_drawn));

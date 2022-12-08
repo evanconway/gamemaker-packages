@@ -9,6 +9,7 @@
     {"id":{"name":"StyleableText","path":"scripts/StyleableText/StyleableText.yy",},"order":0,},
     {"id":{"name":"StyleableTextCharacter","path":"scripts/StyleableTextCharacter/StyleableTextCharacter.yy",},"order":1,},
     {"id":{"name":"fnt_styleable_text_font_default","path":"fonts/fnt_styleable_text_font_default/fnt_styleable_text_font_default.yy",},"order":3,},
+    {"id":{"name":"AnimatedTextAnimation","path":"scripts/AnimatedTextAnimation/AnimatedTextAnimation.yy",},"order":1,},
     {"id":{"name":"obj_test_tag_decorated_text","path":"objects/obj_test_tag_decorated_text/obj_test_tag_decorated_text.yy",},"order":18,},
     {"id":{"name":"TagDecoratedTextDrawable","path":"scripts/TagDecoratedTextDrawable/TagDecoratedTextDrawable.yy",},"order":6,},
     {"id":{"name":"TagDecoratedTextAnimation","path":"scripts/TagDecoratedTextAnimation/TagDecoratedTextAnimation.yy",},"order":3,},
@@ -20,6 +21,7 @@
     {"id":{"name":"spr_styleable_text_sprite_default","path":"sprites/spr_styleable_text_sprite_default/spr_styleable_text_sprite_default.yy",},"order":5,},
     {"id":{"name":"spr_tag_decorated_text_default","path":"sprites/spr_tag_decorated_text_default/spr_tag_decorated_text_default.yy",},"order":1,},
     {"id":{"name":"TagDecoratedTextMisc","path":"scripts/TagDecoratedTextMisc/TagDecoratedTextMisc.yy",},"order":7,},
+    {"id":{"name":"AnimatedText","path":"scripts/AnimatedText/AnimatedText.yy",},"order":0,},
     {"id":{"name":"StyleableTextDrawable","path":"scripts/StyleableTextDrawable/StyleableTextDrawable.yy",},"order":2,},
     {"id":{"name":"TagDecoratedTextStyle","path":"scripts/TagDecoratedTextStyle/TagDecoratedTextStyle.yy",},"order":8,},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},"order":14,},
@@ -45,6 +47,7 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"NewTextSystem","folderPath":"folders/NewTextSystem.yy","order":20,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"StyleableText","folderPath":"folders/NewTextSystem/StyleableText.yy","order":1,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"TagDecoratedText","folderPath":"folders/TagDecoratedText.yy","order":16,},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"AnimatedText","folderPath":"folders/NewTextSystem/AnimatedText.yy","order":2,},
   ],
   "AudioGroups": [
     {"resourceType":"GMAudioGroup","resourceVersion":"1.3","name":"audiogroup_default","targets":-1,},
