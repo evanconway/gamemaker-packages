@@ -80,24 +80,6 @@ function StyleableText(_source, _width = 600) constructor {
 			_word_index_end = -1; // mark word as not started
 		}
 		
-		/* old system
-		var _line_index = 0;
-		var _line_width = 0;
-		for (var _i = 0; _i < array_length(character_array); _i++) {
-			var _char = character_array[_i];
-			_char.line_index = _line_index;
-			_line_width += _char.get_width();
-			if (_line_width >= width && _char.character != " ") {
-				_line_index++;
-				_line_width = 0;
-				for (var _r = _i; _r >= 0 && character_array[_r].character != " "; _r--) {
-					character_array[_r].line_index = _line_index;
-					_line_width += character_array[_r].get_width();
-				}
-			}
-		}
-		*/
-		
 		// second pass: determine line heights
 		var _line_heights = ds_map_create();
 		for (var _i = 0; _i < array_length(character_array); _i++) {

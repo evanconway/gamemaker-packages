@@ -160,10 +160,18 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 		var _draw_x = _x + _char.position_x + style.mod_x;
 		var _draw_y = _y + _char.position_y + style.mod_y;
 		if (sprite == spr_styleable_text_sprite_default) {
+			var _originals = {
+				font: draw_get_font(),
+				alpha: draw_get_alpha(),
+				color: draw_get_color()
+			};
 			draw_set_font(style.font);
 			draw_set_alpha(style.alpha);
 			draw_set_color(style.style_color);
 			draw_text_transformed(_draw_x, _draw_y, content, style.scale_x, style.scale_y, style.mod_angle);
+			draw_set_font(_originals.font);
+			draw_set_alpha(_originals.alpha);
+			draw_set_color(_originals.color);
 		} else {
 			draw_sprite_ext(sprite, 0, _draw_x, _draw_y, style.scale_x, style.scale_y, style.mod_angle, style.style_color, style.alpha);
 		}
