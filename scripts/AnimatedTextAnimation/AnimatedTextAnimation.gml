@@ -30,7 +30,7 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 	time_ms = 0;
 	
 	if (_animation_enum_value == ANIMATED_TEXT_ANIMATIONS.FADEIN) {
-		duration = 100;
+		duration = 1000;
 		
 		update_merge = function(_update_time_ms) {
 			text_reference.set_characters_hidden(index_start, index_end, false);
