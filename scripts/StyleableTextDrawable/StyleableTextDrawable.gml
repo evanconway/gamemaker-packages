@@ -42,7 +42,7 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 		content = "";
 		for (var _i = index_start; _i <= index_end; _i++) {
 			content += character_array[_i].character;
-			//content += "\u200C"
+			character_array[_i].drawable = self;
 		}
 		init_styles();
 	};

@@ -13,6 +13,8 @@ function StyleableTextCharacter(_character) constructor {
 	position_y = 0;
 	style = new StyleableTextStyle();
 	
+	drawable = undefined; // the drawable that draws this character
+	
 	get_width = function() {
 		if (sprite != spr_styleable_text_sprite_default) {
 			return sprite_get_width(sprite) * style.scale_x;

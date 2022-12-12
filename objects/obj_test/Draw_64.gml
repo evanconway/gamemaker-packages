@@ -2,6 +2,7 @@
 if (entry_exit_state == "entry") {
 	if (entry_exit_index < test.get_character_count()) {
 		test.add_animation(ANIMATED_TEXT_ANIMATIONS.FADEIN, entry_exit_index, entry_exit_index, []);
+		test.add_animation(ANIMATED_TEXT_ANIMATIONS.RISEIN, entry_exit_index, entry_exit_index, []);
 		entry_exit_index++;
 	} else {
 		entry_exit_state = "wait";

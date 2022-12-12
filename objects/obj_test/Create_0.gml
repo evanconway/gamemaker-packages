@@ -15,8 +15,9 @@ test.text.set_characters_hidden(0, test.get_character_count() - 1, true);
 test.text.set_default_font(400, 599, fnt_handwriting);
 test.text.set_default_color(200, 299, c_red);
 test.text.set_default_color(300, 399, c_green);
+test.add_animation(ANIMATED_TEXT_ANIMATIONS.WAVE, 410, 490, []);
 
-entry_exit_state = "entry";
+entry_exit_state = "entry"; // "entry"
 entry_exit_index = 0;
 
 global.drawables_drawn = 0;
