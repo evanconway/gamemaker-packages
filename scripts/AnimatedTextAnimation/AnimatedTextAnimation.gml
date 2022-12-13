@@ -336,7 +336,7 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 				show_error("Improper number of args for wave animation!", true);
 			}
 		}
-				
+
 		update_animate = function(_update_time_ms) {
 			time_ms += _update_time_ms;
 			var _time_into_cylce = time_ms % cycle_time;
