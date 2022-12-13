@@ -1,16 +1,40 @@
 enum ANIMATED_TEXT_ANIMATIONS {
 	FADEIN,
 	RISEIN,
-	WAVE
+	WAVE,
+	FADE,
+	SHAKE,
+	TREMBLE
 }
 
-// DEFAULTS
+// DEFAULTs
+
+global.animated_text_default_fadein_duration = 200;
+
+/**
+ * Set default values for fadein animation
+ * @param {real} _duration duration of fadein animation
+ */
+function animated_text_set_default_fadein(_duration) {
+	global.animated_text_default_fadein_duration = _duration;
+}
+
+global.animated_text_default_risein_duration = 200;
+
+/**
+ * Set default values for risein animation
+ * @param {real} _duration duration of risein animation
+ */
+function animated_text_set_default_risein(_duration) {
+	global.animated_text_default_risein_duration = _duration;
+}
+
 global.animated_text_default_fade_alpha_min = 0.3;
 global.animated_text_default_fade_alpha_max = 1;
 global.animated_text_default_fade_cycle_time_ms = 1000;
 
 /**
- * @desc Set default values for fade animation.
+ * Set default values for fade animation.
  * @param {real} _alpha_min minimum alpha
  * @param {real} _alpha_max maximum alpha
  * @param {real} _cycle_time_ms time in ms for one cycle of animation
@@ -21,7 +45,7 @@ function animated_text_set_default_fade(_alpha_min, _alpha_max, _cycle_time_ms) 
 	global.animated_text_default_fade_cycle_time_ms = _cycle_time_ms;
 }
 
-global.animated_text_default_shake_time_ms = 80;
+global.animated_text_default_shake_time_ms = 60;
 global.animated_text_default_shake_magnitude = 1;
 
 /**
@@ -35,7 +59,7 @@ function animated_text_default_shake(_time_ms, _magnitude) {
 }
 
 global.animated_text_default_tremble_time_ms = 80;
-global.animated_text_default_tremble_magnitude = 2;
+global.animated_text_default_tremble_magnitude = 1;
 
 /**
  * Set default values for tremble animation.
@@ -147,7 +171,13 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 	time_ms = 0;
 	
 	if (_animation_enum_value == ANIMATED_TEXT_ANIMATIONS.FADEIN) {
-		duration = 200;
+		duration = global.animated_text_default_fadein_duration;
+		
+		if (array_length(params) == 1) {
+			duration = params[0];
+		} else if (array_length(params) != 0) {
+			show_error("Improper number of args for fadein animation!", true);
+		}
 		
 		update_merge = function(_update_time_ms) {
 			text_reference.set_characters_hidden(index_start, index_end, false);
@@ -156,7 +186,6 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 			text_reference.merge_drawables_at(index_start, index_end);
 		};
 		
-		/// @param {real} _update_time_ms
 		update_animate = function(_update_time_ms) {
 			time_ms += _update_time_ms;
 			text_reference.set_alpha(index_start, index_end, time_ms/duration);
@@ -164,7 +193,13 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 	}
 	
 	if (_animation_enum_value == ANIMATED_TEXT_ANIMATIONS.RISEIN) {
-		duration = 200;
+		duration = global.animated_text_default_risein_duration;
+		
+		if (array_length(params) == 1) {
+			duration = params[0];
+		} else if (array_length(params) != 0) {
+			show_error("Improper number of args for risein animation!", true);
+		}
 		
 		update_merge = function(_update_time_ms) {
 			text_reference.set_characters_hidden(index_start, index_end, false);
@@ -173,10 +208,35 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 			text_reference.merge_drawables_at(index_start, index_end);
 		};
 		
-		/// @param {real} _update_time_ms
 		update_animate = function(_update_time_ms) {
 			time_ms += _update_time_ms;
 			text_reference.set_mod_y(index_start, index_end, 5 - time_ms/duration*5);
+		};
+	}
+	
+	if (_animation_enum_value == ANIMATED_TEXT_ANIMATIONS.FADE) {
+		alpha_min = global.animated_text_default_fade_alpha_min;
+		alpha_max = global.animated_text_default_fade_alpha_max;
+		cycle_time = global.animated_text_default_fade_cycle_time_ms;
+		
+		if (array_length(params) == 3) {
+			alpha_min = params[0];
+			alpha_max = params[1];
+			cycle_time = params[2];
+		} else if (array_length(params) != 0) {
+			show_error("Improper number of args for fade animation!", true);
+		}
+		
+		update_animate = function(_update_time_ms) {
+			time_ms += _update_time_ms;
+			var _check = time_ms % (cycle_time * 2);
+			if (_check <= cycle_time) {
+				_check = cycle_time - _check;
+			} else {
+				_check -= cycle_time;
+			}
+			var _alpha = alpha_min + _check/cycle_time * (alpha_max - alpha_min);
+			text_reference.set_alpha(index_start, index_end, _alpha);
 		};
 	}
 	
@@ -193,7 +253,6 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 			show_error("Improper number of args for wave animation!", true);
 		}
 		
-		/// @param {real} _update_time_ms
 		update_animate = function(_update_time_ms) {
 			time_ms += _update_time_ms;
 			var _time_into_cylce = time_ms % cycle_time;
@@ -201,6 +260,39 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 			for (var _i = index_start; _i <= index_end; _i++) {
 				var _mod_y = sin(_percent * -2 * pi + char_offset * _i) * magnitude;
 				text_reference.set_mod_y(_i, _i, _mod_y);
+			}
+		};
+	}
+	
+	if (_animation_enum_value == ANIMATED_TEXT_ANIMATIONS.SHAKE || _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.TREMBLE) {
+		offset_time = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.SHAKE ? global.animated_text_default_shake_time_ms : global.animated_text_default_tremble_time_ms;
+		magnitude = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.SHAKE ? global.animated_text_default_shake_magnitude : global.animated_text_default_tremble_magnitude;
+		
+		offset_individual_chars = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.TREMBLE;
+		
+		if (array_length(params) == 2) {
+			offset_time = params[0];
+			magnitude = params[1];
+		} else if (array_length(params) != 0) {
+			show_error("Improper number of args for shake/tremble animation!", true);
+		}
+		
+		update_animate = function(_update_time_ms) {
+			time_ms += _update_time_ms;
+			var _index_x = floor(time_ms / offset_time);
+			var _index_y = _index_x + 4321; // arbitrary character index offset 
+			if (offset_individual_chars) {
+				for (var _i = index_start; _i <= index_end; _i++) {
+					var _offset_x = floor((magnitude + 1) * 2 * tag_decorated_text_get_random(_index_x + _i * 4321)) - magnitude
+					var _offset_y = floor((magnitude + 1) * 2 * tag_decorated_text_get_random(_index_y + _i * 4321)) - magnitude
+					text_reference.set_mod_x(_i, _i, _offset_x);
+					text_reference.set_mod_y(_i, _i, _offset_y);
+				}
+			} else {
+				var _offset_x = floor((magnitude + 1) * 2 * tag_decorated_text_get_random(_index_x)) - magnitude;
+				var _offset_y = floor((magnitude + 1) * 2 * tag_decorated_text_get_random(_index_y)) - magnitude;
+				text_reference.set_mod_x(index_start, index_end, _offset_x);
+				text_reference.set_mod_y(index_start, index_end, _offset_y);
 			}
 		};
 	}

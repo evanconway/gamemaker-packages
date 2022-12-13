@@ -160,6 +160,7 @@ function TagDecoratedTextAnimation(_command, _aargs, _char_index) constructor {
 		alpha_min = global.tds_animation_default_fade_alpha_min;
 		alpha_max = global.tds_animation_default_fade_alpha_max;
 		cycle_time = global.tds_animation_default_fade_cycle_time_ms;
+		
 		if (array_length(params) == 3) {
 			alpha_min = params[0];
 			alpha_max = params[1];
