@@ -24,6 +24,7 @@
     {"id":{"name":"AnimatedText","path":"scripts/AnimatedText/AnimatedText.yy",},"order":0,},
     {"id":{"name":"StyleableTextDrawable","path":"scripts/StyleableTextDrawable/StyleableTextDrawable.yy",},"order":2,},
     {"id":{"name":"TagDecoratedTextStyle","path":"scripts/TagDecoratedTextStyle/TagDecoratedTextStyle.yy",},"order":8,},
+    {"id":{"name":"AnimatedTextMisc","path":"scripts/AnimatedTextMisc/AnimatedTextMisc.yy",},"order":2,},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},"order":14,},
   ],
   "Options": [

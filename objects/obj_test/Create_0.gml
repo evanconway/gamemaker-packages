@@ -11,7 +11,7 @@ commas_and_rs += " ";
 for (var _i = 0; _i < 100; _i ++) commas_and_rs += "r,";
 
 test = new AnimatedText(moby);
-//test.text.set_characters_hidden(0, test.get_character_count() - 1, true);
+test.text.set_characters_hidden(0, test.get_character_count() - 1, true);
 test.text.set_default_font(10, 40, fnt_handwriting);
 test.text.set_default_color(50, 80, c_red);
 test.text.set_default_color(100, 130, c_green);
@@ -20,8 +20,10 @@ test.add_animation(ANIMATED_TEXT_ANIMATIONS.WAVE, 200, 230, []);
 test.add_animation(ANIMATED_TEXT_ANIMATIONS.FADE, 240, 270, [0, 0.5, 300]);
 test.add_animation(ANIMATED_TEXT_ANIMATIONS.SHAKE, 280, 310, []);
 test.add_animation(ANIMATED_TEXT_ANIMATIONS.TREMBLE, 320, 350, []);
+test.add_animation(ANIMATED_TEXT_ANIMATIONS.CHROMATIC, 360, 390, []);
+test.add_animation(ANIMATED_TEXT_ANIMATIONS.WCHROMATIC, 400, 430, []);
 
-entry_exit_state = ""; // "entry"
+entry_exit_state = "entry"; // "entry"
 entry_exit_index = 0;
 
 global.drawables_drawn = 0;

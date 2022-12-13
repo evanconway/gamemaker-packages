@@ -4,7 +4,9 @@ enum ANIMATED_TEXT_ANIMATIONS {
 	WAVE,
 	FADE,
 	SHAKE,
-	TREMBLE
+	TREMBLE,
+	CHROMATIC,
+	WCHROMATIC
 }
 
 // DEFAULTs
@@ -294,6 +296,44 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 				text_reference.set_mod_x(index_start, index_end, _offset_x);
 				text_reference.set_mod_y(index_start, index_end, _offset_y);
 			}
+		};
+	}
+	
+	if (_animation_enum_value == ANIMATED_TEXT_ANIMATIONS.CHROMATIC || _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.WCHROMATIC) {
+		change_ms = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.CHROMATIC ? global.animated_text_default_chromatic_change_ms : global.animated_text_default_wchromatic_change_ms;
+		steps_per_change = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.CHROMATIC ? global.animated_text_default_chromatic_steps_per_change : global.animated_text_default_wchromatic_steps_per_change;
+		char_offset = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.CHROMATIC ? global.animated_text_default_chromatic_char_offset : undefined;
+
+		// use char offset to determine if chromatic or wchromatic
+		if (char_offset != undefined) {
+			if (array_length(params) == 2) {
+				change_ms = params[0];
+				steps_per_change = params[1];
+			} else if (array_length(params) != 0) {
+				show_error("Improper number of args for chromatic animation!", true);
+			}
+		} else {
+			if (array_length(params) == 3) {
+				change_ms = params[0];
+				steps_per_change = params[1];
+				char_offset = params[2];
+			} else if (array_length(params) != 0) {
+				show_error("Improper number of args for wchromatic animation!", true);
+			}
+		}
+
+		update_animate = function(_update_time_ms) {
+			time_ms += _update_time_ms;
+			var _index = floor(time_ms/change_ms) * steps_per_change;
+			
+			// use char offset to determine if chromatic or wchromatic
+			if (char_offset != undefined) {
+				for (var _i = index_start; _i <= index_end; _i++) {
+					text_reference.set_color(_i, _i, animated_text_get_chromatic_color_at(_index + char_offset * _i));
+				}
+			} else {
+				text_reference.set_color(index_start, index_end, animated_text_get_chromatic_color_at(_index));
+			}	
 		};
 	}
 }
