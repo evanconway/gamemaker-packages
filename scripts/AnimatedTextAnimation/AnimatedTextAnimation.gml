@@ -1,12 +1,13 @@
 enum ANIMATED_TEXT_ANIMATIONS {
 	FADEIN,
 	RISEIN,
-	WAVE,
 	FADE,
 	SHAKE,
 	TREMBLE,
 	CHROMATIC,
-	WCHROMATIC
+	WCHROMATIC,
+	WAVE,
+	FLOAT
 }
 
 // DEFAULTs
@@ -127,7 +128,7 @@ global.animated_text_default_float_magnitude = 3;
  * @param {real} _magnitude the magnitude of vertical motion the text will have
  */
 function animated_text_default_float(_cycle_time_ms, _magnitude) {
-	global.animated_text_default_float_cycle_time = _cycle_time_ms;
+	global.animated_text_default_float_cycle_time_ms = _cycle_time_ms;
 	global.animated_text_default_float_magnitude = _magnitude;
 }
 
@@ -242,30 +243,6 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 		};
 	}
 	
-	if (_animation_enum_value == ANIMATED_TEXT_ANIMATIONS.WAVE) {
-		cycle_time = global.animated_text_default_wave_cycle_time_ms;
-		magnitude = global.animated_text_default_wave_magnitude;
-		char_offset = global.animated_text_default_wave_char_offset;
-		
-		if (array_length(params) == 3) {
-			cycle_time = params[0];
-			magnitude = params[1];
-			char_offset = params[2];
-		} else if (array_length(params) != 0) {
-			show_error("Improper number of args for wave animation!", true);
-		}
-		
-		update_animate = function(_update_time_ms) {
-			time_ms += _update_time_ms;
-			var _time_into_cylce = time_ms % cycle_time;
-			var _percent = _time_into_cylce / cycle_time;
-			for (var _i = index_start; _i <= index_end; _i++) {
-				var _mod_y = sin(_percent * -2 * pi + char_offset * _i) * magnitude;
-				text_reference.set_mod_y(_i, _i, _mod_y);
-			}
-		};
-	}
-	
 	if (_animation_enum_value == ANIMATED_TEXT_ANIMATIONS.SHAKE || _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.TREMBLE) {
 		offset_time = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.SHAKE ? global.animated_text_default_shake_time_ms : global.animated_text_default_tremble_time_ms;
 		magnitude = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.SHAKE ? global.animated_text_default_shake_magnitude : global.animated_text_default_tremble_magnitude;
@@ -305,12 +282,12 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 		char_offset = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.CHROMATIC ? global.animated_text_default_chromatic_char_offset : undefined;
 
 		// use char offset to determine if chromatic or wchromatic
-		if (char_offset != undefined) {
+		if (char_offset == undefined) {
 			if (array_length(params) == 2) {
 				change_ms = params[0];
 				steps_per_change = params[1];
 			} else if (array_length(params) != 0) {
-				show_error("Improper number of args for chromatic animation!", true);
+				show_error("Improper number of args for wchromatic animation!", true);
 			}
 		} else {
 			if (array_length(params) == 3) {
@@ -318,7 +295,7 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 				steps_per_change = params[1];
 				char_offset = params[2];
 			} else if (array_length(params) != 0) {
-				show_error("Improper number of args for wchromatic animation!", true);
+				show_error("Improper number of args for chromatic animation!", true);
 			}
 		}
 
@@ -334,6 +311,45 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 			} else {
 				text_reference.set_color(index_start, index_end, animated_text_get_chromatic_color_at(_index));
 			}	
+		};
+	}
+	
+	if (_animation_enum_value == ANIMATED_TEXT_ANIMATIONS.WAVE || _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.FLOAT) {
+		cycle_time = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.WAVE ? global.animated_text_default_wave_cycle_time_ms : global.animated_text_default_float_cycle_time_ms;
+		magnitude = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.WAVE ? global.animated_text_default_wave_magnitude : global.animated_text_default_float_magnitude;
+		char_offset = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.WAVE ? global.animated_text_default_wave_char_offset : undefined;
+		
+		// use char offset to determine if wave or float
+		if (char_offset == undefined) {
+			if (array_length(params) == 2) {
+				cycle_time = params[0];
+				magnitude = params[1];
+			} else if (array_length(params) != 0) {
+				show_error("Improper number of args for float animation!", true);
+			}
+		} else {
+			if (array_length(params) == 3) {
+				cycle_time = params[0];
+				magnitude = params[1];
+				char_offset = params[2];
+			} else if (array_length(params) != 0) {
+				show_error("Improper number of args for wave animation!", true);
+			}
+		}
+				
+		update_animate = function(_update_time_ms) {
+			time_ms += _update_time_ms;
+			var _time_into_cylce = time_ms % cycle_time;
+			var _percent = _time_into_cylce / cycle_time;
+			if (char_offset == undefined) {
+				var _mod_y = sin(_percent * -2 * pi) * magnitude;
+				text_reference.set_mod_y(index_start, index_end, _mod_y)
+			} else {
+				for (var _i = index_start; _i <= index_end; _i++) {
+					var _mod_y = sin(_percent * -2 * pi + char_offset * _i) * magnitude;
+					text_reference.set_mod_y(_i, _i, _mod_y);
+				}
+			}
 		};
 	}
 }
