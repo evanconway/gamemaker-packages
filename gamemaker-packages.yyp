@@ -4,6 +4,7 @@
   "name": "gamemaker-packages",
   "resources": [
     {"id":{"name":"TagDecoratedTextCharacter","path":"scripts/TagDecoratedTextCharacter/TagDecoratedTextCharacter.yy",},"order":4,},
+    {"id":{"name":"TypedAnimatedText","path":"scripts/TypedAnimatedText/TypedAnimatedText.yy",},"order":0,},
     {"id":{"name":"fnt_handwriting","path":"fonts/fnt_handwriting/fnt_handwriting.yy",},"order":17,},
     {"id":{"name":"StyleableTextStyle","path":"scripts/StyleableTextStyle/StyleableTextStyle.yy",},"order":4,},
     {"id":{"name":"StyleableText","path":"scripts/StyleableText/StyleableText.yy",},"order":0,},
@@ -48,6 +49,7 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"NewTextSystem","folderPath":"folders/NewTextSystem.yy","order":20,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"AnimatedText","folderPath":"folders/NewTextSystem/AnimatedText.yy","order":2,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"StyleableText","folderPath":"folders/NewTextSystem/StyleableText.yy","order":1,},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"TypedText","folderPath":"folders/NewTextSystem/TypedText.yy","order":3,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"TagDecoratedText","folderPath":"folders/TagDecoratedText.yy","order":16,},
   ],
   "AudioGroups": [
@@ -58,6 +60,6 @@
   ],
   "IncludedFiles": [],
   "MetaData": {
-    "IDEVersion": "2022.11.0.54",
+    "IDEVersion": "2022.11.1.56",
   },
 }
