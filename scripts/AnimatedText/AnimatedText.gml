@@ -23,16 +23,19 @@ function AnimatedText(_source_string) constructor {
 	}
 	
 	/**
-	 * @param 
+	 * @param {real} _update_time_ms amount of time in ms to update animations by
 	 */
 	update = function(_update_time_ms) {
 		for (var _i = 0; _i < array_length(animations); _i++) {
 			animations[_i].update_merge(_update_time_ms);
 		}
 		
-		animations = array_filter(animations, function(_a) {
+		/// @param {Struct.AnimatedTextAnimation} _a
+		var _f = function(_a) {
 			return !_a.animation_finished;
-		});
+		};
+		
+		animations = array_filter(animations, _f);
 		
 		for (var _i = 0; _i < array_length(animations); _i++) {
 			animations[_i].update_split(_update_time_ms);

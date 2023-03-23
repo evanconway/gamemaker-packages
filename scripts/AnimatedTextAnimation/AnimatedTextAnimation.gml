@@ -354,8 +354,10 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 	}
 }
 
+/*
 function animated_text_get_empty_array_animation() {
 	var _text = new StyleableText("$");
 	var _animation = new AnimatedTextAnimation(ANIMATED_TEXT_ANIMATIONS.FADEIN, _text, 0, 0, []);
 	return array_create(0, _animation);
 }
+*/
