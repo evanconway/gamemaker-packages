@@ -27,6 +27,9 @@ function TypedAnimatedText(_source) constructor {
 		}
 	};
 	
+	/**
+	 * @param {real} _update_time_ms amount of time in ms to update by
+	 */
 	update = function(_update_time_ms) {
 		if (char_index_to_type >= animated_text.get_character_count()) return;
 		time_ms += _update_time_ms;

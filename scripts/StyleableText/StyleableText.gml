@@ -8,7 +8,7 @@ function StyleableText(_source, _width = 600) constructor {
 		show_error("Cannot create StyleableText with empty string!", true);
 	}
 	
-	character_array = styleable_text_get_empty_array_character();
+	character_array = [];
 	for (var _i = 1; _i <= string_length(_source); _i++) {
 		array_push(character_array, new StyleableTextCharacter(string_char_at(_source, _i)));
 	}

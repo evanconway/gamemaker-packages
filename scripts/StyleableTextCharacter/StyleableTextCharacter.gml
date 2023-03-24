@@ -39,7 +39,3 @@ function StyleableTextCharacter(_character) constructor {
 	
 	hidden = false;
 }
-
-function styleable_text_get_empty_array_character() {
-	return array_create(0, new StyleableTextCharacter("$"));
-}
