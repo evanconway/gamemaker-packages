@@ -4,6 +4,7 @@
     {"name":"TagDecoratedTextCharacter","order":4,"path":"scripts/TagDecoratedTextCharacter/TagDecoratedTextCharacter.yy",},
     {"name":"fnt_handwriting","order":17,"path":"fonts/fnt_handwriting/fnt_handwriting.yy",},
     {"name":"StyleableTextStyle","order":4,"path":"scripts/StyleableTextStyle/StyleableTextStyle.yy",},
+    {"name":"Script16","order":1,"path":"scripts/Script16/Script16.yy",},
     {"name":"StyleableTextCharacter","order":1,"path":"scripts/StyleableTextCharacter/StyleableTextCharacter.yy",},
     {"name":"fnt_styleable_text_font_default","order":3,"path":"fonts/fnt_styleable_text_font_default/fnt_styleable_text_font_default.yy",},
     {"name":"AnimatedTextAnimation","order":1,"path":"scripts/AnimatedTextAnimation/AnimatedTextAnimation.yy",},

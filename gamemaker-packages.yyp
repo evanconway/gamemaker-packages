@@ -28,6 +28,7 @@
     {"id":{"name":"TypedAnimatedText","path":"scripts/TypedAnimatedText/TypedAnimatedText.yy",},},
     {"id":{"name":"fnt_handwriting","path":"fonts/fnt_handwriting/fnt_handwriting.yy",},},
     {"id":{"name":"StyleableTextStyle","path":"scripts/StyleableTextStyle/StyleableTextStyle.yy",},},
+    {"id":{"name":"Script16","path":"scripts/Script16/Script16.yy",},},
     {"id":{"name":"StyleableText","path":"scripts/StyleableText/StyleableText.yy",},},
     {"id":{"name":"StyleableTextCharacter","path":"scripts/StyleableTextCharacter/StyleableTextCharacter.yy",},},
     {"id":{"name":"fnt_styleable_text_font_default","path":"fonts/fnt_styleable_text_font_default/fnt_styleable_text_font_default.yy",},},

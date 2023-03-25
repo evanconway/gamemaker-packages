@@ -13,7 +13,7 @@ function TypedAnimatedText(_source) constructor {
 	
 	add_entry_animation_at = function(_index, _animation_enum, _aargs) {
 		if (!ds_map_exists(entry_animations_map, _index)) ds_map_set(entry_animations_map, _index, []);
-		array_push(ds_map_find_value(entry_animations_map, _index), { animation_enum: _animation_enum, aargs: _aargs});
+		array_push(ds_map_find_value(entry_animations_map, _index), { animation_enum: _animation_enum, aargs: _aargs });
 	};
 	
 	type_char_at = function(_index) {
