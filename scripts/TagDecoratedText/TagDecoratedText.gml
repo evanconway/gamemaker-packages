@@ -58,7 +58,20 @@ function TagDecoratedText(_source_string) constructor {
  * @param {real} _index_start
  */
 function TagDecoratedTextCommand(_command, _index_start) constructor {
-	command = _command;
+	var _command_aarg_split = string_split(_command, ":");
+	command = _command_aarg_split[0];
+	var _aarg_string = array_length(_command_aarg_split) > 1 ? _command_aarg_split[1] : "";
+	
+	var _f_map = function(_string) {
+		try {
+			var _r = real(string_digits(_string));
+			return _r
+		} catch(error) {}
+		return _string;
+	};
+	
+	aargs = _aarg_string == "" ? [] : array_map(string_split(_aarg_string, ","), _f_map);
+	
 	index_start = _index_start;
 	index_end = -1;
 }

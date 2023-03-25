@@ -262,14 +262,14 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 			var _index_y = _index_x + 4321; // arbitrary character index offset 
 			if (offset_individual_chars) {
 				for (var _i = index_start; _i <= index_end; _i++) {
-					var _offset_x = floor((magnitude + 1) * 2 * tag_decorated_text_get_random(_index_x + _i * 4321)) - magnitude
-					var _offset_y = floor((magnitude + 1) * 2 * tag_decorated_text_get_random(_index_y + _i * 4321)) - magnitude
+					var _offset_x = floor((magnitude + 1) * 2 * animated_text_get_random(_index_x + _i * 4321)) - magnitude
+					var _offset_y = floor((magnitude + 1) * 2 * animated_text_get_random(_index_y + _i * 4321)) - magnitude
 					text_reference.set_mod_x(_i, _i, _offset_x);
 					text_reference.set_mod_y(_i, _i, _offset_y);
 				}
 			} else {
-				var _offset_x = floor((magnitude + 1) * 2 * tag_decorated_text_get_random(_index_x)) - magnitude;
-				var _offset_y = floor((magnitude + 1) * 2 * tag_decorated_text_get_random(_index_y)) - magnitude;
+				var _offset_x = floor((magnitude + 1) * 2 * animated_text_get_random(_index_x)) - magnitude;
+				var _offset_y = floor((magnitude + 1) * 2 * animated_text_get_random(_index_y)) - magnitude;
 				text_reference.set_mod_x(index_start, index_end, _offset_x);
 				text_reference.set_mod_y(index_start, index_end, _offset_y);
 			}
