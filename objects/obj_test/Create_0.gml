@@ -41,3 +41,7 @@ entry_exit_state = "entry"; // "entry"
 entry_exit_index = 0;
 
 global.drawables_drawn = 0;
+
+parse_test_text = "<blue>Hello <red>World<green>!<> Progamming is <wave>cool<>.";
+
+parse_text = new TagDecoratedText(parse_test_text);

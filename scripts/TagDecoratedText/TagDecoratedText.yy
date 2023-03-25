@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "TagDecoratedText",
-    "path": "folders/TagDecoratedText.yy",
+    "name": "NewTextSystem",
+    "path": "folders/NewTextSystem.yy",
   },
 }
