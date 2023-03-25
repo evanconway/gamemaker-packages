@@ -64,9 +64,11 @@ function TagDecoratedTextCommand(_command, _index_start) constructor {
 	
 	var _f_map = function(_string) {
 		try {
-			var _r = real(string_digits(_string));
+			var _r = real(_string);
 			return _r
 		} catch(error) {}
+
+		// Feather disable once GM1035
 		return _string;
 	};
 	
