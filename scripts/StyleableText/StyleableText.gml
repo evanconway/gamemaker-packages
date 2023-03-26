@@ -145,13 +145,9 @@ function StyleableText(_source, _width = 600) constructor {
 		// set xy positions and end of line offsets
 		var _x = 0;
 		var _y = 0;
-		var _current_line_index = character_array[0].line_index;
+		_current_line_index = character_array[0].line_index;
 		var _trailing_space_width = 0;
-		for (var _i = 0; _i < array_length(character_array); _i++) {
-			if (_i == 80) {
-				show_debug_message("bam");
-			}
-			
+		for (var _i = 0; _i < array_length(character_array); _i++) {			
 			var _char = character_array[_i];
 			if (_char.line_index != _current_line_index) {
 				ds_map_set(alignment_offsets, _current_line_index, width - (ds_map_find_value(_line_widths, _current_line_index) - _trailing_space_width));
@@ -171,6 +167,9 @@ function StyleableText(_source, _width = 600) constructor {
 				ds_map_set(alignment_offsets, _current_line_index, width - (ds_map_find_value(_line_widths, _current_line_index) - _trailing_space_width));
 			}
 		}
+		
+		ds_map_destroy(_line_heights);
+		ds_map_destroy(_line_widths);
 	};
 	
 	drawables = undefined;
@@ -281,7 +280,7 @@ function StyleableText(_source, _width = 600) constructor {
 			if (_alignment == fa_left) _alignment_offset = 0;
 			if (_alignment == fa_center) _alignment_offset = floor(_alignment_offset / 2);
 			if (_alignment != fa_left && _alignment != fa_center && _alignment != fa_right) _alignment = 0;
-			_cursor.draw(_x + _alignment_offset, _y, _alignment);
+			_cursor.draw(_x + _alignment_offset, _y);
 			_cursor = _cursor.next;
 		}
 	};
