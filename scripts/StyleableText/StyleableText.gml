@@ -307,6 +307,12 @@ function StyleableText(_source, _width = 600) constructor {
 	};
 	
 	set_default_font = function(_index_start, _index_end, _font) {
+		if (is_string(_font)) {
+			var _asset_type = asset_get_type(_font);
+			if (_asset_type != asset_font) show_error("gave none font asset name for font command", true);
+			_font = asset_get_index(_font);
+		}
+		
 		for (var _i = _index_start; _i <= _index_end; _i++) {
 			character_array[_i].style.font = _font;
 		}

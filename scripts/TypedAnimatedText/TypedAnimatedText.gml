@@ -67,8 +67,6 @@ function TypedAnimatedText(_source) constructor {
 		if (_typed) char_index_to_type = animated_text.get_character_count();
 	};
 	
-	set_typed(true);
-	
 	/**
 	 * @param {real} _x x position
 	 * @param {real} _y y position
