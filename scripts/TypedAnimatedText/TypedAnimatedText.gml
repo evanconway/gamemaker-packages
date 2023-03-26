@@ -1,8 +1,8 @@
 /**
  * @param {string} _source source string
  */
-function TypedAnimatedText(_source) constructor {	
-	animated_text = new AnimatedText(_source);
+function TypedAnimatedText(_source, _width, _height) constructor {	
+	animated_text = new AnimatedText(_source, _width, _height);
 	animated_text.text.set_characters_hidden(0, animated_text.get_character_count() - 1, true);
 	time_between_types_ms = 60;
 	chars_per_type = 5;

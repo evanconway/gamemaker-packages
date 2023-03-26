@@ -1,8 +1,7 @@
 /**
  * @param {string} _source_string the string with decorative tags
- * @param {string} _default_styling default styles and animation command for entire text
  */
-function TagDecoratedText(_source_string, _default_styling = "") constructor {
+function TagDecoratedText(_source_string, _default_effects = "", _width = 600, _height = -1) constructor {
 	/*
 	The source string contains both the tags and the text to actually display. From
 	this we need to build an array of commands and their index ranges as well as 
@@ -63,7 +62,7 @@ function TagDecoratedText(_source_string, _default_styling = "") constructor {
 	
 	// before parsing commands, apply defaults
 	var _default_commands = [];
-	var _default_command_arr = string_split(_default_styling, " ", true);
+	var _default_command_arr = string_split(_default_effects, " ", true);
 	for (var _d = 0; _d < array_length(_default_command_arr); _d++) {
 		var _new_command = new TagDecoratedTextCommand(_default_command_arr[_d], 1);
 		_new_command.index_end = string_length(displayed_text);
@@ -73,7 +72,7 @@ function TagDecoratedText(_source_string, _default_styling = "") constructor {
 		array_insert(commands, 0, array_pop(_default_commands));
 	}
 	
-	typed_animated_text = new TypedAnimatedText(displayed_text);
+	typed_animated_text = new TypedAnimatedText(displayed_text, _width, _height);
 	
 	/// @param {Struct.TagDecoratedTextCommand} _command_to_apply
 	var _f_apply_command = function(_command_to_apply) {

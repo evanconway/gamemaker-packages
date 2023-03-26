@@ -1,5 +1,5 @@
-function AnimatedText(_source_string) constructor {
-	text = new StyleableText(_source_string);
+function AnimatedText(_source_string, _width, _height) constructor {
+	text = new StyleableText(_source_string, _width, _height);
 	
 	get_character_count = function() {
 		return array_length(text.character_array);

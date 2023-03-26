@@ -2,8 +2,9 @@
  * Get a new StyleableText instance.
  * @param {string} _source source string
  * @param {real} _width max width of text before line breaks occur
+ * @param {real} _height max height of text before pagination occurs (not implemented yet)
  */
-function StyleableText(_source, _width = 600) constructor {
+function StyleableText(_source, _width = 600, _height = -1) constructor {
 	if (string_length(_source) == 0) {
 		show_error("Cannot create StyleableText with empty string!", true);
 	}
@@ -19,7 +20,7 @@ function StyleableText(_source, _width = 600) constructor {
 	if the user defines width and height and the text is too large for the given values.
 	*/
 	width = _width;
-	height = 0; // calculated automatically (for now)
+	height = _height; // calculated automatically (for now)
 	
 	get_width = function() {
 		return width;
@@ -49,7 +50,7 @@ function StyleableText(_source, _width = 600) constructor {
 	
 	calculate_xy = function() {
 		// determine line breaks using line_index
-		var _line_index = 0;
+		var _line_index = -1; // start at -1 to account for line break on first word (very small widths or super large words)
 		var _line_width = 0;
 		var _word_index_start = 0;
 		var _word_index_end = -1; // -1 if word has not started
@@ -65,6 +66,8 @@ function StyleableText(_source, _width = 600) constructor {
 					_line_index++;
 					_line_width = 0;
 				}
+				
+				_line_index = _line_index < 0 ? 0 : _line_index; // ensure first line index is 0
 				
 				// add word to current line
 				characters_set_line_index(_word_index_start, _word_index_end, _line_index);
