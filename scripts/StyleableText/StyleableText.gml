@@ -66,19 +66,14 @@ function StyleableText(_source, _width = 600) constructor {
 		}
 		
 		// set last word line index
-		if (_word_index_end <= 0) {
-			// if word is too big for line, start new line
-			if (_line_width + _word_width > width) {
-				_line_index++;
-				_line_width = 0;
-			}
-			
-			// add word to current line
-			characters_set_line_index(_word_index_start, _word_index_end, _line_index);
-			_line_width += _word_width;
-			_word_width = 0;
-			_word_index_end = -1; // mark word as not started
+		// if word is too big for line, start new line
+		if (_line_width + _word_width > width) {
+			_line_index++;
 		}
+			
+		// add word to current line
+		characters_set_line_index(_word_index_start, _word_index_end, _line_index);
+		
 		
 		// second pass: determine line heights
 		var _line_heights = ds_map_create();
