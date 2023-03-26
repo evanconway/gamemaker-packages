@@ -113,9 +113,26 @@ function TagDecoratedText(_source_string) constructor {
 				typed_animated_text.add_entry_animation_at(_i, ANIMATED_TEXT_ANIMATIONS.RISEIN, _aargs);
 			}
 		}
+		
+		// other
+		if (_cmd == "n") typed_animated_text.animated_text.text.set_new_line_at(_s, true);
 	};
 	
 	array_foreach(commands, _f_apply_command);
+	
+	get_height = function() {
+		return typed_animated_text.animated_text.text.get_height();
+	}
+	
+	get_width = function() {
+		return typed_animated_text.animated_text.text.get_width();
+	}
+	
+	draw_border = function(_x, _y) {
+		draw_set_alpha(1);
+		draw_set_color(c_fuchsia);
+		draw_rectangle(_x, _y, _x + get_width(), _y + get_height(), true);
+	}
 	
 	/**
 	 * @param {real} _x x position
@@ -124,6 +141,7 @@ function TagDecoratedText(_source_string) constructor {
 	draw = function(_x, _y) {
 		global.drawables_drawn = 0;
 		typed_animated_text.draw(_x, _y);
+		draw_border(_x, _y);
 	};
 }
 

@@ -35,6 +35,7 @@
     {"id":{"name":"obj_test","path":"objects/obj_test/obj_test.yy",},},
     {"id":{"name":"spr_button","path":"sprites/spr_button/spr_button.yy",},},
     {"id":{"name":"obj_test_colors","path":"objects/obj_test_colors/obj_test_colors.yy",},},
+    {"id":{"name":"obj_test_new_line","path":"objects/obj_test_new_line/obj_test_new_line.yy",},},
     {"id":{"name":"spr_styleable_text_sprite_default","path":"sprites/spr_styleable_text_sprite_default/spr_styleable_text_sprite_default.yy",},},
     {"id":{"name":"AnimatedText","path":"scripts/AnimatedText/AnimatedText.yy",},},
     {"id":{"name":"obj_test_multi_effects","path":"objects/obj_test_multi_effects/obj_test_multi_effects.yy",},},

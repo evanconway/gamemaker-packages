@@ -13,7 +13,21 @@ function StyleableText(_source, _width = 600) constructor {
 		array_push(character_array, new StyleableTextCharacter(string_char_at(_source, _i)));
 	}
 	
+	/*
+	Later we should re-work width/height to be something that's calculated automatically if not
+	defined by the user, or adjusts the text if given by the user. We should add pagination
+	if the user defines width and height and the text is too large for the given values.
+	*/
 	width = _width;
+	height = 0; // calculated automatically (for now)
+	
+	get_width = function() {
+		return width;
+	}
+	
+	get_height = function() {
+		return height;
+	}
 	
 	/**
 	 * Sets the line index for characters in the given range.
@@ -38,8 +52,8 @@ function StyleableText(_source, _width = 600) constructor {
 		for (var _i = 0; _i < array_length(character_array); _i++) {
 			var _char = character_array[_i];
 			
-			// if space, word is over
-			if (_char.character == " ") {
+			// if space or new line, word is over
+			if (_char.character == " " || _char.new_line) {
 				// if word is too big for line, start new line
 				if (_line_width + _word_width > width) {
 					_line_index++;
@@ -52,9 +66,23 @@ function StyleableText(_source, _width = 600) constructor {
 				_word_width = 0;
 				_word_index_end = -1; // mark word as not started
 				
-				// add space to current line
+				// if new line triggered, start new line
+				if (_char.new_line) {
+					_line_index++;
+					_line_width = 0;
+				}
+				
+				// add character to current line
 				characters_set_line_index(_i, _i, _line_index);
 				_line_width += _char.get_width();
+				
+				// if character is not space, start word
+				// (happens when new line triggered by character.new_line and not space)
+				if (_char.character != " ") {
+					_word_index_start = _i;
+					_word_width += _char.get_width();
+					_word_index_end = _i;
+				}
 				
 			// otherwise add to current word
 			} else {
@@ -86,6 +114,12 @@ function StyleableText(_source, _width = 600) constructor {
 					ds_map_set(_line_heights, _char.line_index, _char.get_height());
 				}
 			}
+		}
+		
+		// calculate height
+		height = 0;
+		for (var _i = 0; _i < ds_map_size(_line_heights); _i++) {
+			height += ds_map_find_value(_line_heights, _i);
 		}
 		
 		// third pass: set xy positions
@@ -388,4 +422,13 @@ function StyleableText(_source, _width = 600) constructor {
 			set_character_hidden(_i, _hidden);
 		}
 	};
+	
+	/**
+	 * @param {real} _index
+	 * @param {bool} _new_line
+	 */
+	set_new_line_at = function(_index, _new_line) {
+		character_array[_index].new_line = _new_line;
+		init_drawables();
+	}
 }
