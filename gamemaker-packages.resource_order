@@ -11,6 +11,7 @@
     {"name":"spr_button","order":19,"path":"sprites/spr_button/spr_button.yy",},
     {"name":"obj_test_colors","order":20,"path":"objects/obj_test_colors/obj_test_colors.yy",},
     {"name":"spr_styleable_text_sprite_default","order":5,"path":"sprites/spr_styleable_text_sprite_default/spr_styleable_text_sprite_default.yy",},
+    {"name":"obj_test_animations","order":21,"path":"objects/obj_test_animations/obj_test_animations.yy",},
     {"name":"StyleableTextDrawable","order":2,"path":"scripts/StyleableTextDrawable/StyleableTextDrawable.yy",},
     {"name":"AnimatedTextMisc","order":2,"path":"scripts/AnimatedTextMisc/AnimatedTextMisc.yy",},
     {"name":"Room1","order":14,"path":"rooms/Room1/Room1.yy",},
