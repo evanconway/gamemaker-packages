@@ -159,7 +159,7 @@ function TagDecoratedText(_source_string, _default_styling = "") constructor {
 		draw_border(_x, _y);
 	};
 	
-	//typed_animated_text.set_typed(true);
+	typed_animated_text.set_typed(true);
 }
 
 /**
