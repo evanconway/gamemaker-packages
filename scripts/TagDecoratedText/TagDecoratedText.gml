@@ -8,7 +8,17 @@ function TagDecoratedText(_source_string) constructor {
 	the text to display with command tags removed.
 	*/
 	
-	commands = [];	
+	commands = [];
+	
+	set_command_unset_ends = function(_end_index) {
+		for (var _k = array_length(commands) - 1; _k >= 0; _k--) {
+			if (commands[_k].index_end < 0) {
+				commands[_k].index_end = _end_index;
+			} else {
+				_k = -1; // end loop if index_end defined
+			}
+		}
+	};
 	
 	displayed_text = "";
 	
@@ -29,14 +39,7 @@ function TagDecoratedText(_source_string) constructor {
 		
 		// handle clear tag
 		if (_c == "<" && _c_next == ">") {
-			// set end of all commands without end set
-			for (var _k = array_length(commands) - 1; _k >= 0; _k --) {
-				if (commands[_k].index_end < 0) {
-					commands[_k].index_end = _index - 1;
-				} else {
-					_k = -1; // end loop if index_end defined
-				}
-			}
+			set_command_unset_ends(_index - 1);
 			_i++;
 		}
 		
@@ -52,6 +55,8 @@ function TagDecoratedText(_source_string) constructor {
 		}
 	}
 	
+	set_command_unset_ends(string_length(displayed_text));
+	
 	typed_animated_text = new TypedAnimatedText(displayed_text);
 	
 	/// @param {Struct.TagDecoratedTextCommand} _command_to_apply
@@ -66,8 +71,8 @@ function TagDecoratedText(_source_string) constructor {
 		if (_cmd == "aqua") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_aqua);
 		if (_cmd == "black") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_black);
 		if (_cmd == "blue") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_blue);
-		if (_cmd == "dkgray" || _cmd == "dkgrey") typed_animated_text.animated_text.text.set_default_color(_s, _e, dkgray);
-		if (_cmd == "pink") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_fuchsia);
+		if (_cmd == "dkgray" || _cmd == "dkgrey") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_dkgray);
+		if (_cmd == "pink" || _cmd == "fuchsia") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_fuchsia);
 		if (_cmd == "gray" || _cmd == "grey") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_gray);
 		if (_cmd == "green") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_green);
 		if (_cmd == "lime") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_lime);
