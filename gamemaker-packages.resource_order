@@ -9,6 +9,7 @@
     {"name":"AnimatedTextAnimation","order":1,"path":"scripts/AnimatedTextAnimation/AnimatedTextAnimation.yy",},
     {"name":"obj_test","order":15,"path":"objects/obj_test/obj_test.yy",},
     {"name":"spr_button","order":19,"path":"sprites/spr_button/spr_button.yy",},
+    {"name":"obj_test_colors","order":20,"path":"objects/obj_test_colors/obj_test_colors.yy",},
     {"name":"spr_styleable_text_sprite_default","order":5,"path":"sprites/spr_styleable_text_sprite_default/spr_styleable_text_sprite_default.yy",},
     {"name":"StyleableTextDrawable","order":2,"path":"scripts/StyleableTextDrawable/StyleableTextDrawable.yy",},
     {"name":"AnimatedTextMisc","order":2,"path":"scripts/AnimatedTextMisc/AnimatedTextMisc.yy",},

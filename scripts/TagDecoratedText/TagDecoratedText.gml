@@ -14,6 +14,7 @@ function TagDecoratedText(_source_string) constructor {
 	
 	var _index = 1;
 	
+	// parse out commands and displayed text
 	for (var _i = 1; _i <= string_length(_source_string); _i++) {
 		var _c = string_char_at(_source_string, _i);
 		var _c_next = string_char_at(_source_string, _i + 1);
@@ -50,6 +51,51 @@ function TagDecoratedText(_source_string) constructor {
 			_index++;
 		}
 	}
+	
+	typed_animated_text = new TypedAnimatedText(displayed_text);
+	
+	/// @param {Struct.TagDecoratedTextCommand} _command_to_apply
+	var _f_apply_command = function(_command_to_apply) {
+		var _cmd = string_lower(_command_to_apply.command);
+		var _aargs = _command_to_apply.aargs;
+		
+		// conver string index to array index for applying effects
+		var _s = _command_to_apply.index_start - 1;
+		var _e = _command_to_apply.index_end - 1;
+		
+		if (_cmd == "aqua") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_aqua);
+		if (_cmd == "black") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_black);
+		if (_cmd == "blue") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_blue);
+		if (_cmd == "dkgray" || _cmd == "dkgrey") typed_animated_text.animated_text.text.set_default_color(_s, _e, dkgray);
+		if (_cmd == "pink") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_fuchsia);
+		if (_cmd == "gray" || _cmd == "grey") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_gray);
+		if (_cmd == "green") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_green);
+		if (_cmd == "lime") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_lime);
+		if (_cmd == "ltgray" || _cmd == "ltgrey") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_ltgray);
+		if (_cmd == "maroon") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_maroon);
+		if (_cmd == "navy") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_navy);
+		if (_cmd == "olive") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_olive);
+		if (_cmd == "orange") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_orange);
+		if (_cmd == "purple") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_purple);
+		if (_cmd == "red") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_red);
+		if (_cmd == "silver") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_silver);
+		if (_cmd == "teal") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_teal);
+		if (_cmd == "white") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_white);
+		if (_cmd == "yellow") typed_animated_text.animated_text.text.set_default_color(_s, _e, c_yellow);
+		if (_cmd == "rgb") typed_animated_text.animated_text.text.set_default_color(_s, _e, make_color_rgb(_aargs[0], _aargs[1], _aargs[2]));
+		
+	};
+	
+	array_foreach(commands, _f_apply_command);
+	
+	/**
+	 * @param {real} _x x position
+	 * @param {real} _y y position
+	 */
+	draw = function(_x, _y) {
+		global.drawables_drawn = 0;
+		typed_animated_text.draw(_x, _y);
+	};
 }
 
 /**
@@ -76,4 +122,11 @@ function TagDecoratedTextCommand(_command, _index_start) constructor {
 	
 	index_start = _index_start;
 	index_end = -1;
+}
+
+function tag_decorated_text_draw_performance(_x, _y) {
+	draw_set_color(c_lime);
+	draw_set_alpha(1);
+	draw_text(0, 0, fps_real);
+	draw_text(0, 20, "drawables: " + string(global.drawables_drawn));
 }

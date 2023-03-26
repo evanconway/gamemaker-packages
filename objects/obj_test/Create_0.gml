@@ -39,9 +39,3 @@ for (var _i = 800; _i < 1000; _i++) {
 
 entry_exit_state = "entry"; // "entry"
 entry_exit_index = 0;
-
-global.drawables_drawn = 0;
-
-parse_test_text = "<blue>Hello <red>World<green>!<> Progamming is <wave:6,8,wordzzzz>cool<>. This will be <font:crazy_font,5.1>SUPER<> amazing!";
-
-parse_text = new TagDecoratedText(parse_test_text);

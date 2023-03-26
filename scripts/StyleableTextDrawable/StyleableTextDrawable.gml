@@ -1,3 +1,5 @@
+global.drawables_drawn = 0;
+
 /**
  * Get a new StyleableTextDrawable instance.
  * @param {array<struct.StyleableTextCharacter>} _character_array reference to a StyleableTextCharacter array
