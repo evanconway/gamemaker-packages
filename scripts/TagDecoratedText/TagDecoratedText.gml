@@ -137,10 +137,11 @@ function TagDecoratedText(_source_string) constructor {
 	/**
 	 * @param {real} _x x position
 	 * @param {real} _y y position
+	 * @param {real} _alignment horizontal alignment
 	 */
-	draw = function(_x, _y) {
+	draw = function(_x, _y, _alignment = fa_left) {
 		global.drawables_drawn = 0;
-		typed_animated_text.draw(_x, _y);
+		typed_animated_text.draw(_x, _y, _alignment);
 		draw_border(_x, _y);
 	};
 }

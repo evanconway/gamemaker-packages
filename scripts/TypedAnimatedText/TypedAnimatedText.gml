@@ -62,12 +62,20 @@ function TypedAnimatedText(_source) constructor {
 		}
 	};
 	
+	set_typed = function(_typed) {
+		animated_text.text.set_characters_hidden(0, animated_text.get_character_count() - 1, !_typed);
+		if (_typed) char_index_to_type = animated_text.get_character_count();
+	};
+	
+	set_typed(true);
+	
 	/**
 	 * @param {real} _x x position
 	 * @param {real} _y y position
+	 * @param {real} _alignment horizontal alignment
 	 */
-	draw = function(_x, _y) {
+	draw = function(_x, _y, _alignment) {
 		update(1000 / game_get_speed(gamespeed_fps));
-		animated_text.draw(_x, _y);
+		animated_text.draw(_x, _y, _alignment);
 	};
 }

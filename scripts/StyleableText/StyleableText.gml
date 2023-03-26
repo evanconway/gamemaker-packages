@@ -41,8 +41,14 @@ function StyleableText(_source, _width = 600) constructor {
 		}
 	};
 	
+	/*
+	A mapping of line indexes to width of trailing spaces on said lines. Used to 
+	draw center and right aligned text.
+	*/
+	alignment_offsets = ds_map_create();
+	
 	calculate_xy = function() {
-		// first pass: determine line breaks using line_index
+		// determine line breaks using line_index
 		var _line_index = 0;
 		var _line_width = 0;
 		var _word_index_start = 0;
@@ -102,11 +108,14 @@ function StyleableText(_source, _width = 600) constructor {
 		// add word to current line
 		characters_set_line_index(_word_index_start, _word_index_end, _line_index);
 		
-		
-		// second pass: determine line heights
+		// determine line dimensions
 		var _line_heights = ds_map_create();
+		var _line_widths = ds_map_create();
+		var _width = 0;
+		var _current_line_index = 0;
 		for (var _i = 0; _i < array_length(character_array); _i++) {
 			var _char = character_array[_i];
+			// heights
 			if (!ds_map_exists(_line_heights, _char.line_index)) {
 				ds_map_set(_line_heights, _char.line_index, _char.get_height());
 			} else {
@@ -114,7 +123,18 @@ function StyleableText(_source, _width = 600) constructor {
 					ds_map_set(_line_heights, _char.line_index, _char.get_height());
 				}
 			}
+			
+			// width
+			if (_char.line_index == _current_line_index) {
+				_width += _char.get_width();
+			} else {
+				ds_map_set(_line_widths, _current_line_index, _width);
+				_width = _char.get_width();
+				_current_line_index = _char.line_index;
+			}
 		}
+		
+		ds_map_set(_line_widths, _current_line_index, _width);
 		
 		// calculate height
 		height = 0;
@@ -122,20 +142,34 @@ function StyleableText(_source, _width = 600) constructor {
 			height += ds_map_find_value(_line_heights, _i);
 		}
 		
-		// third pass: set xy positions
+		// set xy positions and end of line offsets
 		var _x = 0;
 		var _y = 0;
 		var _current_line_index = character_array[0].line_index;
+		var _trailing_space_width = 0;
 		for (var _i = 0; _i < array_length(character_array); _i++) {
+			if (_i == 80) {
+				show_debug_message("bam");
+			}
+			
 			var _char = character_array[_i];
 			if (_char.line_index != _current_line_index) {
+				ds_map_set(alignment_offsets, _current_line_index, width - (ds_map_find_value(_line_widths, _current_line_index) - _trailing_space_width));
+				_trailing_space_width = 0;
 				_x = 0;
 				_y += ds_map_find_value(_line_heights, _current_line_index);
 				_current_line_index = _char.line_index;
+			} else {
+				_trailing_space_width = _char.character == " " ? _trailing_space_width + _char.get_width() : 0;
 			}
 			_char.position_x = _x;
 			_x += _char.get_width();
 			_char.position_y = _y;
+			
+			// handle alignment offset of last character
+			if (_i == array_length(character_array) - 1) {
+				ds_map_set(alignment_offsets, _current_line_index, width - (ds_map_find_value(_line_widths, _current_line_index) - _trailing_space_width));
+			}
 		}
 	};
 	
@@ -239,15 +273,17 @@ function StyleableText(_source, _width = 600) constructor {
 	 * @param {real} _x x position
 	 * @param {real} _y y position
 	 */
-	draw = function(_x, _y) {
+	draw = function(_x, _y, _alignment = fa_left) {
 		var _cursor = drawables;
-		var _draw_calls = 0;
 		while (_cursor != undefined) {
-			_cursor.draw(_x, _y);
-			_draw_calls++;
+			var _drawable_line_index = _cursor.character_array[_cursor.get_index_start()].line_index;
+			var _alignment_offset = ds_map_find_value(alignment_offsets, _drawable_line_index);
+			if (_alignment == fa_left) _alignment_offset = 0;
+			if (_alignment == fa_center) _alignment_offset = floor(_alignment_offset / 2);
+			if (_alignment != fa_left && _alignment != fa_center && _alignment != fa_right) _alignment = 0;
+			_cursor.draw(_x + _alignment_offset, _y, _alignment);
 			_cursor = _cursor.next;
 		}
-		return _draw_calls;
 	};
 	
 	// set default styles

@@ -25,6 +25,7 @@
   "resources": [
     {"id":{"name":"TypedAnimatedText","path":"scripts/TypedAnimatedText/TypedAnimatedText.yy",},},
     {"id":{"name":"obj_test_entry_animations","path":"objects/obj_test_entry_animations/obj_test_entry_animations.yy",},},
+    {"id":{"name":"obj_test_memory_leaks","path":"objects/obj_test_memory_leaks/obj_test_memory_leaks.yy",},},
     {"id":{"name":"fnt_handwriting","path":"fonts/fnt_handwriting/fnt_handwriting.yy",},},
     {"id":{"name":"StyleableTextStyle","path":"scripts/StyleableTextStyle/StyleableTextStyle.yy",},},
     {"id":{"name":"TagDecoratedText","path":"scripts/TagDecoratedText/TagDecoratedText.yy",},},
@@ -40,6 +41,7 @@
     {"id":{"name":"AnimatedText","path":"scripts/AnimatedText/AnimatedText.yy",},},
     {"id":{"name":"obj_test_multi_effects","path":"objects/obj_test_multi_effects/obj_test_multi_effects.yy",},},
     {"id":{"name":"obj_test_animations","path":"objects/obj_test_animations/obj_test_animations.yy",},},
+    {"id":{"name":"obj_test_alignment","path":"objects/obj_test_alignment/obj_test_alignment.yy",},},
     {"id":{"name":"StyleableTextDrawable","path":"scripts/StyleableTextDrawable/StyleableTextDrawable.yy",},},
     {"id":{"name":"AnimatedTextMisc","path":"scripts/AnimatedTextMisc/AnimatedTextMisc.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
