@@ -50,7 +50,7 @@ function AnimatedText(_source_string) constructor {
 	 * @param {real} _y
 	 * @param {real} _alignment horizontal alignment
 	 */
-	draw = function(_x, _y, _alignment) {
+	draw = function(_x, _y, _alignment = fa_left) {
 		update(1000 / game_get_speed(gamespeed_fps));
 		text.draw(_x, _y, _alignment);
 	};

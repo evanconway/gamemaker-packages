@@ -1,7 +1,7 @@
 /**
  * @param {string} _source source string
  */
-function TypedAnimatedText(_source) constructor {
+function TypedAnimatedText(_source) constructor {	
 	animated_text = new AnimatedText(_source);
 	animated_text.text.set_characters_hidden(0, animated_text.get_character_count() - 1, true);
 	time_between_types_ms = 60;
@@ -72,8 +72,16 @@ function TypedAnimatedText(_source) constructor {
 	 * @param {real} _y y position
 	 * @param {real} _alignment horizontal alignment
 	 */
-	draw = function(_x, _y, _alignment) {
+	draw = function(_x, _y, _alignment = fa_left) {
 		update(1000 / game_get_speed(gamespeed_fps));
 		animated_text.draw(_x, _y, _alignment);
 	};
+	
+	/*
+	Feather doesn't like that we dynamically create animations durign the draw/update events. It warns us about creating a bunch
+	of instance variables during a non-create event. To solve this we're going to run a couple pointless lines here that
+	triggers the same variable creation. This removes the warnings but doesn't change behavior.
+	*/
+	var _antifeather = new AnimatedText("the quick brown fox");
+	_antifeather.add_animation(ANIMATED_TEXT_ANIMATIONS.CHROMATIC, 0, 0, []);
 }

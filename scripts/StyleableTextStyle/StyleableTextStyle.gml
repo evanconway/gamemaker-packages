@@ -28,22 +28,6 @@ function StyleableTextStyle() constructor {
 	};
 	
 	/**
-	 * Returns a new style object that's an exact copy of this one.
-	 */
-	copy = function() {
-		var _result = new StyleableTextStyle();
-		_result.font = font;
-		_result.style_color = style_color;
-		_result.alpha = alpha;
-		_result.scale_x = scale_x;
-		_result.scale_y = scale_y;
-		_result.mod_x = mod_x;
-		_result.mod_y = mod_y;
-		_result.mod_angle = mod_angle;
-		return _result;
-	};
-	
-	/**
 	 * Sets this styles parameters to the same as the given style.
 	 * @param {struct.StyleableTextStyle} _style the style to copy
 	 */

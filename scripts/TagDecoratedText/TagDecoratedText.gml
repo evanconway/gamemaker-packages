@@ -128,8 +128,22 @@ function TagDecoratedText(_source_string, _default_styling = "") constructor {
 		}
 		
 		// other
-		if (_cmd == "n") typed_animated_text.animated_text.text.set_new_line_at(_s, true);
+		if (_cmd == "n" || _cmd == "br") typed_animated_text.animated_text.text.set_new_line_at(_s, true);
 		if (_cmd == "f" || _cmd == "font") typed_animated_text.animated_text.text.set_default_font(_s, _e, _aargs[0]);
+		if (_cmd == "a" || _cmd == "alpha") typed_animated_text.animated_text.text.set_default_alpha(_s, _e, _aargs[0]);
+		if (_cmd == "x") typed_animated_text.animated_text.text.set_default_mod_x(_s, _e, _aargs[0]);
+		if (_cmd == "y") typed_animated_text.animated_text.text.set_default_mod_y(_s, _e, _aargs[0]);
+		if (_cmd == "xy") {
+			typed_animated_text.animated_text.text.set_default_mod_x(_s, _e, _aargs[0]);
+			typed_animated_text.animated_text.text.set_default_mod_y(_s, _e, _aargs[1]);
+		}
+		if (_cmd == "scalex") typed_animated_text.animated_text.text.set_default_scale_x(_s, _e, _aargs[0]);
+		if (_cmd == "scaley") typed_animated_text.animated_text.text.set_default_scale_y(_s, _e, _aargs[0]);
+		if (_cmd == "scalexy") {
+			typed_animated_text.animated_text.text.set_default_scale_x(_s, _e, _aargs[0]);
+			typed_animated_text.animated_text.text.set_default_scale_y(_s, _e, _aargs[1]);
+		}
+		if (_cmd == "s" || _cmd == "sprite") typed_animated_text.animated_text.text.set_default_sprite(_s, _aargs[0]);
 	};
 	
 	array_foreach(commands, _f_apply_command);
@@ -176,7 +190,9 @@ function TagDecoratedTextCommand(_command, _index_start) constructor {
 		try {
 			var _r = real(_string);
 			return _r
-		} catch(error) {}
+		} catch(_error) {
+			_error = undefined;
+		}
 
 		// Feather disable once GM1035
 		return _string;

@@ -22,6 +22,9 @@ function animated_text_set_default_fadein(_duration) {
 	global.animated_text_default_fadein_duration = _duration;
 }
 
+animated_text_set_default_fadein(200);
+
+
 global.animated_text_default_risein_duration = 200;
 
 /**
@@ -31,6 +34,9 @@ global.animated_text_default_risein_duration = 200;
 function animated_text_set_default_risein(_duration) {
 	global.animated_text_default_risein_duration = _duration;
 }
+
+animated_text_set_default_risein(200);
+
 
 global.animated_text_default_fade_alpha_min = 0.3;
 global.animated_text_default_fade_alpha_max = 1;
@@ -48,6 +54,9 @@ function animated_text_set_default_fade(_alpha_min, _alpha_max, _cycle_time_ms) 
 	global.animated_text_default_fade_cycle_time_ms = _cycle_time_ms;
 }
 
+animated_text_set_default_fade(0.3, 1, 1000);
+
+
 global.animated_text_default_shake_time_ms = 60;
 global.animated_text_default_shake_magnitude = 1;
 
@@ -61,6 +70,9 @@ function animated_text_default_shake(_time_ms, _magnitude) {
 	global.animated_text_default_shake_magnitude = _magnitude;
 }
 
+animated_text_default_shake(60, 1);
+
+
 global.animated_text_default_tremble_time_ms = 80;
 global.animated_text_default_tremble_magnitude = 1;
 
@@ -73,6 +85,9 @@ function animated_text_default_tremble(_time_ms, _magnitude) {
 	global.animated_text_default_tremble_time_ms = _time_ms;
 	global.animated_text_default_tremble_magnitude = _magnitude;
 }
+
+animated_text_default_tremble(80, 1);
+
 
 global.animated_text_default_chromatic_change_ms = 32;
 global.animated_text_default_chromatic_steps_per_change = 10;
@@ -90,6 +105,9 @@ function animated_text_default_chromatic(_change_ms, _steps_per_change, _char_of
 	global.animated_text_default_chromatic_char_offset = _char_offset;
 }
 
+animated_text_default_chromatic(32, 10, 30);
+
+
 global.animated_text_default_wchromatic_change_ms = 32;
 global.animated_text_default_wchromatic_steps_per_change = 10;
 
@@ -102,6 +120,9 @@ function animated_text_default_wchromatic(_change_ms, _steps_per_change) {
 	global.animated_text_default_wchromatic_change_ms = _change_ms;
 	global.animated_text_default_wchromatic_steps_per_change = _steps_per_change;
 }
+
+animated_text_default_wchromatic(32, 10);
+
 
 global.animated_text_default_wave_cycle_time_ms = 1000;
 global.animated_text_default_wave_magnitude = 3;
@@ -119,6 +140,9 @@ function animated_text_default_wave(_cycle_time_ms, _magnitude, _char_offset) {
 	global.animated_text_default_wave_char_offset = _char_offset;
 }
 
+animated_text_default_wave(1000, 3, 0.5);
+
+
 global.animated_text_default_float_cycle_time_ms = 1000;
 global.animated_text_default_float_magnitude = 3;
 
@@ -132,6 +156,9 @@ function animated_text_default_float(_cycle_time_ms, _magnitude) {
 	global.animated_text_default_float_magnitude = _magnitude;
 }
 
+animated_text_default_float(1000, 3);
+
+
 global.animated_text_default_wobble_cycle_time_ms = 1000;
 global.animated_text_default_wobble_max_angle = 10;
 
@@ -144,6 +171,8 @@ function animated_text_default_wobble(_cycle_time_ms, _max_angle) {
 	global.animated_text_default_wobble_cycle_time_ms = _cycle_time_ms;
 	global.animated_text_default_wobble_max_angle = _max_angle;
 }
+
+animated_text_default_wobble(1000, 10);
 
 
 /**

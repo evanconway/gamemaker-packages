@@ -235,7 +235,6 @@ function StyleableText(_source, _width = 600) constructor {
 		_start_drawable.split_left_at_index(_index_start);
 		var _end_drawable = get_drawable_for_character_at(_index_end);
 		_end_drawable.split_right_at_index(_index_end);
-		var _t = 0;
 	};
 	
 	/**
@@ -310,6 +309,7 @@ function StyleableText(_source, _width = 600) constructor {
 		if (is_string(_font)) {
 			var _asset_type = asset_get_type(_font);
 			if (_asset_type != asset_font) show_error("gave none font asset name for font command", true);
+			// Feather disable once GM1043
 			_font = asset_get_index(_font);
 		}
 		
