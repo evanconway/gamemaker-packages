@@ -32,8 +32,11 @@ function TagDecoratedText(_source_string) constructor {
 		// handle command
 		if (_c == "<" && _c_next != ">" && _c_next != "") {
 			var _end_index = string_pos_ext(">", _source_string, _i + 1);
-			var _command = string_copy(_source_string, _i + 1, _end_index - _i - 1);
-			array_push(commands, new TagDecoratedTextCommand(_command, _index));
+			var _command_text = string_copy(_source_string, _i + 1, _end_index - _i - 1);
+			var _command_arr = string_split(_command_text, " ", true);
+			for (var _k = 0; _k < array_length(_command_arr); _k++) {
+				array_push(commands, new TagDecoratedTextCommand(_command_arr[_k], _index));
+			}
 			_i = _end_index;
 		}
 		
@@ -91,7 +94,6 @@ function TagDecoratedText(_source_string) constructor {
 		if (_cmd == "rgb") typed_animated_text.animated_text.text.set_default_color(_s, _e, make_color_rgb(_aargs[0], _aargs[1], _aargs[2]));
 		
 		// animations
-		//fade shake tremble chromatic wchromatic wave float
 		if (_cmd == "fade") typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.FADE, _s, _e, _aargs);
 		if (_cmd == "shake") typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.SHAKE, _s, _e, _aargs);
 		if (_cmd == "tremble") typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.TREMBLE, _s, _e, _aargs);
@@ -99,6 +101,18 @@ function TagDecoratedText(_source_string) constructor {
 		if (_cmd == "wchromatic") typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.WCHROMATIC, _s, _e, _aargs);
 		if (_cmd == "wave") typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.WAVE, _s, _e, _aargs);
 		if (_cmd == "float") typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.FLOAT, _s, _e, _aargs);
+		
+		// entry animations
+		if (_cmd == "fadein") {
+			for (var _i = _s; _i <= _e; _i++) {
+				typed_animated_text.add_entry_animation_at(_i, ANIMATED_TEXT_ANIMATIONS.FADEIN, _aargs);
+			}
+		}
+		if (_cmd == "risein") {
+			for (var _i = _s; _i <= _e; _i++) {
+				typed_animated_text.add_entry_animation_at(_i, ANIMATED_TEXT_ANIMATIONS.RISEIN, _aargs);
+			}
+		}
 	};
 	
 	array_foreach(commands, _f_apply_command);

@@ -1,6 +1,7 @@
 {
   "FolderOrderSettings": [],
   "ResourceOrderSettings": [
+    {"name":"obj_test_entry_animations","order":22,"path":"objects/obj_test_entry_animations/obj_test_entry_animations.yy",},
     {"name":"fnt_handwriting","order":17,"path":"fonts/fnt_handwriting/fnt_handwriting.yy",},
     {"name":"StyleableTextStyle","order":4,"path":"scripts/StyleableTextStyle/StyleableTextStyle.yy",},
     {"name":"TagDecoratedText","order":1,"path":"scripts/TagDecoratedText/TagDecoratedText.yy",},
@@ -11,6 +12,7 @@
     {"name":"spr_button","order":19,"path":"sprites/spr_button/spr_button.yy",},
     {"name":"obj_test_colors","order":20,"path":"objects/obj_test_colors/obj_test_colors.yy",},
     {"name":"spr_styleable_text_sprite_default","order":5,"path":"sprites/spr_styleable_text_sprite_default/spr_styleable_text_sprite_default.yy",},
+    {"name":"obj_test_multi_effects","order":23,"path":"objects/obj_test_multi_effects/obj_test_multi_effects.yy",},
     {"name":"obj_test_animations","order":21,"path":"objects/obj_test_animations/obj_test_animations.yy",},
     {"name":"StyleableTextDrawable","order":2,"path":"scripts/StyleableTextDrawable/StyleableTextDrawable.yy",},
     {"name":"AnimatedTextMisc","order":2,"path":"scripts/AnimatedTextMisc/AnimatedTextMisc.yy",},
