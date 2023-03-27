@@ -2,8 +2,10 @@
   "FolderOrderSettings": [
     {"name":"StyleableText","order":1,"path":"folders/TagDecoratedText/StyleableText.yy",},
     {"name":"TypedText","order":2,"path":"folders/TagDecoratedText/TypedText.yy",},
+    {"name":"MenuSystem","order":15,"path":"folders/MenuSystem.yy",},
   ],
   "ResourceOrderSettings": [
+    {"name":"obj_test","order":16,"path":"objects/obj_test/obj_test.yy",},
     {"name":"obj_textsystem_test","order":5,"path":"objects/obj_textsystem_test/obj_textsystem_test.yy",},
     {"name":"fnt_handwriting","order":4,"path":"fonts/fnt_handwriting/fnt_handwriting.yy",},
     {"name":"StyleableTextStyle","order":4,"path":"scripts/StyleableTextStyle/StyleableTextStyle.yy",},

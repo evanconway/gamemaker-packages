@@ -15,6 +15,7 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"AnimatedText","folderPath":"folders/TagDecoratedText/AnimatedText.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"StyleableText","folderPath":"folders/TagDecoratedText/StyleableText.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"TypedText","folderPath":"folders/TagDecoratedText/TypedText.yy",},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"MenuSystem","folderPath":"folders/MenuSystem.yy",},
   ],
   "IncludedFiles": [],
   "isEcma": false,
@@ -23,6 +24,7 @@
     "IDEVersion": "2023.2.1.75",
   },
   "resources": [
+    {"id":{"name":"obj_test","path":"objects/obj_test/obj_test.yy",},},
     {"id":{"name":"TypedAnimatedText","path":"scripts/TypedAnimatedText/TypedAnimatedText.yy",},},
     {"id":{"name":"obj_textsystem_test","path":"objects/obj_textsystem_test/obj_textsystem_test.yy",},},
     {"id":{"name":"fnt_handwriting","path":"fonts/fnt_handwriting/fnt_handwriting.yy",},},
@@ -36,6 +38,7 @@
     {"id":{"name":"spr_button","path":"sprites/spr_button/spr_button.yy",},},
     {"id":{"name":"spr_styleable_text_sprite_default","path":"sprites/spr_styleable_text_sprite_default/spr_styleable_text_sprite_default.yy",},},
     {"id":{"name":"AnimatedText","path":"scripts/AnimatedText/AnimatedText.yy",},},
+    {"id":{"name":"Button","path":"scripts/Button/Button.yy",},},
     {"id":{"name":"StyleableTextDrawable","path":"scripts/StyleableTextDrawable/StyleableTextDrawable.yy",},},
     {"id":{"name":"AnimatedTextMisc","path":"scripts/AnimatedTextMisc/AnimatedTextMisc.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},

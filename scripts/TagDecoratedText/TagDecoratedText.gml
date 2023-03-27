@@ -158,6 +158,7 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
 		if (_cmd == "wchromatic") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.WCHROMATIC, _s, _e, _aargs);
 		if (_cmd == "wave") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.WAVE, _s, _e, _aargs);
 		if (_cmd == "float") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.FLOAT, _s, _e, _aargs);
+		if (_cmd == "blink") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.BLINK, _s, _e, _aargs);
 		
 		// entry animations
 		if (_cmd == "fadein") {
@@ -231,7 +232,19 @@ function tag_decorated_text_draw_no_update(_tag_decorated_text, _x, _y, _alignme
 		pages[page_current].update(update_time);
 		update_time = 0;
 		pages[page_current].draw(_x, _y, _alignment);
-		draw_border(_x, _y);
+		//draw_border(_x, _y);
+	}
+}
+
+/**
+ * Reset animation states for given tag decorated text.
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ */
+function tag_decorated_text_reset_animations(_tag_decorated_text) {
+	with (_tag_decorated_text) {
+		for (var _i = 0; _i < array_length(pages); _i++) {
+			pages[_i].animated_text.reset_animations();
+		}
 	}
 }
 
