@@ -1,5 +1,6 @@
-function AnimatedText(_source_string) constructor {
-	text = new StyleableText(_source_string);
+/// @ignore
+function AnimatedText(_source_string, _width, _height) constructor {
+	text = new StyleableText(_source_string, _width, _height);
 	
 	get_character_count = function() {
 		return array_length(text.character_array);
@@ -48,9 +49,9 @@ function AnimatedText(_source_string) constructor {
 	/**
 	 * @param {real} _x
 	 * @param {real} _y
+	 * @param {real} _alignment horizontal alignment
 	 */
-	draw = function(_x, _y) {
-		update(1000 / game_get_speed(gamespeed_fps));
-		text.draw(_x, _y);
+	draw = function(_x, _y, _alignment = fa_left) {
+		text.draw(_x, _y, _alignment);
 	};
 }

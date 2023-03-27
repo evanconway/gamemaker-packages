@@ -1,229 +1,281 @@
 /**
- * Create a new Tag Decorated Text element.
- * @param {string} _source_string The text, including command tags, to generate a Tag Decorated Text element from.
+ * @param {string} _command
+ * @param {real} _index_start
+ * @ignore
  */
-function TagDecoratedText(_source_string) constructor {
-	source = "";
-	characters = tag_decorated_text_get_empty_array_characters();
-	default_style = new TagDecoratedTextStyle();
-	max_width = 400;
-	drawables = tag_decorated_text_get_undefined_drawable();
-	drawables = undefined;
-	drawables_end = drawables;
-	create_drawables_on_set_text = true;
-	update_time_ms = 0;
+function TagDecoratedTextCommand(_command, _index_start) constructor {
+	var _command_aarg_split = string_split(_command, ":");
+	command = _command_aarg_split[0];
+	var _aarg_string = array_length(_command_aarg_split) > 1 ? _command_aarg_split[1] : "";
+	
+	var _f_map = function(_string) {
+		try {
+			var _r = real(_string);
+			return _r
+		} catch(_error) {
+			_error = undefined;
+		}
+
+		// Feather disable once GM1035
+		return _string;
+	};
+	
+	aargs = _aarg_string == "" ? [] : array_map(string_split(_aarg_string, ","), _f_map);
+	
+	index_start = _index_start;
+	index_end = -1;
+}
+
+/**
+ * Creates a new TagDecoratedText instance from the given source string.
+ * @param {string} _source_string the string with decorative tags
+ */
+function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _height = -1) constructor {
+	width = _width;
+	height = _height;
 	
 	/*
-	Keep track of line index and line width while parsing text. We use line width to determine
-	when a new line of text should happen, and we keep track of which line the characters are
-	on with the line index. This function should be invoked whenever a non-space character
-	is added to the character array.
+	The source string contains both the tags and the text to actually display. From
+	this we need to build an array of commands and their index ranges as well as 
+	the text to display with command tags removed.
 	*/
-	line_width = 0;
-	line_index = 0;
-	/**
-	 * Adds a character to the character array. Should only be used during text parsing.
-	 *@param {struct.TagDecoratedTextCharacter} _character
-	 */
-	add_character = function(_character) {
-		array_push(characters, _character);
-		line_width += _character.char_width;
-		if (line_width <= max_width || _character.character == " ") return;
-		line_index++;
-		line_width = 0;
-		var _i = array_length(characters) - 1;
-		while (_i >= 0 && characters[_i].character != " ") {
-			characters[_i].line_index = line_index;
-			line_width += characters[_i].char_width;
-			_i--;
-		}
-	};
 	
-	add_drawable = function(_character_index) {
-		var _c = characters[_character_index];
-		if (_c.added) {
-			return;
-		}
-		_c.added = true;
-		var _drawable = new TagDecoratedTextDrawable(characters, _character_index);
-		if (drawables == undefined) {
-			drawables = _drawable;
-			drawables_end = _drawable;
-		} else {
-			_drawable.previous = drawables_end;
-			drawables_end.next = _drawable;
-			_drawable.merge();
-			while (drawables_end.next != undefined) drawables_end = drawables_end.next;
-		}
-	};
+	commands = [];
 	
-	/**
-	 * Set the x and y position of all characters.
-	 */
-	set_characters_xy = function() {
-		var _line_heights = ds_map_create();
-		for (var _i = 0; _i < array_length(characters); _i++) {
-			var _c = characters[_i];
-			if (ds_map_exists(_line_heights, _c.line_index) && _c.char_height > _line_heights[? _c.line_index]) {
-				_line_heights[? _c.line_index] = _c.char_height;
+	set_command_unset_ends = function(_end_index) {
+		for (var _k = array_length(commands) - 1; _k >= 0; _k--) {
+			if (commands[_k].index_end < 0) {
+				commands[_k].index_end = _end_index;
 			} else {
-				ds_map_add(_line_heights, _c.line_index, _c.char_height);
+				_k = -1; // end loop if index_end defined
 			}
 		}
-		var _x = 0;
-		var _y = 0;
-		var _line_i_prev = 0;
-		var _c;
-		for (var _i = 0; _i < array_length(characters); _i++) {
-			_c = characters[_i];
-			if (_c.line_index != _line_i_prev) {
-				_x = 0;
-				_y += _line_heights[? _line_i_prev];
-				_line_i_prev = _c.line_index;
-			}
-			_c.char_x = _x;
-			_x += _c.char_width;
-			_c.char_y = _y;
-			if (create_drawables_on_set_text) {
-				add_drawable(_i);
-			}
-		}
-		ds_map_destroy(_line_heights);
 	};
 	
-	/**
-	 * Set the text of this TagDecoratedText element.
-	 * @param {string} _new_source_string
-	 */
-	set_text = function(_new_source_string) {
-		source = _new_source_string;
-		var _commands = tag_decorated_text_get_empty_array_commands();
-		for (var _i = 1; _i <= string_length(source); _i++) {
-			var _char = string_char_at(source, _i);
-			if (_char == "<") {
-				_commands = parse_commands_at(_i);
-				var _sprite = get_sprite_from_commands(_commands);
-				if (_sprite != undefined) {
-					var _style = default_style.copy_with_commands_applied(_commands);
-					var _animations = get_animations_from_commands(_commands, array_length(characters));
-					var _sprite_character = new TagDecoratedTextCharacter("$", _style, _animations, line_index);
-					_sprite_character.set_sprite(_sprite);
-					add_character(_sprite_character);
-				}
-				_i = string_pos_ext(">", source, _i);
-			} else {
-				var _style = default_style.copy_with_commands_applied(_commands);
-				var _animations = get_animations_from_commands(_commands, array_length(characters));
-				var _character = new TagDecoratedTextCharacter(_char, _style, _animations, line_index);
-				add_character(_character);
+	displayed_text = "";
+	
+	var _index = 1;
+	
+	// parse out commands and displayed text
+	for (var _i = 1; _i <= string_length(_source_string); _i++) {
+		var _c = string_char_at(_source_string, _i);
+		var _c_next = string_char_at(_source_string, _i + 1);
+		
+		// handle command
+		if (_c == "<" && _c_next != ">" && _c_next != "") {
+			var _end_index = string_pos_ext(">", _source_string, _i + 1);
+			var _command_text = string_copy(_source_string, _i + 1, _end_index - _i - 1);
+			var _command_arr = string_split(_command_text, " ", true);
+			for (var _k = 0; _k < array_length(_command_arr); _k++) {
+				array_push(commands, new TagDecoratedTextCommand(_command_arr[_k], _index));
 			}
+			_i = _end_index;
 		}
 		
-		set_characters_xy();
+		// handle clear tag
+		if (_c == "<" && _c_next == ">") {
+			set_command_unset_ends(_index - 1);
+			_i++;
+		}
+		
+		// handle error
+		if (_c == "<" && _c_next == "") {
+			show_error("Improper tags used in tag decorated text!", true);
+		}
+		
+		// handle regular text
+		if (_c != "<") {
+			displayed_text += _c;
+			_index++;
+		}
 	}
 	
-	/**
-	 * Parse out an array of commands at the given index in the source.
-	 * @param {real} _index index in the source to parse commands from
-	 */
-	parse_commands_at = function(_index) {
-		var _end_index = string_pos_ext(">", source, _index);
-		var _string_to_parse = string_copy(source, _index + 1, _end_index - (_index + 1));
-		var _to_parse = string_split(_string_to_parse, " ");
-		var _result = array_create(0, new TagDecoratedTextCommand(0, []));
-		for (var _i = 0; _i < array_length(_to_parse); _i++) {
-			var _command_and_aargs = string_split(_to_parse[_i], ":");
-			var _command = string_to_tag_decorated_text_command(_command_and_aargs[0]);
-			var _aargs = array_length(_command_and_aargs) == 1 ? [] : array_map(string_split(_command_and_aargs[1], ",", true), function(_value) {
-				try {
-					var _number = real(_value);
-					_value = _number;
-				} catch (e) {
-					// do nothing
-				}
-				return _value;
-			});
-			array_push(_result, new TagDecoratedTextCommand(_command, _aargs));
-		}
-		return _result;
-	};
+	set_command_unset_ends(string_length(displayed_text));
 	
-	/**
-	 * Get the sprite asset in the given command array, if there is one.
-	 * @param {array<struct.TagDecoratedTextCommand>} _commands command array
-	 */
-	get_sprite_from_commands = function(_commands) {
-		var _result = spr_tag_decorated_text_default;
-		_result = undefined;
-		for (var _i = 0; _i < array_length(_commands); _i ++) {
-			if (_commands[_i].command == TAG_DECORATED_TEXT_COMMANDS.SPRITE) {
-				if (array_length(_commands[_i].aargs) == 1) {
-					if (asset_get_type(_commands[_i].aargs[0]) != asset_sprite) {
-						show_error("TDT Error: Given sprite \"" + _commands[_i].aargs[0] + "\" does not exist!", true);
-					}
-					_result = asset_get_index(_commands[_i].aargs[0]);
-				} else {
-					show_error("TDT Error: Improper number of args for sprite!", true);
-				}
+	// before parsing commands, apply defaults
+	var _default_commands = [];
+	var _default_command_arr = string_split(_default_effects, " ", true);
+	for (var _d = 0; _d < array_length(_default_command_arr); _d++) {
+		var _new_command = new TagDecoratedTextCommand(_default_command_arr[_d], 1);
+		_new_command.index_end = string_length(displayed_text);
+		array_push(_default_commands, _new_command);
+	}
+	while (array_length(_default_commands) > 0) {
+		array_insert(commands, 0, array_pop(_default_commands));
+	}
+	
+	/*
+	Our original design did not account for pagination. This variable is a remnant of that.
+	What we do now is create a single instance of TypedAnimatedText, then split it up into
+	multiple instances or "pages" if a height is provided. 
+	*/
+	var _typed_animated_text = new TypedAnimatedText(displayed_text, _width, _height);
+	
+	for (var _i = 0; _i < array_length(commands); _i++) {
+		var _cmd = string_lower(commands[_i].command);
+		var _aargs = commands[_i].aargs;
+		
+		// convert string index to array index for applying effects
+		var _s = commands[_i].index_start - 1;
+		var _e = commands[_i].index_end - 1;
+		
+		// colors
+		if (_cmd == "aqua") _typed_animated_text.animated_text.text.set_default_color(_s, _e, c_aqua);
+		if (_cmd == "black") _typed_animated_text.animated_text.text.set_default_color(_s, _e, c_black);
+		if (_cmd == "blue") _typed_animated_text.animated_text.text.set_default_color(_s, _e, c_blue);
+		if (_cmd == "dkgray" || _cmd == "dkgrey") _typed_animated_text.animated_text.text.set_default_color(_s, _e, c_dkgray);
+		if (_cmd == "pink" || _cmd == "fuchsia") _typed_animated_text.animated_text.text.set_default_color(_s, _e, c_fuchsia);
+		if (_cmd == "gray" || _cmd == "grey") _typed_animated_text.animated_text.text.set_default_color(_s, _e, c_gray);
+		if (_cmd == "green") _typed_animated_text.animated_text.text.set_default_color(_s, _e, c_green);
+		if (_cmd == "lime") _typed_animated_text.animated_text.text.set_default_color(_s, _e, c_lime);
+		if (_cmd == "ltgray" || _cmd == "ltgrey") _typed_animated_text.animated_text.text.set_default_color(_s, _e, c_ltgray);
+		if (_cmd == "maroon") _typed_animated_text.animated_text.text.set_default_color(_s, _e, c_maroon);
+		if (_cmd == "navy") _typed_animated_text.animated_text.text.set_default_color(_s, _e, c_navy);
+		if (_cmd == "olive") _typed_animated_text.animated_text.text.set_default_color(_s, _e, c_olive);
+		if (_cmd == "orange") _typed_animated_text.animated_text.text.set_default_color(_s, _e, c_orange);
+		if (_cmd == "purple") _typed_animated_text.animated_text.text.set_default_color(_s, _e, c_purple);
+		if (_cmd == "red") _typed_animated_text.animated_text.text.set_default_color(_s, _e, c_red);
+		if (_cmd == "silver") _typed_animated_text.animated_text.text.set_default_color(_s, _e, c_silver);
+		if (_cmd == "teal") _typed_animated_text.animated_text.text.set_default_color(_s, _e, c_teal);
+		if (_cmd == "white") _typed_animated_text.animated_text.text.set_default_color(_s, _e, c_white);
+		if (_cmd == "yellow") _typed_animated_text.animated_text.text.set_default_color(_s, _e, c_yellow);
+		if (_cmd == "rgb") _typed_animated_text.animated_text.text.set_default_color(_s, _e, make_color_rgb(_aargs[0], _aargs[1], _aargs[2]));
+		
+		// animations
+		if (_cmd == "fade") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.FADE, _s, _e, _aargs);
+		if (_cmd == "shake") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.SHAKE, _s, _e, _aargs);
+		if (_cmd == "tremble") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.TREMBLE, _s, _e, _aargs);
+		if (_cmd == "chromatic") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.CHROMATIC, _s, _e, _aargs);
+		if (_cmd == "wchromatic") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.WCHROMATIC, _s, _e, _aargs);
+		if (_cmd == "wave") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.WAVE, _s, _e, _aargs);
+		if (_cmd == "float") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.FLOAT, _s, _e, _aargs);
+		
+		// entry animations
+		if (_cmd == "fadein") {
+			for (var _k = _s; _k <= _e; _k++) {
+				_typed_animated_text.add_entry_animation_at(_i, ANIMATED_TEXT_ANIMATIONS.FADEIN, _aargs);
 			}
 		}
-		return _result;
-	};
-	
-	/**
-	 * Get an array of animations given an array of commands and character index.
-	 * @param {array<struct.TagDecoratedTextCommand>} _commands array of commands to parse animations from
-	 * @param {real} _char_index index in char array animations will refer to
-	 */
-	get_animations_from_commands = function(_commands, _char_index) {
-		var _result = tag_decorated_text_get_empty_array_animations();
-		for (var _i = 0; _i < array_length(_commands); _i++) {
-			var _animation = new TagDecoratedTextAnimation(_commands[_i].command, _commands[_i].aargs, _char_index);
-			if (_animation.valid_animation_command) array_push(_result, _animation);
+		if (_cmd == "risein") {
+			for (var _k = _s; _k <= _e; _k++) {
+				_typed_animated_text.add_entry_animation_at(_i, ANIMATED_TEXT_ANIMATIONS.RISEIN, _aargs);
+			}
 		}
-		return _result;
-	};
-	
-	set_text(_source_string);
-	
-	update_custom_time = function(_time_ms) {
-		update_time_ms += _time_ms;
-		var _cursor = drawables;
-		while (_cursor != undefined) {
-			_cursor.update(update_time_ms);
-			_cursor = _cursor.next;
-		}
-	};
-	
-	update = function() {
-		update_custom_time(1000 / game_get_speed(gamespeed_fps));
-	};
-	
-	/**
-	 * Draw this TagDecoratedText instance at the given x y position without updating.
-	 * @param {real} _x x position
-	 * @param {real} _y y position
-	 */
-	draw_no_update = function(_x, _y) {
-		draw_set_halign(fa_left)
-		draw_set_valign(fa_top)
-		var _cursor = drawables;
-		while (_cursor != undefined) {
-			_cursor.draw(_x, _y);
-			_cursor = _cursor.next;
-		}
-		draw_set_color(c_fuchsia);
-		draw_rectangle(_x, _y, _x + max_width, _y + 480, true);
 		
-	};
+		// other
+		if (_cmd == "n" || _cmd == "br") _typed_animated_text.animated_text.text.set_new_line_at(_s, true);
+		if (_cmd == "f" || _cmd == "font") _typed_animated_text.animated_text.text.set_default_font(_s, _e, _aargs[0]);
+		if (_cmd == "a" || _cmd == "alpha") _typed_animated_text.animated_text.text.set_default_alpha(_s, _e, _aargs[0]);
+		if (_cmd == "x") _typed_animated_text.animated_text.text.set_default_mod_x(_s, _e, _aargs[0]);
+		if (_cmd == "y") _typed_animated_text.animated_text.text.set_default_mod_y(_s, _e, _aargs[0]);
+		if (_cmd == "xy") {
+			_typed_animated_text.animated_text.text.set_default_mod_x(_s, _e, _aargs[0]);
+			_typed_animated_text.animated_text.text.set_default_mod_y(_s, _e, _aargs[1]);
+		}
+		if (_cmd == "scalex") _typed_animated_text.animated_text.text.set_default_scale_x(_s, _e, _aargs[0]);
+		if (_cmd == "scaley") _typed_animated_text.animated_text.text.set_default_scale_y(_s, _e, _aargs[0]);
+		if (_cmd == "scalexy") {
+			_typed_animated_text.animated_text.text.set_default_scale_x(_s, _e, _aargs[0]);
+			_typed_animated_text.animated_text.text.set_default_scale_y(_s, _e, _aargs[1]);
+		}
+		if (_cmd == "s" || _cmd == "sprite") _typed_animated_text.animated_text.text.set_default_sprite(_s, _aargs[0]);
+	}
 	
-	/**
-	 * Draw this TagDecoratedText instance at the given x y position.
-	 * @param {real} _x x position
-	 * @param {real} _y y position
-	 */
-	draw = function(_x, _y) {
-		update();
-		draw_no_update(_x, _y);
-	};
+	pages = height > 0 ? _typed_animated_text.paginate(_width, _height) : [_typed_animated_text];
+	
+	// default to typed pages
+	for (var _i = 0; _i < array_length(pages); _i++) {
+		pages[_i].set_typed();
+	}
+	
+	page_current = 0;
+	
+	get_height = function() {
+		return height > 0 ? height : pages[0].animated_text.text.get_height();
+	}
+	
+	get_width = function() {
+		return width > 0 ? width : pages[0].animated_text.text.get_width();
+	}
+	
+	draw_border = function(_x, _y) {
+		draw_set_alpha(1);
+		draw_set_color(c_fuchsia);
+		draw_rectangle(_x, _y, _x + get_width(), _y + get_height(), true);
+	}
+	
+	update_time = 0;
+}
+
+/**
+ * Updates the given tag decorated text instance by the given time in ms. If no time is specified
+ * the tag decorated text instance is updated by time in ms of 1 frame of the current game speed.
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ * @param {real} _update_time_ms
+ */
+function tag_decorated_text_update(_tag_decorated_text, _update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
+	_tag_decorated_text.update_time = _update_time_ms;
+}
+
+/**
+ * Draws the given tag decorated text instance without updating it.
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ * @param {real} _x
+ * @param {real} _y
+ * @param {Constant.HAlign} _alignment
+ */
+function tag_decorated_text_draw_no_update(_tag_decorated_text, _x, _y, _alignment = fa_left) {
+	with (_tag_decorated_text) {
+		global.drawables_drawn = 0;
+		pages[page_current].update(update_time);
+		update_time = 0;
+		pages[page_current].draw(_x, _y, _alignment);
+		draw_border(_x, _y);
+	}
+}
+
+/**
+ * Updates and draws the given tag decorated text instance.
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ * @param {real} _x
+ * @param {real} _y
+ * @param {Constant.HAlign} _alignment
+ */
+function tag_decorated_text_draw(_tag_decorated_text, _x, _y, _alignment = fa_left) {
+	tag_decorated_text_update(_tag_decorated_text);
+	tag_decorated_text_draw_no_update(_tag_decorated_text, _x, _y, _alignment);
+}
+
+/**
+ * Resets the typing status of all pages in the given tag decorated text instance.
+ * Tag decorated text instances have their typing set to finished by default so this
+ * must be called in order to see typing effects on a tag decorated text instance.
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ */
+function tag_decorated_text_reset_typing(_tag_decorated_text) {
+	with (_tag_decorated_text) {
+		for (var _i = 0; _i < array_length(pages); _i++) {
+			pages[_i].reset_typing();
+		}
+	}
+}
+
+/**
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ */
+function tag_decorated_text_advance(_tag_decorated_text) {
+	with (_tag_decorated_text) {
+		if (!pages[page_current].get_typed()) pages[page_current].set_typed();
+		else if (page_current < array_length(pages) - 1) {
+			page_current++
+		}	
+	}
+}
+
+/// @ignore
+function tag_decorated_text_draw_performance(_x, _y) {
+	draw_set_color(c_lime);
+	draw_set_alpha(1);
+	draw_text(0, 0, fps_real);
+	draw_text(0, 20, "drawables: " + string(global.drawables_drawn));
 }

@@ -8,6 +8,7 @@ global.animated_text_animation_random_array = array_map(array_create(1000000, 0)
 /**
  * Get a random number from 0 to 1 (inclusive 0, exclusive 1) given an index. Returns the same number for the same index.
  * @param {real} _index
+ * @ignore
  */
 function animated_text_get_random(_index) {
 	_index %= array_length(global.animated_text_animation_random_array);
@@ -101,6 +102,7 @@ function animated_text_chromatic_blue_at(_index) {
 /**
  * Get an rgb color based on an index. The color will progress through the spectrum as the index increases. The same index returns the same color.
  * @param {real} _index
+ * @ignore
  */
 function animated_text_get_chromatic_color_at(_index) {
 	var _red = animated_text_chromatic_red_at(_index);

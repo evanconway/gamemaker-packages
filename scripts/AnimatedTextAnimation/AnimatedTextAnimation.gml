@@ -22,6 +22,9 @@ function animated_text_set_default_fadein(_duration) {
 	global.animated_text_default_fadein_duration = _duration;
 }
 
+animated_text_set_default_fadein(200);
+
+
 global.animated_text_default_risein_duration = 200;
 
 /**
@@ -31,6 +34,9 @@ global.animated_text_default_risein_duration = 200;
 function animated_text_set_default_risein(_duration) {
 	global.animated_text_default_risein_duration = _duration;
 }
+
+animated_text_set_default_risein(200);
+
 
 global.animated_text_default_fade_alpha_min = 0.3;
 global.animated_text_default_fade_alpha_max = 1;
@@ -48,6 +54,9 @@ function animated_text_set_default_fade(_alpha_min, _alpha_max, _cycle_time_ms) 
 	global.animated_text_default_fade_cycle_time_ms = _cycle_time_ms;
 }
 
+animated_text_set_default_fade(0.3, 1, 1000);
+
+
 global.animated_text_default_shake_time_ms = 60;
 global.animated_text_default_shake_magnitude = 1;
 
@@ -61,6 +70,9 @@ function animated_text_default_shake(_time_ms, _magnitude) {
 	global.animated_text_default_shake_magnitude = _magnitude;
 }
 
+animated_text_default_shake(60, 1);
+
+
 global.animated_text_default_tremble_time_ms = 80;
 global.animated_text_default_tremble_magnitude = 1;
 
@@ -73,6 +85,9 @@ function animated_text_default_tremble(_time_ms, _magnitude) {
 	global.animated_text_default_tremble_time_ms = _time_ms;
 	global.animated_text_default_tremble_magnitude = _magnitude;
 }
+
+animated_text_default_tremble(80, 1);
+
 
 global.animated_text_default_chromatic_change_ms = 32;
 global.animated_text_default_chromatic_steps_per_change = 10;
@@ -90,6 +105,9 @@ function animated_text_default_chromatic(_change_ms, _steps_per_change, _char_of
 	global.animated_text_default_chromatic_char_offset = _char_offset;
 }
 
+animated_text_default_chromatic(32, 10, 30);
+
+
 global.animated_text_default_wchromatic_change_ms = 32;
 global.animated_text_default_wchromatic_steps_per_change = 10;
 
@@ -102,6 +120,9 @@ function animated_text_default_wchromatic(_change_ms, _steps_per_change) {
 	global.animated_text_default_wchromatic_change_ms = _change_ms;
 	global.animated_text_default_wchromatic_steps_per_change = _steps_per_change;
 }
+
+animated_text_default_wchromatic(32, 10);
+
 
 global.animated_text_default_wave_cycle_time_ms = 1000;
 global.animated_text_default_wave_magnitude = 3;
@@ -119,6 +140,9 @@ function animated_text_default_wave(_cycle_time_ms, _magnitude, _char_offset) {
 	global.animated_text_default_wave_char_offset = _char_offset;
 }
 
+animated_text_default_wave(1000, 3, 0.5);
+
+
 global.animated_text_default_float_cycle_time_ms = 1000;
 global.animated_text_default_float_magnitude = 3;
 
@@ -131,6 +155,9 @@ function animated_text_default_float(_cycle_time_ms, _magnitude) {
 	global.animated_text_default_float_cycle_time_ms = _cycle_time_ms;
 	global.animated_text_default_float_magnitude = _magnitude;
 }
+
+animated_text_default_float(1000, 3);
+
 
 global.animated_text_default_wobble_cycle_time_ms = 1000;
 global.animated_text_default_wobble_max_angle = 10;
@@ -145,6 +172,8 @@ function animated_text_default_wobble(_cycle_time_ms, _max_angle) {
 	global.animated_text_default_wobble_max_angle = _max_angle;
 }
 
+animated_text_default_wobble(1000, 10);
+
 
 /**
  * @param {real} _animation_enum_value entry in the ANIMATED_TEXT_ANIMATIONS enum
@@ -152,8 +181,10 @@ function animated_text_default_wobble(_cycle_time_ms, _max_angle) {
  * @param {real} _index_start index of first character animation acts on
  * @param {real} _index_end index of last character animation acts on
  * @param {array} _aargs array of parameters for this animation
+ * @ignore
  */
 function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_start, _index_end, _aargs) constructor {
+	animation_enum_value = _animation_enum_value; // only needed for copying in outside contexts
 	text_reference = _styleable_text;
 	index_start = _index_start;
 	index_end = _index_end;
@@ -262,14 +293,14 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 			var _index_y = _index_x + 4321; // arbitrary character index offset 
 			if (offset_individual_chars) {
 				for (var _i = index_start; _i <= index_end; _i++) {
-					var _offset_x = floor((magnitude + 1) * 2 * tag_decorated_text_get_random(_index_x + _i * 4321)) - magnitude
-					var _offset_y = floor((magnitude + 1) * 2 * tag_decorated_text_get_random(_index_y + _i * 4321)) - magnitude
+					var _offset_x = floor((magnitude + 1) * 2 * animated_text_get_random(_index_x + _i * 4321)) - magnitude
+					var _offset_y = floor((magnitude + 1) * 2 * animated_text_get_random(_index_y + _i * 4321)) - magnitude
 					text_reference.set_mod_x(_i, _i, _offset_x);
 					text_reference.set_mod_y(_i, _i, _offset_y);
 				}
 			} else {
-				var _offset_x = floor((magnitude + 1) * 2 * tag_decorated_text_get_random(_index_x)) - magnitude;
-				var _offset_y = floor((magnitude + 1) * 2 * tag_decorated_text_get_random(_index_y)) - magnitude;
+				var _offset_x = floor((magnitude + 1) * 2 * animated_text_get_random(_index_x)) - magnitude;
+				var _offset_y = floor((magnitude + 1) * 2 * animated_text_get_random(_index_y)) - magnitude;
 				text_reference.set_mod_x(index_start, index_end, _offset_x);
 				text_reference.set_mod_y(index_start, index_end, _offset_y);
 			}

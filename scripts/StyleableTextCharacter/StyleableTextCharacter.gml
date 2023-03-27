@@ -1,6 +1,7 @@
 /**
  * Get a new StyleableCharacter instance.
  * @param {string} _character character
+ * @ignore
  */
 function StyleableTextCharacter(_character) constructor {
 	if (string_length(_character) != 1) {
@@ -9,6 +10,7 @@ function StyleableTextCharacter(_character) constructor {
 	character = _character;
 	sprite = spr_styleable_text_sprite_default; // treated as undefined
 	line_index = 0;
+	new_line = false; // forces new line start on this character
 	position_x = 0;
 	position_y = 0;
 	style = new StyleableTextStyle();

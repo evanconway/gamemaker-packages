@@ -1,8 +1,11 @@
+global.drawables_drawn = 0;
+
 /**
  * Get a new StyleableTextDrawable instance.
  * @param {array<struct.StyleableTextCharacter>} _character_array reference to a StyleableTextCharacter array
  * @param {real} _index_start index of first character this drawable references, inclusive
  * @param {real} _index_end index of last character this drawable references, inclusive
+ * @ignore
  */
 function StyleableTextDrawable(_character_array, _index_start, _index_end) constructor {
 	if (_index_start < 0) {
@@ -49,10 +52,6 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 	
 	calculate_content();
 	
-	get_content = function() {
-		return content;
-	};
-	
 	get_index_start = function() {
 		return index_start;
 	};
@@ -61,13 +60,15 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 		return index_end;
 	};
 	
-	/**
-	 * @param {real} _new_index_start the new starting index in the character array of this drawable
+	/** commented out because it seems we may not need this at all?
+	 * param {real} _new_index_start the new starting index in the character array of this drawable
 	 */
+	 /*
 	set_index_start = function(_new_index_start) {
 		index_start = _new_index_start;
 		calculate_content();
 	};
+	*/
 	
 	/**
 	 * @param {real} _new_index_end the new ending index in the character array of this drawable

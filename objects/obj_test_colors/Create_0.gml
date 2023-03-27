@@ -1,0 +1,1 @@
+test = new TagDecoratedText("<aqua>aqua <black>black <blue>blue <dkgray>dkgray <pink>pink <gray>gray <green>green <lime>lime <ltgray>ltgray <maroon>maroon <navy>navy <olive>olive <orange>orange <purple>purple <red>red <silver>silver <teal>teal <white>white <yellow>yellow <rgb:255,255,200>RGB");

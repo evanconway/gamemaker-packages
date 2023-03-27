@@ -2,8 +2,10 @@
  * Get a new StyleableText instance.
  * @param {string} _source source string
  * @param {real} _width max width of text before line breaks occur
+ * @param {real} _height max height of text before pagination occurs (not implemented yet)
+ * @ignore
  */
-function StyleableText(_source, _width = 600) constructor {
+function StyleableText(_source, _width = -1, _height = -1) constructor {
 	if (string_length(_source) == 0) {
 		show_error("Cannot create StyleableText with empty string!", true);
 	}
@@ -13,7 +15,21 @@ function StyleableText(_source, _width = 600) constructor {
 		array_push(character_array, new StyleableTextCharacter(string_char_at(_source, _i)));
 	}
 	
+	/*
+	Later we should re-work width/height to be something that's calculated automatically if not
+	defined by the user, or adjusts the text if given by the user. We should add pagination
+	if the user defines width and height and the text is too large for the given values.
+	*/
 	width = _width;
+	height = _height; // calculated automatically (for now)
+	
+	get_width = function() {
+		return width;
+	}
+	
+	get_height = function() {
+		return height;
+	}
 	
 	/**
 	 * Sets the line index for characters in the given range.
@@ -27,9 +43,19 @@ function StyleableText(_source, _width = 600) constructor {
 		}
 	};
 	
+	/*
+	A mapping of line indexes to width of trailing spaces on said lines. Used to 
+	draw center and right aligned text.
+	*/
+	alignment_offsets = ds_map_create();
+	
 	calculate_xy = function() {
-		// first pass: determine line breaks using line_index
-		var _line_index = 0;
+		/*
+		Here we determine line breaks by setting a different line_index to characters. However, if width
+		is given as less than 0 than there will be no line breaks, the text will be a single line, and the
+		width will be set to the width of the resulting single line.
+		*/
+		var _line_index = -1; // start at -1 to account for line break on first word (very small widths or super large words)
 		var _line_width = 0;
 		var _word_index_start = 0;
 		var _word_index_end = -1; // -1 if word has not started
@@ -38,13 +64,15 @@ function StyleableText(_source, _width = 600) constructor {
 		for (var _i = 0; _i < array_length(character_array); _i++) {
 			var _char = character_array[_i];
 			
-			// if space, word is over
-			if (_char.character == " ") {
+			// if space or new line, word is over
+			if (_char.character == " " || _char.new_line) {
 				// if word is too big for line, start new line
-				if (_line_width + _word_width > width) {
+				if (width >= 0 && _line_width + _word_width > width) {
 					_line_index++;
 					_line_width = 0;
 				}
+				
+				_line_index = _line_index < 0 ? 0 : _line_index; // ensure first line index is 0
 				
 				// add word to current line
 				characters_set_line_index(_word_index_start, _word_index_end, _line_index);
@@ -52,9 +80,23 @@ function StyleableText(_source, _width = 600) constructor {
 				_word_width = 0;
 				_word_index_end = -1; // mark word as not started
 				
-				// add space to current line
+				// if new line triggered, start new line
+				if (_char.new_line) {
+					_line_index++;
+					_line_width = 0;
+				}
+				
+				// add character to current line
 				characters_set_line_index(_i, _i, _line_index);
 				_line_width += _char.get_width();
+				
+				// if character is not space, start word
+				// (happens when new line triggered by character.new_line and not space)
+				if (_char.character != " ") {
+					_word_index_start = _i;
+					_word_width += _char.get_width();
+					_word_index_end = _i;
+				}
 				
 			// otherwise add to current word
 			} else {
@@ -66,24 +108,25 @@ function StyleableText(_source, _width = 600) constructor {
 		}
 		
 		// set last word line index
-		if (_word_index_end <= 0) {
-			// if word is too big for line, start new line
-			if (_line_width + _word_width > width) {
-				_line_index++;
-				_line_width = 0;
-			}
-			
-			// add word to current line
-			characters_set_line_index(_word_index_start, _word_index_end, _line_index);
-			_line_width += _word_width;
-			_word_width = 0;
-			_word_index_end = -1; // mark word as not started
+		// if word is too big for line, start new line
+		if (width >= 0 && _line_width + _word_width > width) {
+			_line_index++;
 		}
 		
-		// second pass: determine line heights
+		// in cases with very little text, line_index can not even be advanced, ensure it's at least 0 for last word
+		_line_index = _line_index < 0 ? 0 : _line_index; // ensure first line index is 0
+			
+		// add word to current line
+		characters_set_line_index(_word_index_start, _word_index_end, _line_index);
+		
+		// determine line dimensions
 		var _line_heights = ds_map_create();
+		var _line_widths = ds_map_create();
+		var _width = 0;
+		var _current_line_index = 0;
 		for (var _i = 0; _i < array_length(character_array); _i++) {
 			var _char = character_array[_i];
+			// heights
 			if (!ds_map_exists(_line_heights, _char.line_index)) {
 				ds_map_set(_line_heights, _char.line_index, _char.get_height());
 			} else {
@@ -91,23 +134,56 @@ function StyleableText(_source, _width = 600) constructor {
 					ds_map_set(_line_heights, _char.line_index, _char.get_height());
 				}
 			}
+			
+			// width
+			if (_char.line_index == _current_line_index) {
+				_width += _char.get_width();
+			} else {
+				ds_map_set(_line_widths, _current_line_index, _width);
+				_width = _char.get_width();
+				_current_line_index = _char.line_index;
+			}
 		}
 		
-		// third pass: set xy positions
+		ds_map_set(_line_widths, _current_line_index, _width);
+		
+		// set width and height if given values are less than 0
+		if (width < 0) {
+			width = ds_map_find_value(_line_widths, 0);
+		}
+		
+		// calculate height
+		height = 0;
+		for (var _i = 0; _i < ds_map_size(_line_heights); _i++) {
+			height += ds_map_find_value(_line_heights, _i);
+		}
+		
+		// set xy positions and end of line offsets
 		var _x = 0;
 		var _y = 0;
-		var _current_line_index = character_array[0].line_index;
-		for (var _i = 0; _i < array_length(character_array); _i++) {
+		_current_line_index = character_array[0].line_index;
+		var _trailing_space_width = 0;
+		for (var _i = 0; _i < array_length(character_array); _i++) {			
 			var _char = character_array[_i];
 			if (_char.line_index != _current_line_index) {
+				ds_map_set(alignment_offsets, _current_line_index, width - (ds_map_find_value(_line_widths, _current_line_index) - _trailing_space_width));
+				_trailing_space_width = 0;
 				_x = 0;
 				_y += ds_map_find_value(_line_heights, _current_line_index);
 				_current_line_index = _char.line_index;
+			} else {
+				_trailing_space_width = _char.character == " " ? _trailing_space_width + _char.get_width() : 0;
 			}
 			_char.position_x = _x;
 			_x += _char.get_width();
 			_char.position_y = _y;
 		}
+		
+		// handle alignment offset of last character
+		ds_map_set(alignment_offsets, _current_line_index, width - (ds_map_find_value(_line_widths, _current_line_index) - _trailing_space_width));
+		
+		ds_map_destroy(_line_heights);
+		ds_map_destroy(_line_widths);
 	};
 	
 	drawables = undefined;
@@ -173,7 +249,6 @@ function StyleableText(_source, _width = 600) constructor {
 		_start_drawable.split_left_at_index(_index_start);
 		var _end_drawable = get_drawable_for_character_at(_index_end);
 		_end_drawable.split_right_at_index(_index_end);
-		var _t = 0;
 	};
 	
 	/**
@@ -210,20 +285,28 @@ function StyleableText(_source, _width = 600) constructor {
 	 * @param {real} _x x position
 	 * @param {real} _y y position
 	 */
-	draw = function(_x, _y) {
+	draw = function(_x, _y, _alignment = fa_left) {
 		var _cursor = drawables;
-		var _draw_calls = 0;
 		while (_cursor != undefined) {
-			_cursor.draw(_x, _y);
-			_draw_calls++;
+			var _drawable_line_index = _cursor.character_array[_cursor.get_index_start()].line_index;
+			var _alignment_offset = ds_map_find_value(alignment_offsets, _drawable_line_index);
+			if (_alignment == fa_left) _alignment_offset = 0;
+			if (_alignment == fa_center) _alignment_offset = floor(_alignment_offset / 2);
+			if (_alignment != fa_left && _alignment != fa_center && _alignment != fa_right) _alignment = 0;
+			_cursor.draw(_x + _alignment_offset, _y);
 			_cursor = _cursor.next;
 		}
-		return _draw_calls;
 	};
 	
 	// set default styles
 	
 	set_default_sprite = function(_index, _sprite) {
+		if (is_string(_sprite)) {
+			var _asset_type = asset_get_type(_sprite);
+			if (_asset_type != asset_sprite) show_error("gave none sprite asset name for sprite command", true);
+			// Feather disable once GM1043
+			_sprite = asset_get_index(_sprite);
+		}
 		character_array[_index].sprite = _sprite;
 		init_drawables();
 	};
@@ -243,6 +326,13 @@ function StyleableText(_source, _width = 600) constructor {
 	};
 	
 	set_default_font = function(_index_start, _index_end, _font) {
+		if (is_string(_font)) {
+			var _asset_type = asset_get_type(_font);
+			if (_asset_type != asset_font) show_error("gave none font asset name for font command", true);
+			// Feather disable once GM1043
+			_font = asset_get_index(_font);
+		}
+		
 		for (var _i = _index_start; _i <= _index_end; _i++) {
 			character_array[_i].style.font = _font;
 		}
@@ -393,4 +483,13 @@ function StyleableText(_source, _width = 600) constructor {
 			set_character_hidden(_i, _hidden);
 		}
 	};
+	
+	/**
+	 * @param {real} _index
+	 * @param {bool} _new_line
+	 */
+	set_new_line_at = function(_index, _new_line) {
+		character_array[_index].new_line = _new_line;
+		init_drawables();
+	}
 }

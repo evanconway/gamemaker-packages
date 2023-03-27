@@ -1,10 +1,7 @@
 if (keyboard_check_pressed(ord("R"))) game_restart();
+if (keyboard_check_pressed(vk_space)) tag_decorated_text_advance(test);
+if (keyboard_check_pressed(ord("U"))) updating = !updating;
 
-global.drawables_drawn = 0;
-
-test.draw(40, 80);
-
-draw_set_color(c_lime);
-draw_set_alpha(1);
-draw_text(0, 0, fps_real);
-draw_text(0, 20, "drawables: " + string(global.drawables_drawn));
+if (updating) tag_decorated_text_update(test);
+tag_decorated_text_draw_no_update(test, 40, 40);
+tag_decorated_text_draw_performance(0, 0);
