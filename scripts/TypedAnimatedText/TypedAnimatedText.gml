@@ -3,16 +3,22 @@
  * @ignore
  */
 function TypedAnimatedText(_source, _width, _height) constructor {
+	/// @ignore
 	animated_text = new AnimatedText(_source, _width, _height);
 	animated_text.text.set_characters_hidden(0, animated_text.get_character_count() - 1, true);
+	/// @ignore
 	time_between_types_ms = 100;
+	/// @ignore
 	chars_per_type = 4;
+	/// @ignore
 	char_index_to_type = 0;
+	/// @ignore
 	time_ms = time_between_types_ms;
 	
 	// mapping between indexes of chars and array of entry animations for said chars
+	/// @ignore
 	entry_animations_map = ds_map_create();
-	
+	/// @ignore
 	add_entry_animation_at = function(_index, _animation_enum, _aargs) {
 		if (!ds_map_exists(entry_animations_map, _index)) ds_map_set(entry_animations_map, _index, []);
 		array_push(ds_map_find_value(entry_animations_map, _index), { animation_enum: _animation_enum, aargs: _aargs });
@@ -24,6 +30,7 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 	These animations handle visibility of the character themselves. If there is no animation mapped
 	to the given character index we simply set the character visible.
 	*/
+	/// @ignore
 	type_char_at = function(_index) {
 		if (!ds_map_exists(entry_animations_map, _index)) {
 			animated_text.text.set_character_hidden(_index, false);
@@ -36,11 +43,13 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 	};
 	
 	// callback function invoked when type occurs
+	/// @ignore
 	on_type = function() {
 		// default is blank function
 	};
 	
 	// mapping of characters to pause timings in ms
+	/// @ignore
 	punctuation_pause_map = ds_map_create();
 	
 	// add default settings
@@ -53,6 +62,7 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 	
 	/**
 	 * @param {real} _update_time_ms amount of time in ms to update by
+	 * @ignore
 	 */
 	update = function(_update_time_ms) {
 		animated_text.update(_update_time_ms);
@@ -80,30 +90,29 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 		}
 		on_type();
 	};
-	
+	/// @ignore
 	reset_typing = function() {
 		time_ms = time_between_types_ms;
 		char_index_to_type = 0;
 		animated_text.text.set_characters_hidden(0, animated_text.get_character_count() - 1, true);
 		animated_text.reset_animations();
 	}
-	
+	/// @ignore
 	set_typed = function() {
 		animated_text.text.set_characters_hidden(0, animated_text.get_character_count() - 1, false);
 		animated_text.clear_entry_animations();
 		char_index_to_type = animated_text.get_character_count();
 	};
-	
+	/// @ignore
 	get_typed = function() {
 		return char_index_to_type = animated_text.get_character_count();
 	}
-	
-	
 	
 	/**
 	 * @param {real} _x x position
 	 * @param {real} _y y position
 	 * @param {real} _alignment horizontal alignment
+	 * @ignore
 	 */
 	draw = function(_x, _y, _alignment = fa_left) {
 		animated_text.draw(_x, _y, _alignment);
@@ -114,6 +123,7 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 	 * based on the given dimensions.
 	 * @param {real} _width
 	 * @param {real} _height
+	 * @ignore
 	 */
 	paginate = function(_width, _height) {
 		// here we determine which line indexes of the underlying StyleableText instance go on what pages

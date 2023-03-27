@@ -21,15 +21,19 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 	index_start = _index_start;
 	/// @ignore
 	index_end = _index_end;
-	
+	/// @ignore
 	next = self;
+	/// @ignore
 	previous = self;
+	/// @ignore
 	next = undefined; // helps with typing
+	/// @ignore
 	previous = undefined;
-	
+	/// @ignore
 	style = new StyleableTextStyle();
+	/// @ignore
 	sprite = spr_styleable_text_sprite_default;
-	
+	/// @ignore
 	init_styles = function() {
 		if (index_start < array_length(character_array)) {
 			style.set_to(character_array[index_start].style);
@@ -49,29 +53,20 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 		}
 		init_styles();
 	};
-	
+	/// @ignore
 	calculate_content();
-	
+	/// @ignore
 	get_index_start = function() {
 		return index_start;
 	};
-	
+	/// @ignore
 	get_index_end = function() {
 		return index_end;
 	};
 	
-	/** commented out because it seems we may not need this at all?
-	 * param {real} _new_index_start the new starting index in the character array of this drawable
-	 */
-	 /*
-	set_index_start = function(_new_index_start) {
-		index_start = _new_index_start;
-		calculate_content();
-	};
-	*/
-	
 	/**
 	 * @param {real} _new_index_end the new ending index in the character array of this drawable
+	 * @ignore
 	 */
 	set_index_end = function(_new_index_end) {
 		index_end = _new_index_end;
@@ -85,6 +80,7 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 	/**
 	 * Split drawable at index on the left. [abc] split at index 1 becomes [a]-[bc]
 	 * @param {real} _index index to split at
+	 * @ignore
 	 */
 	split_left_at_index = function(_index) {
 		if (_index < get_index_start() || _index > get_index_end()) show_error("cannot split index outside of drawable range", true);
@@ -104,6 +100,7 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 	/**
 	 * Split drawable at index on the right. [abc] split at index 1 becomes [ab]-[c]
 	 * @param {real} _index index to split at
+	 * @ignore
 	 */
 	split_right_at_index = function(_index) {
 		if (_index < get_index_start() || _index > get_index_end()) show_error("cannot split index outside of drawable range", true);
@@ -122,6 +119,7 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 	
 	/**
 	 * Returns true if this drawable can merge with the next drawable in the linked list.
+	 * @ignore
 	 */
 	can_merge_with_next = function() {
 		if (next == undefined) return false;
@@ -133,6 +131,7 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 		return true;
 	}
 	
+	/// @ignore
 	merge_with_next = function() {
 		if (!can_merge_with_next()) return;
 		var _next = next;
@@ -145,6 +144,7 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 	 * Draw this drawables contents and the given position.
 	 * @param {real} _x x position
 	 * @param {real} _y y position
+	 * @ignore
 	 */
 	draw = function(_x, _y) {
 		global.drawables_drawn++;

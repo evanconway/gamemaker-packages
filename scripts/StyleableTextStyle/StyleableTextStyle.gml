@@ -3,18 +3,27 @@
  * @ignore
  */
 function StyleableTextStyle() constructor {
+	/// @ignore
 	font = fnt_styleable_text_font_default;
+	/// @ignore
 	style_color = c_white;
+	/// @ignore
 	alpha = 1;
+	/// @ignore
 	scale_x = 1;
+	/// @ignore
 	scale_y = 1;
+	/// @ignore
 	mod_x = 0;
+	/// @ignore
 	mod_y = 0;
+	/// @ignore
 	mod_angle = 0;
 	
 	/**
 	 * Get boolean indicating if the given style is equal to this one.
 	 * @param {struct.StyleableTextStyle} _style style
+	 * @ignore
 	 */
 	is_equal = function(_style) {
 		if (_style.font != font) return false;
@@ -31,6 +40,7 @@ function StyleableTextStyle() constructor {
 	/**
 	 * Sets this styles parameters to the same as the given style.
 	 * @param {struct.StyleableTextStyle} _style the style to copy
+	 * @ignore
 	 */
 	set_to = function(_style) {
 		font = _style.font;

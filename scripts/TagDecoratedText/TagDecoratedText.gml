@@ -38,7 +38,9 @@ function TagDecoratedTextCommand(_command, _index_start) constructor {
  * @param {string} _source_string the string with decorative tags
  */
 function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _height = -1) constructor {
+	/// @ignore
 	width = _width;
+	/// @ignore
 	height = _height;
 	
 	/*
@@ -46,9 +48,9 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
 	this we need to build an array of commands and their index ranges as well as 
 	the text to display with command tags removed.
 	*/
-	
+	/// @ignore
 	commands = [];
-	
+	/// @ignore
 	set_command_unset_ends = function(_end_index) {
 		for (var _k = array_length(commands) - 1; _k >= 0; _k--) {
 			if (commands[_k].index_end < 0) {
@@ -58,7 +60,7 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
 			}
 		}
 	};
-	
+	/// @ignore
 	displayed_text = "";
 	
 	var _index = 1;
@@ -96,7 +98,7 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
 			_index++;
 		}
 	}
-	
+	/// @ignore
 	set_command_unset_ends(string_length(displayed_text));
 	
 	// before parsing commands, apply defaults
@@ -187,22 +189,22 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
 		}
 		if (_cmd == "s" || _cmd == "sprite") _typed_animated_text.animated_text.text.set_default_sprite(_s, _aargs[0]);
 	}
-	
+	/// @ignore
 	pages = height >= 0 ? _typed_animated_text.paginate(_width, _height) : [_typed_animated_text];
 	
 	// default to typed pages
 	for (var _i = 0; _i < array_length(pages); _i++) {
 		pages[_i].set_typed();
 	}
-	
+	/// @ignore
 	page_current = 0;
-	
+	/// @ignore
 	draw_border = function(_x, _y) {
 		draw_set_alpha(1);
 		draw_set_color(c_fuchsia);
 		draw_rectangle(_x, _y, _x + tag_decorated_text_get_width(self), _y + tag_decorated_text_get_height(self), true);
 	}
-	
+	/// @ignore
 	update_time = 0;
 }
 
@@ -294,6 +296,7 @@ function tag_decorated_text_reset(_tag_decorated_text) {
 }
 
 /**
+ * Advances the typing state of the given tag decorated text instance.
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  */
 function tag_decorated_text_advance(_tag_decorated_text) {
@@ -324,6 +327,7 @@ function tag_decorated_text_get_height(_tag_decorated_text) {
 }
 
 /**
+ * Set the callback function that's invoked whenever a type event occurs.
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  * @param {function}
  */
@@ -336,20 +340,26 @@ function tag_decorated_text_set_on_type(_tag_decorated_text, _new_on_type) {
 }
 
 /**
+ * Set specific typing pauses for given characters.
  * @param {Struct.TagDecoratedText} _tag_decorated_text
- * @param {string} _char
+ * @param {array<string>} _characters
  * @param {real} _pause_time_ms
  */
-function tag_decorated_text_set_char_pause(_tag_decorated_text, _char, _pause_time_ms) {
-	if (string_length(_char) != 1) show_error("value given for _char is not a string of length 1.", true);
+function tag_decorated_text_set_character_pause(_tag_decorated_text, _characters, _pause_time_ms) {
+	for (var _c = 0; _c < array_length(_characters); _c++) {
+		if (string_length(_characters[_c]) != 1) show_error("value given in _characters is not a string of length 1.", true);
+	}
 	with (_tag_decorated_text) {
 		for (var _i = 0; _i < array_length(pages); _i++) {
-			ds_map_set(pages[_i].punctuation_pause_map, _char, _pause_time_ms);
+			for (var _c = 0; _c < array_length(_characters); _c++) {
+				ds_map_set(pages[_i].punctuation_pause_map, _characters[_c], _pause_time_ms);
+			}
 		}
 	}
 }
 
 /**
+ * Removes all mappings between characters and pause timings.
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  */
 function tag_decorated_text_clear_pause_map(_tag_decorated_text) {
@@ -361,6 +371,7 @@ function tag_decorated_text_clear_pause_map(_tag_decorated_text) {
 }
 
 /**
+ * Set the time between types and characters per type.
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  * @param {real} _time_ms_between_types
  * @param {real} _chars_per_type

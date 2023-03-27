@@ -6,3 +6,5 @@ tag_decorated_text_set_on_type(test, function() {
 	audio_play_sound(snd_chirp, 0, false);
 });
 tag_decorated_text_clear_pause_map(test);
+tag_decorated_text_set_character_pause(test, [".", "!", "?"], 400);
+tag_decorated_text_set_character_pause(test, [",", "-", ";", ":"], 200);

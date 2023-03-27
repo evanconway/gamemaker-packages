@@ -9,7 +9,7 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 	if (string_length(_source) == 0) {
 		show_error("Cannot create StyleableText with empty string!", true);
 	}
-	
+	/// @ignore
 	character_array = [];
 	for (var _i = 1; _i <= string_length(_source); _i++) {
 		array_push(character_array, new StyleableTextCharacter(string_char_at(_source, _i)));
@@ -20,13 +20,15 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 	defined by the user, or adjusts the text if given by the user. We should add pagination
 	if the user defines width and height and the text is too large for the given values.
 	*/
+	/// @ignore
 	width = _width;
+	/// @ignore
 	height = _height; // calculated automatically (for now)
-	
+	/// @ignore
 	get_width = function() {
 		return width;
 	}
-	
+	/// @ignore
 	get_height = function() {
 		return height;
 	}
@@ -36,6 +38,7 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 	 * @param {real} _index_start start index 
 	 * @param {real} _index_end end index
 	 * @param {real} _line_index the line index to give the characters
+	 * @ignore
 	 */
 	characters_set_line_index = function(_index_start, _index_end, _line_index) {
 		for (var _i = _index_start; _i <= _index_end; _i ++) {
@@ -47,8 +50,9 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 	A mapping of line indexes to width of trailing spaces on said lines. Used to 
 	draw center and right aligned text.
 	*/
+	/// @ignore
 	alignment_offsets = ds_map_create();
-	
+	/// @ignore
 	calculate_xy = function() {
 		/*
 		Here we determine line breaks by setting a different line_index to characters. However, if width
@@ -185,8 +189,9 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 		ds_map_destroy(_line_heights);
 		ds_map_destroy(_line_widths);
 	};
-	
+	/// @ignore
 	drawables = undefined;
+	/// @ignore
 	init_drawables = function() {
 		calculate_xy();
 		var _result = undefined;
@@ -228,12 +233,13 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 		
 		drawables = _result;
 	};
-	
+	/// @ignore
 	init_drawables();
 	
 	/**
 	 * Get the drawable instance that's drawing character at the given index.
 	 * @param {real} _index character index
+	 * @ignore
 	 */
 	get_drawable_for_character_at = function(_index) {
 		return character_array[_index].drawable;
@@ -243,6 +249,7 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 	 * Splits the drawables linked list at the given indexes so a drawable starts at _index_start and one ends at _index_end.
 	 * @param {real} _index_start
 	 * @param {real} _index_end
+	 * @ignore
 	 */
 	split_drawables_at = function(_index_start, _index_end) {
 		var _start_drawable = get_drawable_for_character_at(_index_start);
@@ -255,6 +262,7 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 	 * Merges all drawables with given index range, as well as at the ends.
 	 * @param {real} _index_start
 	 * @param {real} _index_end
+	 * @ignore
 	 */
 	merge_drawables_at = function(_index_start, _index_end) {
 		var _merging_drawable = get_drawable_for_character_at(_index_start);
@@ -284,6 +292,7 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 	 * Draw this StyleableText instance at the given x and y positions.
 	 * @param {real} _x x position
 	 * @param {real} _y y position
+	 * @ignore
 	 */
 	draw = function(_x, _y, _alignment = fa_left) {
 		var _cursor = drawables;
@@ -299,7 +308,7 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 	};
 	
 	// set default styles
-	
+	/// @ignore
 	set_default_sprite = function(_index, _sprite) {
 		if (is_string(_sprite)) {
 			var _asset_type = asset_get_type(_sprite);
@@ -310,21 +319,21 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 		character_array[_index].sprite = _sprite;
 		init_drawables();
 	};
-	
+	/// @ignore
 	set_default_scale_x = function(_index_start, _index_end, _scale_x) {
 		for (var _i = _index_start; _i <= _index_end; _i++) {
 			character_array[_i].style.scale_x = _scale_x;
 		}
 		init_drawables();
 	};
-	
+	/// @ignore
 	set_default_scale_y = function(_index_start, _index_end, _scale_y) {
 		for (var _i = _index_start; _i <= _index_end; _i++) {
 			character_array[_i].style.scale_y = _scale_y;
 		}
 		init_drawables();
 	};
-	
+	/// @ignore
 	set_default_font = function(_index_start, _index_end, _font) {
 		if (is_string(_font)) {
 			var _asset_type = asset_get_type(_font);
@@ -338,35 +347,35 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 		}
 		init_drawables();
 	};
-	
+	/// @ignore
 	set_default_color = function(_index_start, _index_end, _color) {
 		for (var _i = _index_start; _i <= _index_end; _i++) {
 			character_array[_i].style.style_color = _color;
 		}
 		init_drawables();
 	};
-	
+	/// @ignore
 	set_default_alpha = function(_index_start, _index_end, _alpha) {
 		for (var _i = _index_start; _i <= _index_end; _i++) {
 			character_array[_i].style.alpha = _alpha;
 		}
 		init_drawables();
 	};
-	
+	/// @ignore
 	set_default_mod_x = function(_index_start, _index_end, _mod_x) {
 		for (var _i = _index_start; _i <= _index_end; _i++) {
 			character_array[_i].style.mod_x = _mod_x;
 		}
 		init_drawables();
 	};
-	
+	/// @ignore
 	set_default_mod_y = function(_index_start, _index_end, _mod_y) {
 		for (var _i = _index_start; _i <= _index_end; _i++) {
 			character_array[_i].style.mod_y = _mod_y;
 		}
 		init_drawables();
 	};
-	
+	/// @ignore
 	set_default_mod_angle = function(_index_start, _index_end, _mod_angle) {
 		for (var _i = _index_start; _i <= _index_end; _i++) {
 			character_array[_i].style.mod_angle = _mod_angle;
@@ -375,12 +384,12 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 	};
 	
 	// affect temporary styles
-	
+	/// @ignore
 	set_sprite = function(_index, _sprite) {
 		split_drawables_at(_index, _index);
 		get_drawable_for_character_at(_index).sprite = _sprite;
 	};
-	
+	/// @ignore
 	set_scale_x = function(_index_start, _index_end, _scale_x) {
 		split_drawables_at(_index_start, _index_end);
 		var _cursor = get_drawable_for_character_at(_index_start);
@@ -389,7 +398,7 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 			_cursor = _cursor.next;
 		}
 	};
-	
+	/// @ignore
 	set_scale_y = function(_index_start, _index_end, _scale_y) {
 		split_drawables_at(_index_start, _index_end);
 		var _cursor = get_drawable_for_character_at(_index_start);
@@ -398,7 +407,7 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 			_cursor = _cursor.next;
 		}
 	};
-	
+	/// @ignore
 	set_font = function(_index_start, _index_end, _font) {
 		split_drawables_at(_index_start, _index_end);
 		var _cursor = get_drawable_for_character_at(_index_start);
@@ -407,7 +416,7 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 			_cursor = _cursor.next;
 		}
 	};
-	
+	/// @ignore
 	set_color = function(_index_start, _index_end, _color) {
 		split_drawables_at(_index_start, _index_end);
 		var _cursor = get_drawable_for_character_at(_index_start);
@@ -416,7 +425,7 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 			_cursor = _cursor.next;
 		}
 	};
-	
+	/// @ignore
 	set_alpha = function(_index_start, _index_end, _alpha) {
 		split_drawables_at(_index_start, _index_end);
 		var _cursor = get_drawable_for_character_at(_index_start);
@@ -425,7 +434,7 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 			_cursor = _cursor.next;
 		}
 	};
-	
+	/// @ignore
 	set_mod_x = function(_index_start, _index_end, _mod_x) {
 		split_drawables_at(_index_start, _index_end);
 		var _cursor = get_drawable_for_character_at(_index_start);
@@ -434,7 +443,7 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 			_cursor = _cursor.next;
 		}
 	};
-	
+	/// @ignore
 	set_mod_y = function(_index_start, _index_end, _mod_y) {
 		split_drawables_at(_index_start, _index_end);
 		var _cursor = get_drawable_for_character_at(_index_start);
@@ -443,7 +452,7 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 			_cursor = _cursor.next;
 		}
 	};
-	
+	/// @ignore
 	set_mod_angle = function(_index_start, _index_end, _mod_angle) {
 		split_drawables_at(_index_start, _index_end);
 		var _cursor = get_drawable_for_character_at(_index_start);
@@ -456,6 +465,7 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 	/**
 	 * Get if character at given index is hidden.
 	 * @param {real} _index character index
+	 * @ignore
 	 */
 	get_character_hidden = function(_index) {
 		return character_array[_index].hidden;
@@ -465,6 +475,7 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 	 * Set hidden state of character at given index.
 	 * @param {real} _index character index
 	 * @param {bool} _hidden new hidden value of character
+	 * @ignore
 	 */
 	set_character_hidden = function(_index, _hidden) {
 		if (get_character_hidden(_index) == _hidden) return;
@@ -477,6 +488,7 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 	 * @param {real} _index_start
 	 * @param {real} _index_end
 	 * @param {bool} _hidden
+	 * @ignore
 	 */
 	set_characters_hidden = function(_index_start, _index_end, _hidden) {
 		for (var _i = _index_start; _i <= _index_end; _i++) {
@@ -487,9 +499,10 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 	/**
 	 * @param {real} _index
 	 * @param {bool} _new_line
+	 * @ignore
 	 */
 	set_new_line_at = function(_index, _new_line) {
 		character_array[_index].new_line = _new_line;
 		init_drawables();
-	}
+	};
 }

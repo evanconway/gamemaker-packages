@@ -184,29 +184,47 @@ animated_text_default_wobble(1000, 10);
  * @ignore
  */
 function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_start, _index_end, _aargs) constructor {
+	/// @ignore
 	animation_enum_value = _animation_enum_value; // only needed for copying in outside contexts
+	/// @ignore
 	is_entry = false;
+	/// @ignore
 	text_reference = _styleable_text;
+	/// @ignore
 	index_start = _index_start;
+	/// @ignore
 	index_end = _index_end;
+	/// @ignore
 	params = _aargs;
 	
-	/// @param {real} _update_time_ms
+	/**
+	 * @param {real} _update_time_ms
+	 * @ignore
+	 */
 	update_merge = function(_update_time_ms) {};
 	
-	/// @param {real} _update_time_ms
+	/**
+	 * @param {real} _update_time_ms
+	 * @ignore
+	 */
 	update_split = function(_update_time_ms) {
 		text_reference.split_drawables_at(index_start, index_end);
 	};
 	
-	/// @param {real} _update_time_ms
+	/**
+	 * @param {real} _update_time_ms
+	 * @ignore
+	 */
 	update_animate = function(_update_time_ms) {};
 	
+	/// @ignore
 	animation_finished = false; // finished animations are removed from whatever's using them
+	/// @ignore
 	time_ms = 0;
 	
 	if (_animation_enum_value == ANIMATED_TEXT_ANIMATIONS.FADEIN) {
 		is_entry = true;
+		/// @ignore
 		duration = global.animated_text_default_fadein_duration;
 		
 		if (array_length(params) == 1) {
@@ -230,6 +248,7 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 	
 	if (_animation_enum_value == ANIMATED_TEXT_ANIMATIONS.RISEIN) {
 		is_entry = true;
+		/// @ignore
 		duration = global.animated_text_default_risein_duration;
 		
 		if (array_length(params) == 1) {
@@ -252,8 +271,11 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 	}
 	
 	if (_animation_enum_value == ANIMATED_TEXT_ANIMATIONS.FADE) {
+		/// @ignore
 		alpha_min = global.animated_text_default_fade_alpha_min;
+		/// @ignore
 		alpha_max = global.animated_text_default_fade_alpha_max;
+		/// @ignore
 		cycle_time = global.animated_text_default_fade_cycle_time_ms;
 		
 		if (array_length(params) == 3) {
@@ -278,9 +300,11 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 	}
 	
 	if (_animation_enum_value == ANIMATED_TEXT_ANIMATIONS.SHAKE || _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.TREMBLE) {
+		/// @ignore
 		offset_time = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.SHAKE ? global.animated_text_default_shake_time_ms : global.animated_text_default_tremble_time_ms;
+		/// @ignore
 		magnitude = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.SHAKE ? global.animated_text_default_shake_magnitude : global.animated_text_default_tremble_magnitude;
-		
+		/// @ignore
 		offset_individual_chars = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.TREMBLE;
 		
 		if (array_length(params) == 2) {
@@ -311,8 +335,11 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 	}
 	
 	if (_animation_enum_value == ANIMATED_TEXT_ANIMATIONS.CHROMATIC || _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.WCHROMATIC) {
+		/// @ignore
 		change_ms = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.CHROMATIC ? global.animated_text_default_chromatic_change_ms : global.animated_text_default_wchromatic_change_ms;
+		/// @ignore
 		steps_per_change = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.CHROMATIC ? global.animated_text_default_chromatic_steps_per_change : global.animated_text_default_wchromatic_steps_per_change;
+		/// @ignore
 		char_offset = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.CHROMATIC ? global.animated_text_default_chromatic_char_offset : undefined;
 
 		// use char offset to determine if chromatic or wchromatic
@@ -349,8 +376,11 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 	}
 	
 	if (_animation_enum_value == ANIMATED_TEXT_ANIMATIONS.WAVE || _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.FLOAT) {
+		/// @ignore
 		cycle_time = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.WAVE ? global.animated_text_default_wave_cycle_time_ms : global.animated_text_default_float_cycle_time_ms;
+		/// @ignore
 		magnitude = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.WAVE ? global.animated_text_default_wave_magnitude : global.animated_text_default_float_magnitude;
+		/// @ignore
 		char_offset = _animation_enum_value == ANIMATED_TEXT_ANIMATIONS.WAVE ? global.animated_text_default_wave_char_offset : undefined;
 		
 		// use char offset to determine if wave or float
