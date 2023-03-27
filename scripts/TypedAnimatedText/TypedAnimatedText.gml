@@ -2,15 +2,15 @@
  * @param {string} _source source string
  * @ignore
  */
-function TypedAnimatedText(_source, _width, _height) constructor {	
+function TypedAnimatedText(_source, _width, _height) constructor {
 	animated_text = new AnimatedText(_source, _width, _height);
 	animated_text.text.set_characters_hidden(0, animated_text.get_character_count() - 1, true);
 	time_between_types_ms = 60;
-	chars_per_type = 5;
+	chars_per_type = 3;
 	char_index_to_type = 0;
 	time_ms = time_between_types_ms;
 	
-	// mapping between indexes of chars and 
+	// mapping between indexes of chars and array of entry animations for said chars
 	entry_animations_map = ds_map_create();
 	
 	add_entry_animation_at = function(_index, _animation_enum, _aargs) {
@@ -56,7 +56,7 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 				animated_text.get_char_at(char_index_to_type) == ";" ||
 				animated_text.get_char_at(char_index_to_type) == ","
 			) {
-				time_ms = -400;
+				//time_ms = -400;
 				_can_type_chars = false;
 			}
 			char_index_to_type++;
@@ -74,10 +74,12 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 	reset_typing = function() {
 		char_index_to_type = 0;
 		animated_text.text.set_characters_hidden(0, animated_text.get_character_count() - 1, true);
+		animated_text.reset_animations();
 	}
 	
 	set_typed = function() {
 		animated_text.text.set_characters_hidden(0, animated_text.get_character_count() - 1, false);
+		animated_text.clear_entry_animations();
 		char_index_to_type = animated_text.get_character_count();
 	};
 	

@@ -185,6 +185,7 @@ animated_text_default_wobble(1000, 10);
  */
 function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_start, _index_end, _aargs) constructor {
 	animation_enum_value = _animation_enum_value; // only needed for copying in outside contexts
+	is_entry = false;
 	text_reference = _styleable_text;
 	index_start = _index_start;
 	index_end = _index_end;
@@ -205,6 +206,7 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 	time_ms = 0;
 	
 	if (_animation_enum_value == ANIMATED_TEXT_ANIMATIONS.FADEIN) {
+		is_entry = true;
 		duration = global.animated_text_default_fadein_duration;
 		
 		if (array_length(params) == 1) {
@@ -227,6 +229,7 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 	}
 	
 	if (_animation_enum_value == ANIMATED_TEXT_ANIMATIONS.RISEIN) {
+		is_entry = true;
 		duration = global.animated_text_default_risein_duration;
 		
 		if (array_length(params) == 1) {
@@ -293,8 +296,8 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 			var _index_y = _index_x + 4321; // arbitrary character index offset 
 			if (offset_individual_chars) {
 				for (var _i = index_start; _i <= index_end; _i++) {
-					var _offset_x = floor((magnitude + 1) * 2 * animated_text_get_random(_index_x + _i * 4321)) - magnitude
-					var _offset_y = floor((magnitude + 1) * 2 * animated_text_get_random(_index_y + _i * 4321)) - magnitude
+					var _offset_x = floor((magnitude + 1) * 2 * animated_text_get_random(_index_x + _i * 4321)) - magnitude;
+					var _offset_y = floor((magnitude + 1) * 2 * animated_text_get_random(_index_y + _i * 4321)) - magnitude;
 					text_reference.set_mod_x(_i, _i, _offset_x);
 					text_reference.set_mod_y(_i, _i, _offset_y);
 				}

@@ -1,4 +1,4 @@
-if (keyboard_check_pressed(ord("R"))) game_restart();
+if (keyboard_check_pressed(ord("R"))) tag_decorated_text_reset(test);
 if (keyboard_check_pressed(vk_space)) tag_decorated_text_advance(test);
 if (keyboard_check_pressed(ord("U"))) updating = !updating;
 

@@ -24,6 +24,27 @@ function AnimatedText(_source_string, _width, _height) constructor {
 	}
 	
 	/**
+	 * Removes all entry animations.
+	 */
+	clear_entry_animations = function() {
+		/// @param {Struct.AnimatedTextAnimation} _a
+		var _f = function(_a) {
+			return !_a.is_entry;
+		};
+		animations = array_filter(animations, _f);
+	}
+	
+	/**
+	 * Removes all entry animations and resets update time for all remaining animations.
+	 */
+	reset_animations = function() {
+		clear_entry_animations();
+		for (var _i = 0; _i < array_length(animations); _i++) {
+			animations[_i].time_ms = 0;
+		}
+	}
+	
+	/**
 	 * @param {real} _update_time_ms amount of time in ms to update animations by
 	 */
 	update = function(_update_time_ms) {

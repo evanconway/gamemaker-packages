@@ -2,4 +2,4 @@ moby = "<fadein float>Call me Ishmael. <s:spr_button>$ Some years ago-never mind
 test = new TagDecoratedText(moby, "", 200, 100);
 updating = true;
 
-tag_decorated_text_reset_typing(test);
+tag_decorated_text_reset(test);

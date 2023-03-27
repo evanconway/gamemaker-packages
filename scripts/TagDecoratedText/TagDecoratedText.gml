@@ -5,7 +5,10 @@
  */
 function TagDecoratedTextCommand(_command, _index_start) constructor {
 	var _command_aarg_split = string_split(_command, ":");
+	
+	/// @ignore
 	command = _command_aarg_split[0];
+	
 	var _aarg_string = array_length(_command_aarg_split) > 1 ? _command_aarg_split[1] : "";
 	
 	var _f_map = function(_string) {
@@ -20,9 +23,13 @@ function TagDecoratedTextCommand(_command, _index_start) constructor {
 		return _string;
 	};
 	
+	/// @ignore
 	aargs = _aarg_string == "" ? [] : array_map(string_split(_aarg_string, ","), _f_map);
 	
+	/// @ignore
 	index_start = _index_start;
+	
+	/// @ignore
 	index_end = -1;
 }
 
@@ -153,12 +160,12 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
 		// entry animations
 		if (_cmd == "fadein") {
 			for (var _k = _s; _k <= _e; _k++) {
-				_typed_animated_text.add_entry_animation_at(_i, ANIMATED_TEXT_ANIMATIONS.FADEIN, _aargs);
+				_typed_animated_text.add_entry_animation_at(_k, ANIMATED_TEXT_ANIMATIONS.FADEIN, _aargs);
 			}
 		}
 		if (_cmd == "risein") {
 			for (var _k = _s; _k <= _e; _k++) {
-				_typed_animated_text.add_entry_animation_at(_i, ANIMATED_TEXT_ANIMATIONS.RISEIN, _aargs);
+				_typed_animated_text.add_entry_animation_at(_k, ANIMATED_TEXT_ANIMATIONS.RISEIN, _aargs);
 			}
 		}
 		
@@ -181,7 +188,7 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
 		if (_cmd == "s" || _cmd == "sprite") _typed_animated_text.animated_text.text.set_default_sprite(_s, _aargs[0]);
 	}
 	
-	pages = height > 0 ? _typed_animated_text.paginate(_width, _height) : [_typed_animated_text];
+	pages = height >= 0 ? _typed_animated_text.paginate(_width, _height) : [_typed_animated_text];
 	
 	// default to typed pages
 	for (var _i = 0; _i < array_length(pages); _i++) {
@@ -190,18 +197,10 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
 	
 	page_current = 0;
 	
-	get_height = function() {
-		return height > 0 ? height : pages[0].animated_text.text.get_height();
-	}
-	
-	get_width = function() {
-		return width > 0 ? width : pages[0].animated_text.text.get_width();
-	}
-	
 	draw_border = function(_x, _y) {
 		draw_set_alpha(1);
 		draw_set_color(c_fuchsia);
-		draw_rectangle(_x, _y, _x + get_width(), _y + get_height(), true);
+		draw_rectangle(_x, _y, _x + tag_decorated_text_get_width(self), _y + tag_decorated_text_get_height(self), true);
 	}
 	
 	update_time = 0;
@@ -261,14 +260,66 @@ function tag_decorated_text_reset_typing(_tag_decorated_text) {
 }
 
 /**
+ * Go to the next page of given tag decorated text instance.
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ */
+function tag_decorated_text_page_next(_tag_decorated_text) {
+	with (_tag_decorated_text) {
+		if (page_current < array_length(pages) - 1) {
+			page_current++
+		}	
+	}
+}
+
+/**
+ * Go to the previous page of given tag decorated text instance.
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ */
+function tag_decorated_text_page_previous(_tag_decorated_text) {
+	with (_tag_decorated_text) {
+		if (page_current > 0) {
+			page_current--;
+		}	
+	}
+}
+
+/**
+ * Resets the typing state of all pages and goes to first page of
+ * given tag decorated text instance.
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ */
+function tag_decorated_text_reset(_tag_decorated_text) {
+	tag_decorated_text_reset_typing(_tag_decorated_text);
+	_tag_decorated_text.page_current = 0;
+}
+
+/**
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  */
 function tag_decorated_text_advance(_tag_decorated_text) {
 	with (_tag_decorated_text) {
 		if (!pages[page_current].get_typed()) pages[page_current].set_typed();
-		else if (page_current < array_length(pages) - 1) {
-			page_current++
-		}	
+		else tag_decorated_text_page_next(_tag_decorated_text);	
+	}
+}
+
+/**
+ * Returns the width of the given tag decorated text instance.
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ */
+function tag_decorated_text_get_width(_tag_decorated_text) {
+	with (_tag_decorated_text) {
+		return width >= 0 ? width : pages[0].animated_text.text.get_width();
+	}
+}
+
+/**
+ * Returns the height of the given tag decorated text instance.
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ */
+function tag_decorated_text_get_height(_tag_decorated_text) {
+	with (_tag_decorated_text) {
+		return height >= 0 ? height : pages[0].animated_text.text.get_height();
 	}
 }
 
