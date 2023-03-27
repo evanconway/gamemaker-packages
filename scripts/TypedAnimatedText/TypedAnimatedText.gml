@@ -40,6 +40,17 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 		// default is blank function
 	};
 	
+	// mapping of characters to pause timings in ms
+	punctuation_pause_map = ds_map_create();
+	
+	// add default settings
+	ds_map_set(punctuation_pause_map, ".", 550);
+	ds_map_set(punctuation_pause_map, "!", 550);
+	ds_map_set(punctuation_pause_map, "?", 550);
+	ds_map_set(punctuation_pause_map, ":", 300);
+	ds_map_set(punctuation_pause_map, ";", 300);
+	ds_map_set(punctuation_pause_map, ",", 300);
+	
 	/**
 	 * @param {real} _update_time_ms amount of time in ms to update by
 	 */
@@ -53,15 +64,8 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 		var _chars_typed = 0;
 		while (_can_type_chars) {
 			type_char_at(char_index_to_type);
-			if (
-				animated_text.get_char_at(char_index_to_type) == "." ||
-				animated_text.get_char_at(char_index_to_type) == "!" ||
-				animated_text.get_char_at(char_index_to_type) == "?" ||
-				animated_text.get_char_at(char_index_to_type) == ":" ||
-				animated_text.get_char_at(char_index_to_type) == ";" ||
-				animated_text.get_char_at(char_index_to_type) == ","
-			) {
-				time_ms = -400;
+			if (ds_map_exists(punctuation_pause_map, animated_text.get_char_at(char_index_to_type))) {
+				time_ms = -1 * ds_map_find_value(punctuation_pause_map, animated_text.get_char_at(char_index_to_type));
 				_can_type_chars = false;
 			}
 			char_index_to_type++;
@@ -78,6 +82,7 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 	};
 	
 	reset_typing = function() {
+		time_ms = time_between_types_ms;
 		char_index_to_type = 0;
 		animated_text.text.set_characters_hidden(0, animated_text.get_character_count() - 1, true);
 		animated_text.reset_animations();

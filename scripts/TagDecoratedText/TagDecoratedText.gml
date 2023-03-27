@@ -335,6 +335,45 @@ function tag_decorated_text_set_on_type(_tag_decorated_text, _new_on_type) {
 	}
 }
 
+/**
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ * @param {string} _char
+ * @param {real} _pause_time_ms
+ */
+function tag_decorated_text_set_char_pause(_tag_decorated_text, _char, _pause_time_ms) {
+	if (string_length(_char) != 1) show_error("value given for _char is not a string of length 1.", true);
+	with (_tag_decorated_text) {
+		for (var _i = 0; _i < array_length(pages); _i++) {
+			ds_map_set(pages[_i].punctuation_pause_map, _char, _pause_time_ms);
+		}
+	}
+}
+
+/**
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ */
+function tag_decorated_text_clear_pause_map(_tag_decorated_text) {
+	with (_tag_decorated_text) {
+		for (var _i = 0; _i < array_length(pages); _i++) {
+			ds_map_clear(pages[_i].punctuation_pause_map);
+		}
+	}
+}
+
+/**
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ * @param {real} _time_ms_between_types
+ * @param {real} _chars_per_type
+ */
+function tag_decorated_text_set_typing_params(_tag_decorated_text, _time_ms_between_types, _chars_per_type) {
+	with (_tag_decorated_text) {
+		for (var _i = 0; _i < array_length(pages); _i++) {
+			pages[_i].time_between_types_ms = _time_ms_between_types;
+			pages[_i].chars_per_type = _chars_per_type;
+		}
+	}
+}
+
 /// @ignore
 function tag_decorated_text_draw_performance(_x, _y) {
 	draw_set_color(c_lime);

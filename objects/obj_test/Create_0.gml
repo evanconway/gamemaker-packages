@@ -2,7 +2,7 @@ moby = "<fadein float>Call me Ishmael.<><fadein> <s:spr_button fade>$<><fadein> 
 test = new TagDecoratedText(moby, "", 200, 100);
 updating = true;
 tag_decorated_text_reset(test);
-chirp = function() {
+tag_decorated_text_set_on_type(test, function() {
 	audio_play_sound(snd_chirp, 0, false);
-};
-tag_decorated_text_set_on_type(test, chirp);
+});
+tag_decorated_text_clear_pause_map(test);
