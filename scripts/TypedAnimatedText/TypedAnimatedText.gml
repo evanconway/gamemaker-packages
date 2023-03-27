@@ -5,8 +5,8 @@
 function TypedAnimatedText(_source, _width, _height) constructor {
 	animated_text = new AnimatedText(_source, _width, _height);
 	animated_text.text.set_characters_hidden(0, animated_text.get_character_count() - 1, true);
-	time_between_types_ms = 60;
-	chars_per_type = 3;
+	time_between_types_ms = 100;
+	chars_per_type = 4;
 	char_index_to_type = 0;
 	time_ms = time_between_types_ms;
 	
@@ -35,6 +35,11 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 		}
 	};
 	
+	// callback function invoked when type occurs
+	on_type = function() {
+		// default is blank function
+	};
+	
 	/**
 	 * @param {real} _update_time_ms amount of time in ms to update by
 	 */
@@ -56,7 +61,7 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 				animated_text.get_char_at(char_index_to_type) == ";" ||
 				animated_text.get_char_at(char_index_to_type) == ","
 			) {
-				//time_ms = -400;
+				time_ms = -400;
 				_can_type_chars = false;
 			}
 			char_index_to_type++;
@@ -69,6 +74,7 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 				_can_type_chars = false;
 			}
 		}
+		on_type();
 	};
 	
 	reset_typing = function() {

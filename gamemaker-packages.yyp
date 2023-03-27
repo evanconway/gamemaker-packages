@@ -36,6 +36,7 @@
     {"id":{"name":"obj_test_auto_width_height","path":"objects/obj_test_auto_width_height/obj_test_auto_width_height.yy",},},
     {"id":{"name":"AnimatedTextAnimation","path":"scripts/AnimatedTextAnimation/AnimatedTextAnimation.yy",},},
     {"id":{"name":"obj_test_basics","path":"objects/obj_test_basics/obj_test_basics.yy",},},
+    {"id":{"name":"snd_chirp","path":"sounds/snd_chirp/snd_chirp.yy",},},
     {"id":{"name":"spr_button","path":"sprites/spr_button/spr_button.yy",},},
     {"id":{"name":"obj_test_doki_doki","path":"objects/obj_test_doki_doki/obj_test_doki_doki.yy",},},
     {"id":{"name":"obj_test_colors","path":"objects/obj_test_colors/obj_test_colors.yy",},},

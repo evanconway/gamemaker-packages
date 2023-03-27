@@ -323,6 +323,18 @@ function tag_decorated_text_get_height(_tag_decorated_text) {
 	}
 }
 
+/**
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ * @param {function}
+ */
+function tag_decorated_text_set_on_type(_tag_decorated_text, _new_on_type) {
+	with (_tag_decorated_text) {
+		for (var _i = 0; _i < array_length(pages); _i++) {
+			pages[_i].on_type = _new_on_type;
+		}
+	}
+}
+
 /// @ignore
 function tag_decorated_text_draw_performance(_x, _y) {
 	draw_set_color(c_lime);
