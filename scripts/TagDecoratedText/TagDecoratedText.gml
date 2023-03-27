@@ -296,12 +296,22 @@ function tag_decorated_text_reset(_tag_decorated_text) {
 }
 
 /**
+ * Type current page of given tag decorated text.
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ */
+function tag_decorated_text_type_current_page(_tag_decorated_text) {
+	with (_tag_decorated_text) {
+		pages[page_current].set_typed();
+	}
+}
+
+/**
  * Advances the typing state of the given tag decorated text instance.
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  */
 function tag_decorated_text_advance(_tag_decorated_text) {
 	with (_tag_decorated_text) {
-		if (!pages[page_current].get_typed()) pages[page_current].set_typed();
+		if (!pages[page_current].get_typed()) tag_decorated_text_type_current_page(self);
 		else tag_decorated_text_page_next(_tag_decorated_text);	
 	}
 }

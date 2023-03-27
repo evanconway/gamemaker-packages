@@ -66,6 +66,16 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 	 */
 	update = function(_update_time_ms) {
 		animated_text.update(_update_time_ms);
+		
+		/*
+		Although our logic still allows typing to happen with an
+		update time of 0ms, from a user perspective it's implied 
+		that an update of 0ms means don't change anything. So
+		we'll exit the function if that's the case.
+		*/
+		if (_update_time_ms <= 0) return;
+		
+		
 		if (char_index_to_type >= animated_text.get_character_count()) return;
 		time_ms += _update_time_ms;
 		if (time_ms < time_between_types_ms) return;
