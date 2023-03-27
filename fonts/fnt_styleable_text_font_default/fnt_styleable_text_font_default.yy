@@ -119,7 +119,7 @@
   "maintainGms1Font": false,
   "parent": {
     "name": "StyleableText",
-    "path": "folders/NewTextSystem/StyleableText.yy",
+    "path": "folders/TagDecoratedText/StyleableText.yy",
   },
   "pointRounding": 0,
   "ranges": [

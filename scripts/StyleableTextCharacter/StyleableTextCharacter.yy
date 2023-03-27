@@ -6,6 +6,6 @@
   "isDnD": false,
   "parent": {
     "name": "StyleableText",
-    "path": "folders/NewTextSystem/StyleableText.yy",
+    "path": "folders/TagDecoratedText/StyleableText.yy",
   },
 }

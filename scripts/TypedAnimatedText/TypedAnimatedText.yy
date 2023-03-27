@@ -6,6 +6,6 @@
   "isDnD": false,
   "parent": {
     "name": "TypedText",
-    "path": "folders/NewTextSystem/TypedText.yy",
+    "path": "folders/TagDecoratedText/TypedText.yy",
   },
 }

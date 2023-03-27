@@ -1,7 +1,7 @@
 {
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
-  "name": "obj_test_multi_effects",
+  "name": "obj_textsystem_test",
   "eventList": [
     {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,},
     {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","collisionObjectId":null,"eventNum":64,"eventType":8,"isDnD":false,},
@@ -9,8 +9,8 @@
   "managed": true,
   "overriddenProperties": [],
   "parent": {
-    "name": "gamemaker-packages",
-    "path": "gamemaker-packages.yyp",
+    "name": "TagDecoratedText",
+    "path": "folders/TagDecoratedText.yy",
   },
   "parentObjectId": null,
   "persistent": false,

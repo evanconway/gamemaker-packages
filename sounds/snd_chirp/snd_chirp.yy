@@ -12,8 +12,8 @@
   "conversionMode": 0,
   "duration": 0.115011,
   "parent": {
-    "name": "gamemaker-packages",
-    "path": "gamemaker-packages.yyp",
+    "name": "TagDecoratedText",
+    "path": "folders/TagDecoratedText.yy",
   },
   "preload": false,
   "sampleRate": 44100,

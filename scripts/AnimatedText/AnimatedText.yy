@@ -6,6 +6,6 @@
   "isDnD": false,
   "parent": {
     "name": "AnimatedText",
-    "path": "folders/NewTextSystem/AnimatedText.yy",
+    "path": "folders/TagDecoratedText/AnimatedText.yy",
   },
 }

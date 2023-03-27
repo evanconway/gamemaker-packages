@@ -26,7 +26,7 @@
   "origin": 0,
   "parent": {
     "name": "StyleableText",
-    "path": "folders/NewTextSystem/StyleableText.yy",
+    "path": "folders/TagDecoratedText/StyleableText.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {
