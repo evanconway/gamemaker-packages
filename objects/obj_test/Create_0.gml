@@ -9,7 +9,7 @@ for (var _i = 0; _i < 100; _i ++) commas_and_rs += "r,";
 commas_and_rs += " ";
 for (var _i = 0; _i < 100; _i ++) commas_and_rs += "r,";
 
-test = new TypedAnimatedText(moby);
+test = new TypedAnimatedText(moby, 500, -1);
 test.animated_text.text.set_default_sprite(0, spr_button);
 test.animated_text.text.set_default_font(10, 40, fnt_handwriting);
 test.animated_text.text.set_default_color(50, 80, c_red);

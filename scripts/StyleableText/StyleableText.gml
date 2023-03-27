@@ -4,7 +4,7 @@
  * @param {real} _width max width of text before line breaks occur
  * @param {real} _height max height of text before pagination occurs (not implemented yet)
  */
-function StyleableText(_source, _width = 600, _height = -1) constructor {
+function StyleableText(_source, _width = -1, _height = -1) constructor {
 	if (string_length(_source) == 0) {
 		show_error("Cannot create StyleableText with empty string!", true);
 	}
@@ -49,7 +49,11 @@ function StyleableText(_source, _width = 600, _height = -1) constructor {
 	alignment_offsets = ds_map_create();
 	
 	calculate_xy = function() {
-		// determine line breaks using line_index
+		/*
+		Here we determine line breaks by setting a different line_index to characters. However, if width
+		is given as less than 0 than there will be no line breaks, the text will be a single line, and the
+		width will be set to the width of the resulting single line.
+		*/
 		var _line_index = -1; // start at -1 to account for line break on first word (very small widths or super large words)
 		var _line_width = 0;
 		var _word_index_start = 0;
@@ -62,7 +66,7 @@ function StyleableText(_source, _width = 600, _height = -1) constructor {
 			// if space or new line, word is over
 			if (_char.character == " " || _char.new_line) {
 				// if word is too big for line, start new line
-				if (_line_width + _word_width > width) {
+				if (width >= 0 && _line_width + _word_width > width) {
 					_line_index++;
 					_line_width = 0;
 				}
@@ -104,9 +108,12 @@ function StyleableText(_source, _width = 600, _height = -1) constructor {
 		
 		// set last word line index
 		// if word is too big for line, start new line
-		if (_line_width + _word_width > width) {
+		if (width >= 0 && _line_width + _word_width > width) {
 			_line_index++;
 		}
+		
+		// in cases with very little text, line_index can not even be advanced, ensure it's at least 0 for last word
+		_line_index = _line_index < 0 ? 0 : _line_index; // ensure first line index is 0
 			
 		// add word to current line
 		characters_set_line_index(_word_index_start, _word_index_end, _line_index);
@@ -139,6 +146,11 @@ function StyleableText(_source, _width = 600, _height = -1) constructor {
 		
 		ds_map_set(_line_widths, _current_line_index, _width);
 		
+		// set width and height if given values are less than 0
+		if (width < 0) {
+			width = ds_map_find_value(_line_widths, 0);
+		}
+		
 		// calculate height
 		height = 0;
 		for (var _i = 0; _i < ds_map_size(_line_heights); _i++) {
@@ -164,12 +176,10 @@ function StyleableText(_source, _width = 600, _height = -1) constructor {
 			_char.position_x = _x;
 			_x += _char.get_width();
 			_char.position_y = _y;
-			
-			// handle alignment offset of last character
-			if (_i == array_length(character_array) - 1) {
-				ds_map_set(alignment_offsets, _current_line_index, width - (ds_map_find_value(_line_widths, _current_line_index) - _trailing_space_width));
-			}
 		}
+		
+		// handle alignment offset of last character
+		ds_map_set(alignment_offsets, _current_line_index, width - (ds_map_find_value(_line_widths, _current_line_index) - _trailing_space_width));
 		
 		ds_map_destroy(_line_heights);
 		ds_map_destroy(_line_widths);
