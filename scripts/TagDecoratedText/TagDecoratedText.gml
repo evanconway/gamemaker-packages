@@ -1,4 +1,33 @@
 /**
+ * @param {string} _command
+ * @param {real} _index_start
+ * @ignore
+ */
+function TagDecoratedTextCommand(_command, _index_start) constructor {
+	var _command_aarg_split = string_split(_command, ":");
+	command = _command_aarg_split[0];
+	var _aarg_string = array_length(_command_aarg_split) > 1 ? _command_aarg_split[1] : "";
+	
+	var _f_map = function(_string) {
+		try {
+			var _r = real(_string);
+			return _r
+		} catch(_error) {
+			_error = undefined;
+		}
+
+		// Feather disable once GM1035
+		return _string;
+	};
+	
+	aargs = _aarg_string == "" ? [] : array_map(string_split(_aarg_string, ","), _f_map);
+	
+	index_start = _index_start;
+	index_end = -1;
+}
+
+/**
+ * Creates a new TagDecoratedText instance from the given source string.
  * @param {string} _source_string the string with decorative tags
  */
 function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _height = -1) constructor {
@@ -175,56 +204,72 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
 		draw_rectangle(_x, _y, _x + get_width(), _y + get_height(), true);
 	}
 	
-	advance = function() {
-		if (!pages[page_current].get_typed()) pages[page_current].set_typed();
-		else if (page_current < array_length(pages) - 1) {
-			page_current++
-		}
-	}
-	
-	update = function(_update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
-		pages[page_current].update(_update_time_ms);
-	};
-	
-	/**
-	 * @param {real} _x x position
-	 * @param {real} _y y position
-	 * @param {real} _alignment horizontal alignment
-	 */
-	draw = function(_x, _y, _alignment = fa_left) {
-		global.drawables_drawn = 0;
-		pages[page_current].draw(_x, _y, _alignment);
-		draw_border(_x, _y);
-	};
+	update_time = 0;
 }
 
 /**
- * @ignore
- * @param {string} _command
- * @param {real} _index_start
- * @ignore
+ * Updates the given tag decorated text instance by the given time in ms. If no time is specified
+ * the tag decorated text instance is updated by time in ms of 1 frame of the current game speed.
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ * @param {real} _update_time_ms
  */
-function TagDecoratedTextCommand(_command, _index_start) constructor {
-	var _command_aarg_split = string_split(_command, ":");
-	command = _command_aarg_split[0];
-	var _aarg_string = array_length(_command_aarg_split) > 1 ? _command_aarg_split[1] : "";
-	
-	var _f_map = function(_string) {
-		try {
-			var _r = real(_string);
-			return _r
-		} catch(_error) {
-			_error = undefined;
-		}
+function tag_decorated_text_update(_tag_decorated_text, _update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
+	_tag_decorated_text.update_time = _update_time_ms;
+}
 
-		// Feather disable once GM1035
-		return _string;
-	};
-	
-	aargs = _aarg_string == "" ? [] : array_map(string_split(_aarg_string, ","), _f_map);
-	
-	index_start = _index_start;
-	index_end = -1;
+/**
+ * Draws the given tag decorated text instance without updating it.
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ * @param {real} _x
+ * @param {real} _y
+ * @param {Constant.HAlign} _alignment
+ */
+function tag_decorated_text_draw_no_update(_tag_decorated_text, _x, _y, _alignment = fa_left) {
+	with (_tag_decorated_text) {
+		global.drawables_drawn = 0;
+		pages[page_current].update(update_time);
+		update_time = 0;
+		pages[page_current].draw(_x, _y, _alignment);
+		draw_border(_x, _y);
+	}
+}
+
+/**
+ * Updates and draws the given tag decorated text instance.
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ * @param {real} _x
+ * @param {real} _y
+ * @param {Constant.HAlign} _alignment
+ */
+function tag_decorated_text_draw(_tag_decorated_text, _x, _y, _alignment = fa_left) {
+	tag_decorated_text_update(_tag_decorated_text);
+	tag_decorated_text_draw_no_update(_tag_decorated_text, _x, _y, _alignment);
+}
+
+/**
+ * Resets the typing status of all pages in the given tag decorated text instance.
+ * Tag decorated text instances have their typing set to finished by default so this
+ * must be called in order to see typing effects on a tag decorated text instance.
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ */
+function tag_decorated_text_reset_typing(_tag_decorated_text) {
+	with (_tag_decorated_text) {
+		for (var _i = 0; _i < array_length(pages); _i++) {
+			pages[_i].reset_typing();
+		}
+	}
+}
+
+/**
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ */
+function tag_decorated_text_advance(_tag_decorated_text) {
+	with (_tag_decorated_text) {
+		if (!pages[page_current].get_typed()) pages[page_current].set_typed();
+		else if (page_current < array_length(pages) - 1) {
+			page_current++
+		}	
+	}
 }
 
 /// @ignore

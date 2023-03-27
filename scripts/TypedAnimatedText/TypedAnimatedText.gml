@@ -97,8 +97,8 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 	};
 	
 	/**
-	 * Returns an array of TypeAnimatedText instances each of which is a page of this instance split up
-	 * based on the given height
+	 * Returns an array of TypedAnimatedText instances each of which is a page of this instance split up
+	 * based on the given dimensions.
 	 * @param {real} _width
 	 * @param {real} _height
 	 */
@@ -196,9 +196,9 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 	};
 	
 	/*
-	Feather doesn't like that we dynamically create animations durign the draw/update events. It warns us about creating a bunch
+	Feather doesn't like that we dynamically create animations during the draw/update events. It warns us about creating a bunch
 	of instance variables during a non-create event. To solve this we're going to run a couple pointless lines here that
-	triggers the same variable creation. This removes the warnings but doesn't change behavior.
+	trigger the same variable creation. This removes the warnings but doesn't change behavior.
 	*/
 	var _antifeather = new AnimatedText("the quick brown fox", -1, -1);
 	_antifeather.add_animation(ANIMATED_TEXT_ANIMATIONS.CHROMATIC, 0, 0, []);
