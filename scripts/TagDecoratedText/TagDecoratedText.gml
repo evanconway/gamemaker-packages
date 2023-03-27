@@ -170,6 +170,15 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
 		draw_rectangle(_x, _y, _x + get_width(), _y + get_height(), true);
 	}
 	
+	advance = function() {
+		if (!pages[page_current].get_typed()) pages[page_current].set_typed(true);
+		else if (page_current < array_length(pages) - 1) {
+			page_current++
+			pages[page_current].reset_typing();
+		}
+	}
+	
+	
 	/**
 	 * @param {real} _x x position
 	 * @param {real} _y y position
@@ -178,6 +187,7 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
 	draw = function(_x, _y, _alignment = fa_left) {
 		global.drawables_drawn = 0;
 		pages[page_current].draw(_x, _y, _alignment);
+		pages[page_current].update(1000 / game_get_speed(gamespeed_fps));
 		draw_border(_x, _y);
 	};
 }

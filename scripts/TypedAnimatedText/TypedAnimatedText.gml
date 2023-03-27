@@ -4,7 +4,7 @@
 function TypedAnimatedText(_source, _width, _height) constructor {	
 	animated_text = new AnimatedText(_source, _width, _height);
 	animated_text.text.set_characters_hidden(0, animated_text.get_character_count() - 1, true);
-	time_between_types_ms = 60;
+	time_between_types_ms = 120;
 	chars_per_type = 5;
 	char_index_to_type = 0;
 	time_ms = time_between_types_ms;
@@ -69,10 +69,21 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 		}
 	};
 	
+	reset_typing = function() {
+		char_index_to_type = 0;
+		animated_text.text.set_characters_hidden(0, animated_text.get_character_count() - 1, true);
+	}
+	
 	set_typed = function(_typed) {
 		animated_text.text.set_characters_hidden(0, animated_text.get_character_count() - 1, !_typed);
 		if (_typed) char_index_to_type = animated_text.get_character_count();
 	};
+	
+	get_typed = function() {
+		return char_index_to_type = animated_text.get_character_count();
+	}
+	
+	
 	
 	/**
 	 * @param {real} _x x position
@@ -80,7 +91,6 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 	 * @param {real} _alignment horizontal alignment
 	 */
 	draw = function(_x, _y, _alignment = fa_left) {
-		update(1000 / game_get_speed(gamespeed_fps));
 		animated_text.draw(_x, _y, _alignment);
 	};
 	
@@ -104,7 +114,7 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 					_page_height += _line_height;
 				} else {
 					_page_index++;
-					_page_height = 0;
+					_page_height = _line_height;
 				}
 				ds_map_set(_line_index_to_page_index_map, _line_index, _page_index);
 				_line_index = _char.line_index;
