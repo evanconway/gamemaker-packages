@@ -181,6 +181,7 @@ animated_text_default_wobble(1000, 10);
  * @param {real} _index_start index of first character animation acts on
  * @param {real} _index_end index of last character animation acts on
  * @param {array} _aargs array of parameters for this animation
+ * @ignore
  */
 function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_start, _index_end, _aargs) constructor {
 	animation_enum_value = _animation_enum_value; // only needed for copying in outside contexts

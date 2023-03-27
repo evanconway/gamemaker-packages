@@ -3,6 +3,7 @@
   "ResourceOrderSettings": [
     {"name":"obj_test_entry_animations","order":22,"path":"objects/obj_test_entry_animations/obj_test_entry_animations.yy",},
     {"name":"obj_test_memory_leaks","order":26,"path":"objects/obj_test_memory_leaks/obj_test_memory_leaks.yy",},
+    {"name":"obj_test","order":30,"path":"objects/obj_test/obj_test.yy",},
     {"name":"fnt_handwriting","order":17,"path":"fonts/fnt_handwriting/fnt_handwriting.yy",},
     {"name":"StyleableTextStyle","order":4,"path":"scripts/StyleableTextStyle/StyleableTextStyle.yy",},
     {"name":"TagDecoratedText","order":1,"path":"scripts/TagDecoratedText/TagDecoratedText.yy",},
@@ -10,7 +11,7 @@
     {"name":"fnt_styleable_text_font_default","order":3,"path":"fonts/fnt_styleable_text_font_default/fnt_styleable_text_font_default.yy",},
     {"name":"obj_test_auto_width_height","order":28,"path":"objects/obj_test_auto_width_height/obj_test_auto_width_height.yy",},
     {"name":"AnimatedTextAnimation","order":1,"path":"scripts/AnimatedTextAnimation/AnimatedTextAnimation.yy",},
-    {"name":"obj_test","order":15,"path":"objects/obj_test/obj_test.yy",},
+    {"name":"obj_test_basics","order":15,"path":"objects/obj_test_basics/obj_test_basics.yy",},
     {"name":"spr_button","order":19,"path":"sprites/spr_button/spr_button.yy",},
     {"name":"obj_test_doki_doki","order":27,"path":"objects/obj_test_doki_doki/obj_test_doki_doki.yy",},
     {"name":"obj_test_colors","order":20,"path":"objects/obj_test_colors/obj_test_colors.yy",},

@@ -1,5 +1,6 @@
 /**
  * Get a new StyleableTextStyle instance.
+ * @ignore
  */
 function StyleableTextStyle() constructor {
 	font = fnt_styleable_text_font_default;

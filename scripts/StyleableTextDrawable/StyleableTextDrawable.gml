@@ -5,6 +5,7 @@ global.drawables_drawn = 0;
  * @param {array<struct.StyleableTextCharacter>} _character_array reference to a StyleableTextCharacter array
  * @param {real} _index_start index of first character this drawable references, inclusive
  * @param {real} _index_end index of last character this drawable references, inclusive
+ * @ignore
  */
 function StyleableTextDrawable(_character_array, _index_start, _index_end) constructor {
 	if (_index_start < 0) {

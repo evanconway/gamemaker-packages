@@ -1,10 +1,11 @@
 /**
  * @param {string} _source source string
+ * @ignore
  */
 function TypedAnimatedText(_source, _width, _height) constructor {	
 	animated_text = new AnimatedText(_source, _width, _height);
 	animated_text.text.set_characters_hidden(0, animated_text.get_character_count() - 1, true);
-	time_between_types_ms = 120;
+	time_between_types_ms = 60;
 	chars_per_type = 5;
 	char_index_to_type = 0;
 	time_ms = time_between_types_ms;
@@ -38,6 +39,7 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 	 * @param {real} _update_time_ms amount of time in ms to update by
 	 */
 	update = function(_update_time_ms) {
+		animated_text.update(_update_time_ms);
 		if (char_index_to_type >= animated_text.get_character_count()) return;
 		time_ms += _update_time_ms;
 		if (time_ms < time_between_types_ms) return;
@@ -74,9 +76,9 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 		animated_text.text.set_characters_hidden(0, animated_text.get_character_count() - 1, true);
 	}
 	
-	set_typed = function(_typed) {
-		animated_text.text.set_characters_hidden(0, animated_text.get_character_count() - 1, !_typed);
-		if (_typed) char_index_to_type = animated_text.get_character_count();
+	set_typed = function() {
+		animated_text.text.set_characters_hidden(0, animated_text.get_character_count() - 1, false);
+		char_index_to_type = animated_text.get_character_count();
 	};
 	
 	get_typed = function() {

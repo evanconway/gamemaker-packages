@@ -1,3 +1,4 @@
+/// @ignore
 function AnimatedText(_source_string, _width, _height) constructor {
 	text = new StyleableText(_source_string, _width, _height);
 	
@@ -51,7 +52,6 @@ function AnimatedText(_source_string, _width, _height) constructor {
 	 * @param {real} _alignment horizontal alignment
 	 */
 	draw = function(_x, _y, _alignment = fa_left) {
-		update(1000 / game_get_speed(gamespeed_fps));
 		text.draw(_x, _y, _alignment);
 	};
 }

@@ -3,6 +3,7 @@
  * @param {string} _source source string
  * @param {real} _width max width of text before line breaks occur
  * @param {real} _height max height of text before pagination occurs (not implemented yet)
+ * @ignore
  */
 function StyleableText(_source, _width = -1, _height = -1) constructor {
 	if (string_length(_source) == 0) {
@@ -300,6 +301,12 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 	// set default styles
 	
 	set_default_sprite = function(_index, _sprite) {
+		if (is_string(_sprite)) {
+			var _asset_type = asset_get_type(_sprite);
+			if (_asset_type != asset_sprite) show_error("gave none sprite asset name for sprite command", true);
+			// Feather disable once GM1043
+			_sprite = asset_get_index(_sprite);
+		}
 		character_array[_index].sprite = _sprite;
 		init_drawables();
 	};

@@ -1,6 +1,7 @@
 /**
  * Get a new StyleableCharacter instance.
  * @param {string} _character character
+ * @ignore
  */
 function StyleableTextCharacter(_character) constructor {
 	if (string_length(_character) != 1) {

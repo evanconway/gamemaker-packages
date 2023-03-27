@@ -154,6 +154,11 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
 	
 	pages = height > 0 ? _typed_animated_text.paginate(_width, _height) : [_typed_animated_text];
 	
+	// default to typed pages
+	for (var _i = 0; _i < array_length(pages); _i++) {
+		pages[_i].set_typed();
+	}
+	
 	page_current = 0;
 	
 	get_height = function() {
@@ -171,13 +176,15 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
 	}
 	
 	advance = function() {
-		if (!pages[page_current].get_typed()) pages[page_current].set_typed(true);
+		if (!pages[page_current].get_typed()) pages[page_current].set_typed();
 		else if (page_current < array_length(pages) - 1) {
 			page_current++
-			pages[page_current].reset_typing();
 		}
 	}
 	
+	update = function(_update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
+		pages[page_current].update(_update_time_ms);
+	};
 	
 	/**
 	 * @param {real} _x x position
@@ -187,7 +194,6 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
 	draw = function(_x, _y, _alignment = fa_left) {
 		global.drawables_drawn = 0;
 		pages[page_current].draw(_x, _y, _alignment);
-		pages[page_current].update(1000 / game_get_speed(gamespeed_fps));
 		draw_border(_x, _y);
 	};
 }
@@ -196,6 +202,7 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
  * @ignore
  * @param {string} _command
  * @param {real} _index_start
+ * @ignore
  */
 function TagDecoratedTextCommand(_command, _index_start) constructor {
 	var _command_aarg_split = string_split(_command, ":");
@@ -220,6 +227,7 @@ function TagDecoratedTextCommand(_command, _index_start) constructor {
 	index_end = -1;
 }
 
+/// @ignore
 function tag_decorated_text_draw_performance(_x, _y) {
 	draw_set_color(c_lime);
 	draw_set_alpha(1);
