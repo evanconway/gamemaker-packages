@@ -3,7 +3,7 @@ test = new TagDecoratedText(moby, "", 200, 100);
 updating = true;
 tag_decorated_text_reset(test);
 tag_decorated_text_set_on_type(test, function() {
-	audio_play_sound(snd_chirp, 0, false, 0.1);
+	audio_play_sound(snd_chirp, 0, false);
 });
 tag_decorated_text_clear_pause_map(test);
 tag_decorated_text_set_character_pause(test, [".", "!", "?"], 400);

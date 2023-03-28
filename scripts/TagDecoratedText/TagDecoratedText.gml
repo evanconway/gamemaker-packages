@@ -205,6 +205,13 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
 		draw_set_color(c_fuchsia);
 		draw_rectangle(_x, _y, _x + tag_decorated_text_get_width(self), _y + tag_decorated_text_get_height(self), true);
 	}
+	
+	/*
+	We want to de-couple updating our animations from from drawing them. This gives us a way to "pause" animated text
+	by simply drawing it without updating it. However, the update logic for animations must still run even if nothing
+	changes. To accomplish we keep track of the update_time in the instance so the animations can always update based
+	on it. The only way to change animations is to set update time to a positive value before drawing.
+	*/
 	/// @ignore
 	update_time = 0;
 }
@@ -230,21 +237,14 @@ function tag_decorated_text_draw_no_update(_tag_decorated_text, _x, _y, _alignme
 	with (_tag_decorated_text) {
 		global.drawables_drawn = 0;
 		pages[page_current].update(update_time);
+		/*
+		Update time is reset here so that if we need to draw the text again without updating,
+		the update time won't change the animations at all. The only way to change animations
+		is to set update time to a positive value before drawing.
+		*/
 		update_time = 0;
 		pages[page_current].draw(_x, _y, _alignment);
 		//draw_border(_x, _y);
-	}
-}
-
-/**
- * Reset animation states for given tag decorated text.
- * @param {Struct.TagDecoratedText} _tag_decorated_text
- */
-function tag_decorated_text_reset_animations(_tag_decorated_text) {
-	with (_tag_decorated_text) {
-		for (var _i = 0; _i < array_length(pages); _i++) {
-			pages[_i].animated_text.reset_animations();
-		}
 	}
 }
 
@@ -258,6 +258,18 @@ function tag_decorated_text_reset_animations(_tag_decorated_text) {
 function tag_decorated_text_draw(_tag_decorated_text, _x, _y, _alignment = fa_left) {
 	tag_decorated_text_update(_tag_decorated_text);
 	tag_decorated_text_draw_no_update(_tag_decorated_text, _x, _y, _alignment);
+}
+
+/**
+ * Reset animation states for given tag decorated text.
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ */
+function tag_decorated_text_reset_animations(_tag_decorated_text) {
+	with (_tag_decorated_text) {
+		for (var _i = 0; _i < array_length(pages); _i++) {
+			pages[_i].animated_text.reset_animations();
+		}
+	}
 }
 
 /**

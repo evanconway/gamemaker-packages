@@ -27,6 +27,82 @@ function TextButtonList(_options, _default_effects = "", _highlight_effects = "y
 	
 	/// @ignore
 	highlighted_option = 0;
+	
+	/// @ignore
+	selected_option = -1;
+	
+	reset_highlight_animation_on_change = true;
+	
+	reset_selected_animation_on_change = true;
+	
+	reset_default_animation_on_change = true;
+}
+
+/**
+ * Sets the animation reset settings for default, highlight, and selected effects.
+ * @param {Struct.TextButtonList} _text_button_list
+ * @param {bool} _reset_default
+ * @param {bool} _reset_highlight
+ * @param {bool} _reset_selected
+ */
+function text_button_list_set_animation_reset_options(_text_button_list, _reset_default, _reset_highlight, _reset_selected) {
+	_text_button_list.reset_default_animation_on_change = _reset_default;
+	_text_button_list.reset_highlight_animation_on_change = _reset_highlight;
+	_text_button_list.reset_selected_animation_on_change = _reset_selected;
+}
+
+/**
+ * Reset animation state of option at given index.
+ * @param {Struct.TextButtonList} _text_button_list
+ * @param {real} _option_index
+ */
+function text_button_list_reset_option_animations(_text_button_list, _option_index) {
+	with (_text_button_list) {
+		if (!reset_highlight_animation_on_change && !reset_selected_animation_on_change && !reset_default_animation_on_change) return;
+		if (_option_index < 0 || _option_index >= array_length(options)) return;
+		if (selected_option == _option_index && reset_selected_animation_on_change) {
+			text_button_reset_animations_selected(options[_option_index]);
+		} else if (highlighted_option == _option_index && reset_highlight_animation_on_change) {
+			text_button_reset_animations_highlighted(options[_option_index]);
+		} else if (reset_default_animation_on_change) {
+			text_button_reset_animations_default(options[_option_index]);
+		}
+	}
+}
+
+/**
+ * Resets the animations of the two given option indexes. But only if they differ.
+ * This is mostly a utility function for resetting animations of newly changed
+ * highlighted/selected option indexes.
+ * @param {Struct.TextButtonList} _text_button_list
+ * @param {real} _a
+ * @param {real} _b
+ */
+function text_button_list_reset_two_animations(_text_button_list, _a, _b) {
+	if (_a == _b) return;
+	text_button_list_reset_option_animations(_text_button_list, _a);
+	text_button_list_reset_option_animations(_text_button_list, _b);
+}
+
+/**
+ * Return index of the highlighted option of the given text button list.
+ * @param {Struct.TextButtonList} _text_button_list
+ */
+function text_button_list_get_highlighted_option(_text_button_list) {
+	return _text_button_list.highlighted_option;
+}
+
+/**
+ * Set the selected option of given text button list to given index.
+ * @param {Struct.TextButtonList} _text_button_list
+ * @param {real} _option_index
+ */
+function text_button_list_set_selected_option(_text_button_list, _option_index) {
+	with (_text_button_list) {
+		var _prev_selected = selected_option;
+		selected_option = clamp(_option_index, -1, array_length(options));
+		text_button_list_reset_two_animations(self, _prev_selected, selected_option);
+	}
 }
 
 /**
@@ -47,21 +123,27 @@ function text_button_list_get_height(_text_button_list) {
 
 /**
  * Set highlighted option to previous option.
+ * @param {Struct.TextButtonList} _text_button_list
  */
 function text_button_list_highlight_previous(_text_button_list) {
 	with (_text_button_list) {
+		var _prev_highlighted = highlighted_option;
 		highlighted_option--;
 		highlighted_option = clamp(highlighted_option, 0, array_length(options) - 1);
+		text_button_list_reset_two_animations(self, _prev_highlighted, highlighted_option);
 	}
 }
 
 /**
  * Set highlighted option to next option.
+ * @param {Struct.TextButtonList} _text_button_list
  */
 function text_button_list_highlight_next(_text_button_list) {
 	with (_text_button_list) {
+		var _prev_highlighted = highlighted_option;
 		highlighted_option++;
 		highlighted_option = clamp(highlighted_option, 0, array_length(options) - 1);
+		text_button_list_reset_two_animations(self, _prev_highlighted, highlighted_option);
 	}
 }
 
@@ -78,7 +160,6 @@ function text_button_list_highlight_next(_text_button_list) {
 function text_button_list_get_option_at_xy(_text_button_list, _list_x, _list_y, _x, _y, _alignment = fa_left) {
 	with (_text_button_list) {
 		for (var _d = 0; _d < array_length(options); _d++) {
-			var _selected = highlighted_option == _d;
 			if (_alignment == fa_left) {
 				if (text_button_is_point_on(options[_d], _list_x, _list_y, _x, _y)) return _d;
 			}
@@ -104,7 +185,11 @@ function text_button_list_get_option_at_xy(_text_button_list, _list_x, _list_y, 
  */
 function text_button_list_set_highlighted_at_xy(_text_button_list, _list_x, _list_y, _x, _y, _alignment = fa_left) {
 	with (_text_button_list) {
-		highlighted_option = text_button_list_get_option_at_xy(self, _list_x, _list_y, _x, _y, _alignment);
+		var _new_highlight = text_button_list_get_option_at_xy(self, _list_x, _list_y, _x, _y, _alignment);
+		if (_new_highlight == highlighted_option) return;
+		var _prev_highlighted = highlighted_option;
+		highlighted_option = _new_highlight;
+		text_button_list_reset_two_animations(self, _prev_highlighted, highlighted_option);
 	}
 }
 
@@ -118,15 +203,16 @@ function text_button_list_set_highlighted_at_xy(_text_button_list, _list_x, _lis
 function text_button_list_draw_vertical(_text_button_list, _x, _y, _alignment = fa_left) {
 	with (_text_button_list) {
 		for (var _d = 0; _d < array_length(options); _d++) {
-			var _selected = highlighted_option == _d;
+			var _highlighted = highlighted_option == _d;
+			var _selected = selected_option == _d;
 			if (_alignment == fa_left) {
-				text_button_draw(options[_d], _x, _y, _selected);
+				text_button_draw(options[_d], _x, _y, _highlighted, _selected);
 			}
 			if (_alignment == fa_right) {
-				text_button_draw(options[_d], _x - text_button_get_width(options[_d]), _y, _selected);
+				text_button_draw(options[_d], _x - text_button_get_width(options[_d]), _y, _highlighted, _selected);
 			}
 			if (_alignment == fa_center) {
-				text_button_draw(options[_d], _x - floor(text_button_get_width(options[_d]) / 2), _y, _selected);
+				text_button_draw(options[_d], _x - floor(text_button_get_width(options[_d]) / 2), _y, _highlighted, _selected);
 			}
 			_y += text_button_get_height(options[_d]);
 		}	
