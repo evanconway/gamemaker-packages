@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "Button",
+  "name": "TextButton",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {

@@ -73,6 +73,7 @@ function StyleableTextDrawable(_character_array, _index_start, _index_end) const
 		calculate_content();
 	};
 	
+	/// @ignore
 	is_hidden = function() {
 		return character_array[get_index_start()].hidden;
 	}

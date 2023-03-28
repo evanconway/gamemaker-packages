@@ -101,14 +101,14 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 		} else if (array_length(params) != 0) {
 			show_error("Improper number of args for fadein animation!", true);
 		}
-		
+		/// @ignore
 		update_merge = function(_update_time_ms) {
 			text_reference.set_characters_hidden(index_start, index_end, false);
 			if (time_ms < duration) return;
 			animation_finished = true;
 			text_reference.merge_drawables_at(index_start, index_end);
 		};
-		
+		/// @ignore
 		update_animate = function(_update_time_ms) {
 			time_ms += _update_time_ms;
 			text_reference.set_alpha(index_start, index_end, time_ms/duration);
@@ -125,14 +125,14 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 		} else if (array_length(params) != 0) {
 			show_error("Improper number of args for risein animation!", true);
 		}
-		
+		/// @ignore
 		update_merge = function(_update_time_ms) {
 			text_reference.set_characters_hidden(index_start, index_end, false);
 			if (time_ms < duration) return;
 			animation_finished = true;
 			text_reference.merge_drawables_at(index_start, index_end);
 		};
-		
+		/// @ignore
 		update_animate = function(_update_time_ms) {
 			time_ms += _update_time_ms;
 			text_reference.set_mod_y(index_start, index_end, 5 - time_ms/duration*5);
@@ -154,7 +154,7 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 		} else if (array_length(params) != 0) {
 			show_error("Improper number of args for fade animation!", true);
 		}
-		
+		/// @ignore
 		update_animate = function(_update_time_ms) {
 			time_ms += _update_time_ms;
 			var _check = time_ms % (cycle_time * 2);
@@ -182,7 +182,7 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 		} else if (array_length(params) != 0) {
 			show_error("Improper number of args for shake/tremble animation!", true);
 		}
-		
+		/// @ignore
 		update_animate = function(_update_time_ms) {
 			time_ms += _update_time_ms;
 			var _index_x = floor(time_ms / offset_time);
@@ -228,7 +228,7 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 				show_error("Improper number of args for chromatic animation!", true);
 			}
 		}
-
+		/// @ignore
 		update_animate = function(_update_time_ms) {
 			time_ms += _update_time_ms;
 			var _index = floor(time_ms/change_ms) * steps_per_change;
@@ -269,7 +269,7 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 				show_error("Improper number of args for wave animation!", true);
 			}
 		}
-
+		/// @ignore
 		update_animate = function(_update_time_ms) {
 			time_ms += _update_time_ms;
 			var _time_into_cylce = time_ms % cycle_time;
@@ -301,7 +301,7 @@ function AnimatedTextAnimation(_animation_enum_value, _styleable_text, _index_st
 		} else if (array_length(params) != 0) {
 			show_error("Improper number of args for blink animation!", true);
 		}
-		
+		/// @ignore
 		update_animate = function(_update_time_ms) {
 			time_ms += _update_time_ms;
 			var _check = time_ms % (cycle_time * 2);

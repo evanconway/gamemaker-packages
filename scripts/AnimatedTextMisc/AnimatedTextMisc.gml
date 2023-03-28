@@ -2,9 +2,6 @@ var _temp_get_random = function() {
 	return random(1);
 };
 
-/// @ignore
-global.animated_text_animation_random_array = array_map(array_create(1000000, 0), _temp_get_random);
-
 /**
  * Get a random number from 0 to 1 (inclusive 0, exclusive 1) given an index. Returns the same number for the same index.
  * @param {real} _index

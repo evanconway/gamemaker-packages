@@ -1,10 +1,12 @@
+global.tag_decorated_text_default_font = fnt_styleable_text_font_default
+
 /**
  * Get a new StyleableTextStyle instance.
  * @ignore
  */
 function StyleableTextStyle() constructor {
 	/// @ignore
-	font = fnt_styleable_text_font_default;
+	font = global.tag_decorated_text_default_font;
 	/// @ignore
 	style_color = c_white;
 	/// @ignore
