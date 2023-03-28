@@ -175,6 +175,7 @@ function text_button_list_get_option_at_xy(_text_button_list, _list_x, _list_y, 
 }
 
 /**
+ * Sets the highlighted option to the option at the given xy, if the given text button list is at the given list xy.
  * @param {Struct.TextButtonList} _text_button_list
  * @param {real} _list_x
  * @param {real} _list_y
@@ -193,6 +194,45 @@ function text_button_list_set_highlighted_at_xy(_text_button_list, _list_x, _lis
 }
 
 /**
+ * Update button animations of given text button list by given time in ms.
+ * @param {Struct.TextButtonList} _text_button_list
+ * @param {real} _update_time_ms
+ */
+function text_button_list_update(_text_button_list, _update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
+	with (_text_button_list) {
+		for (var _i = 0; _i < array_length(options); _i++) {
+			text_button_update(options[_i], _update_time_ms);
+		}
+	}
+}
+
+/**
+ * Draw given text button list in vertical orientation, but without updating any animations.
+ * @param {Struct.TextButtonList} _text_button_list
+ * @param {real} _x
+ * @param {real} _y
+ * @param {Constant.HAlign} _alignment
+ */
+function text_button_list_draw_vertical_no_update(_text_button_list, _x, _y, _alignment = fa_left) {
+	with (_text_button_list) {
+		for (var _d = 0; _d < array_length(options); _d++) {
+			var _highlighted = highlighted_option == _d;
+			var _selected = highlighted_option == _d && highlighted_option_selected;
+			if (_alignment == fa_left) {
+				text_button_draw_no_update(options[_d], _x, _y, _highlighted, _selected);
+			}
+			if (_alignment == fa_right) {
+				text_button_draw_no_update(options[_d], _x - text_button_get_width(options[_d]), _y, _highlighted, _selected);
+			}
+			if (_alignment == fa_center) {
+				text_button_draw_no_update(options[_d], _x - floor(text_button_get_width(options[_d]) / 2), _y, _highlighted, _selected);
+			}
+			_y += text_button_get_height(options[_d]);
+		}	
+	}
+}
+
+/**
  * Draw given text button list in vertical fashion.
  * @param {Struct.TextButtonList} _text_button_list
  * @param {real} _x
@@ -200,20 +240,6 @@ function text_button_list_set_highlighted_at_xy(_text_button_list, _list_x, _lis
  * @param {Constant.HAlign} _alignment
  */
 function text_button_list_draw_vertical(_text_button_list, _x, _y, _alignment = fa_left) {
-	with (_text_button_list) {
-		for (var _d = 0; _d < array_length(options); _d++) {
-			var _highlighted = highlighted_option == _d;
-			var _selected = highlighted_option == _d && highlighted_option_selected;
-			if (_alignment == fa_left) {
-				text_button_draw(options[_d], _x, _y, _highlighted, _selected);
-			}
-			if (_alignment == fa_right) {
-				text_button_draw(options[_d], _x - text_button_get_width(options[_d]), _y, _highlighted, _selected);
-			}
-			if (_alignment == fa_center) {
-				text_button_draw(options[_d], _x - floor(text_button_get_width(options[_d]) / 2), _y, _highlighted, _selected);
-			}
-			_y += text_button_get_height(options[_d]);
-		}	
-	}
+	text_button_list_update(_text_button_list);
+	text_button_list_draw_vertical_no_update(_text_button_list, _x, _y, _alignment);
 }

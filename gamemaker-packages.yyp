@@ -24,7 +24,7 @@
     "IDEVersion": "2023.2.1.75",
   },
   "resources": [
-    {"id":{"name":"obj_test_list","path":"objects/obj_test_list/obj_test_list.yy",},},
+    {"id":{"name":"obj_test_list_vertical","path":"objects/obj_test_list_vertical/obj_test_list_vertical.yy",},},
     {"id":{"name":"TextButtonList","path":"scripts/TextButtonList/TextButtonList.yy",},},
     {"id":{"name":"obj_test_button","path":"objects/obj_test_button/obj_test_button.yy",},},
     {"id":{"name":"obj_test_tdt_update_draw_decouple","path":"objects/obj_test_tdt_update_draw_decouple/obj_test_tdt_update_draw_decouple.yy",},},
@@ -36,6 +36,8 @@
     {"id":{"name":"TagDecoratedText","path":"scripts/TagDecoratedText/TagDecoratedText.yy",},},
     {"id":{"name":"StyleableText","path":"scripts/StyleableText/StyleableText.yy",},},
     {"id":{"name":"StyleableTextCharacter","path":"scripts/StyleableTextCharacter/StyleableTextCharacter.yy",},},
+    {"id":{"name":"TextMenu","path":"scripts/TextMenu/TextMenu.yy",},},
+    {"id":{"name":"obj_text_text_menu","path":"objects/obj_text_text_menu/obj_text_text_menu.yy",},},
     {"id":{"name":"fnt_styleable_text_font_default","path":"fonts/fnt_styleable_text_font_default/fnt_styleable_text_font_default.yy",},},
     {"id":{"name":"AnimatedTextAnimation","path":"scripts/AnimatedTextAnimation/AnimatedTextAnimation.yy",},},
     {"id":{"name":"snd_chirp","path":"sounds/snd_chirp/snd_chirp.yy",},},

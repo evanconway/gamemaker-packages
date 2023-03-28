@@ -5,7 +5,7 @@
     {"name":"TypedText","order":2,"path":"folders/TagDecoratedText/TypedText.yy",},
   ],
   "ResourceOrderSettings": [
-    {"name":"obj_test_list","order":17,"path":"objects/obj_test_list/obj_test_list.yy",},
+    {"name":"obj_test_list_vertical","order":17,"path":"objects/obj_test_list_vertical/obj_test_list_vertical.yy",},
     {"name":"TextButtonList","order":1,"path":"scripts/TextButtonList/TextButtonList.yy",},
     {"name":"obj_test_button","order":16,"path":"objects/obj_test_button/obj_test_button.yy",},
     {"name":"obj_test_tdt_update_draw_decouple","order":19,"path":"objects/obj_test_tdt_update_draw_decouple/obj_test_tdt_update_draw_decouple.yy",},
@@ -15,6 +15,8 @@
     {"name":"fnt_menu","order":18,"path":"fonts/fnt_menu/fnt_menu.yy",},
     {"name":"TagDecoratedText","order":3,"path":"scripts/TagDecoratedText/TagDecoratedText.yy",},
     {"name":"StyleableTextCharacter","order":1,"path":"scripts/StyleableTextCharacter/StyleableTextCharacter.yy",},
+    {"name":"TextMenu","order":2,"path":"scripts/TextMenu/TextMenu.yy",},
+    {"name":"obj_text_text_menu","order":20,"path":"objects/obj_text_text_menu/obj_text_text_menu.yy",},
     {"name":"fnt_styleable_text_font_default","order":3,"path":"fonts/fnt_styleable_text_font_default/fnt_styleable_text_font_default.yy",},
     {"name":"AnimatedTextAnimation","order":1,"path":"scripts/AnimatedTextAnimation/AnimatedTextAnimation.yy",},
     {"name":"snd_chirp","order":6,"path":"sounds/snd_chirp/snd_chirp.yy",},

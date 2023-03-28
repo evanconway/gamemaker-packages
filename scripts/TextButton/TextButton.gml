@@ -80,18 +80,29 @@ function text_button_is_point_on(_text_button, _button_x, _button_y, _point_x, _
 };
 	
 /**
- * Draw given text button at given xy.
+ * Update the given text button by the given time in ms. This updates any animations the text
+ * may have.
+ * @param {Struct.TextButton} _text_button
+ * @param {real} _update_time_ms
+ */
+function text_button_update(_text_button, _update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
+	with (_text_button) {
+		tag_decorated_text_update(tds);
+		tag_decorated_text_update(tds_highlighted);
+		tag_decorated_text_update(tds_selected);
+	}
+}
+
+/**
+ * Draw given text button at given xy without updating animations.
  * @param {Struct.TextButton} _text_button
  * @param {real} _x
  * @param {real} _y
  * @param {bool} _highlighted
  */
-function text_button_draw(_text_button, _x, _y, _highlighted = false, _selected = false) {
+function text_button_draw_no_update(_text_button, _x, _y, _highlighted = false, _selected = false) {
 	// offsets to account for different size of highlight and selected
 	with (_text_button) {
-		tag_decorated_text_update(tds);
-		tag_decorated_text_update(tds_highlighted);
-		tag_decorated_text_update(tds_selected);
 		if (_selected) {
 			var _offset_x = floor((tag_decorated_text_get_width(tds) - tag_decorated_text_get_width(tds_selected)) / 2);
 			var _offset_y = floor((tag_decorated_text_get_height(tds) - tag_decorated_text_get_height(tds_selected)) / 2);
@@ -104,4 +115,16 @@ function text_button_draw(_text_button, _x, _y, _highlighted = false, _selected 
 			tag_decorated_text_draw_no_update(tds, _x, _y);
 		}
 	}
+}
+
+/**
+ * Draw given text button at given xy.
+ * @param {Struct.TextButton} _text_button
+ * @param {real} _x
+ * @param {real} _y
+ * @param {bool} _highlighted
+ */
+function text_button_draw(_text_button, _x, _y, _highlighted = false, _selected = false) {
+	text_button_update(_text_button);
+	text_button_draw_no_update(_text_button, _x, _y, _highlighted, _selected);
 };

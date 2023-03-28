@@ -16,6 +16,7 @@ if (mx != _mx || my != _my) {
 if (selected_time >= 0) {
 	if (--selected_time <= 0) {
 		text_button_list_set_highlighted_option_selected(list, false);
+		if (using_mouse) text_button_list_set_highlighted_at_xy(list, _x, _y, _mx, _my, _alignment);
 	}
 	
 } else if (using_mouse) {
