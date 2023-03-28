@@ -28,9 +28,6 @@ function TextButtonList(_options, _default_effects = "", _highlight_effects = "y
 	/// @ignore
 	highlighted_option = 0;
 	
-	/// @ignore
-	selected_option = -1;
-	
 	// experimental different strat
 	highlighted_option_selected = false;
 	
@@ -63,7 +60,7 @@ function text_button_list_reset_option_animations(_text_button_list, _option_ind
 	with (_text_button_list) {
 		if (!reset_highlight_animation_on_change && !reset_selected_animation_on_change && !reset_default_animation_on_change) return;
 		if (_option_index < 0 || _option_index >= array_length(options)) return;
-		if (selected_option == _option_index && reset_selected_animation_on_change) {
+		if (highlighted_option == _option_index && highlighted_option_selected && reset_selected_animation_on_change) {
 			text_button_reset_animations_selected(options[_option_index]);
 		} else if (highlighted_option == _option_index && reset_highlight_animation_on_change) {
 			text_button_reset_animations_highlighted(options[_option_index]);
@@ -96,25 +93,15 @@ function text_button_list_get_highlighted_option(_text_button_list) {
 }
 
 /**
- * Set the selected option of given text button list to given index.
- * @param {Struct.TextButtonList} _text_button_list
- * @param {real} _option_index
- */
-function text_button_list_set_selected_option(_text_button_list, _option_index) {
-	with (_text_button_list) {
-		var _prev_selected = selected_option;
-		selected_option = clamp(_option_index, -1, array_length(options));
-		text_button_list_reset_two_animations(self, _prev_selected, selected_option);
-	}
-}
-
-/**
  * Set the highlighted option of given text button list to given selected state.
  * @param {Struct.TextButtonList} _text_button_list
  * @param {bool} _selected
  */
 function text_button_list_set_highlighted_option_selected(_text_button_list, _selected) {
-	_text_button_list.highlighted_option_selected = _selected;
+	with (_text_button_list) {
+		highlighted_option_selected = _selected;
+		text_button_list_reset_option_animations(self, highlighted_option);
+	}
 }
 
 /**
@@ -216,7 +203,7 @@ function text_button_list_draw_vertical(_text_button_list, _x, _y, _alignment = 
 	with (_text_button_list) {
 		for (var _d = 0; _d < array_length(options); _d++) {
 			var _highlighted = highlighted_option == _d;
-			var _selected = selected_option == _d;
+			var _selected = highlighted_option == _d && highlighted_option_selected;
 			if (_alignment == fa_left) {
 				text_button_draw(options[_d], _x, _y, _highlighted, _selected);
 			}

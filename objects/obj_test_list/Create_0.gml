@@ -3,5 +3,6 @@ list = new TextButtonList(["new game", "load game", "options", "exit"], "gray", 
 mx = window_mouse_get_x();
 my = window_mouse_get_y();
 selected_time = -1;
+using_mouse = true;
 
 //text_button_list_set_animation_reset_options(list, false, false, false);
