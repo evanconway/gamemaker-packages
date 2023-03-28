@@ -17,7 +17,7 @@ if (button_state == 2) {
 		button.reset_animations_highlighted();
 	} else if (mouse_check_button_pressed(mb_left)) {
 		button.reset_animations_highlighted();
-		selected_time = 20;
+		selected_time = 40;
 		button_state = 2;
 	}
 // default
