@@ -28,4 +28,4 @@ if (button_state == 2) {
 
 draw_text(0, 0, string(window_mouse_get_x()) + ", " + string(window_mouse_get_y()));
 
-button.draw(_x, _y, button_state == 1, button_state == 2);
+text_button_draw(button, _x, _y, button_state == 1, button_state == 2);

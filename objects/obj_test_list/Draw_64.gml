@@ -1,11 +1,11 @@
 draw_set_color(c_white);
-var _x = 400;
+var _x = 20;
 var _y = 300;
 draw_circle(_x, _y, 5, false);
 
 var _mx = window_mouse_get_x();
 var _my = window_mouse_get_y();
-var _alignment = fa_center;
+var _alignment = fa_left;
 
 if (selected_time >= 0) {
 	selected_time--;

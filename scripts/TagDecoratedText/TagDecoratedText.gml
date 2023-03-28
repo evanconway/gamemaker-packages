@@ -214,6 +214,16 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
 	*/
 	/// @ignore
 	update_time = 0;
+	
+	
+	/*
+	Because we want updating and drawing to be decoupled, we use this internal flag to indicate if the animations
+	have been applied (updated). When we call the draw function, if this flag has been set true, then we don't
+	bother updating the animations. If it has not been set, we'll update the animations, but with an update time
+	of 0.
+	*/
+	/// @ignore
+	animations_updated = false;
 }
 
 /**
@@ -223,7 +233,10 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
  * @param {real} _update_time_ms
  */
 function tag_decorated_text_update(_tag_decorated_text, _update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
-	_tag_decorated_text.update_time = _update_time_ms;
+	with (_tag_decorated_text) {
+		pages[page_current].update(_update_time_ms);
+		animations_updated = true;
+	}
 }
 
 /**
@@ -236,13 +249,14 @@ function tag_decorated_text_update(_tag_decorated_text, _update_time_ms = 1000 /
 function tag_decorated_text_draw_no_update(_tag_decorated_text, _x, _y, _alignment = fa_left) {
 	with (_tag_decorated_text) {
 		global.drawables_drawn = 0;
-		pages[page_current].update(update_time);
+		if (!animations_updated) pages[page_current].update(0);
+		animations_updated = false;
 		/*
 		Update time is reset here so that if we need to draw the text again without updating,
 		the update time won't change the animations at all. The only way to change animations
 		is to set update time to a positive value before drawing.
 		*/
-		update_time = 0;
+		//update_time = 0;
 		pages[page_current].draw(_x, _y, _alignment);
 		//draw_border(_x, _y);
 	}

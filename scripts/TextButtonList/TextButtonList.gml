@@ -31,11 +31,14 @@ function TextButtonList(_options, _default_effects = "", _highlight_effects = "y
 	/// @ignore
 	selected_option = -1;
 	
+	// experimental different strat
+	highlighted_option_selected = false;
+	
 	reset_highlight_animation_on_change = true;
 	
 	reset_selected_animation_on_change = true;
 	
-	reset_default_animation_on_change = true;
+	reset_default_animation_on_change = false;
 }
 
 /**
@@ -103,6 +106,15 @@ function text_button_list_set_selected_option(_text_button_list, _option_index) 
 		selected_option = clamp(_option_index, -1, array_length(options));
 		text_button_list_reset_two_animations(self, _prev_selected, selected_option);
 	}
+}
+
+/**
+ * Set the highlighted option of given text button list to given selected state.
+ * @param {Struct.TextButtonList} _text_button_list
+ * @param {bool} _selected
+ */
+function text_button_list_set_highlighted_option_selected(_text_button_list, _selected) {
+	_text_button_list.highlighted_option_selected = _selected;
 }
 
 /**

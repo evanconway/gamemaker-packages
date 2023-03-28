@@ -89,27 +89,19 @@ function text_button_is_point_on(_text_button, _button_x, _button_y, _point_x, _
 function text_button_draw(_text_button, _x, _y, _highlighted = false, _selected = false) {
 	// offsets to account for different size of highlight and selected
 	with (_text_button) {
+		tag_decorated_text_update(tds);
+		tag_decorated_text_update(tds_highlighted);
+		tag_decorated_text_update(tds_selected);
 		if (_selected) {
 			var _offset_x = floor((tag_decorated_text_get_width(tds) - tag_decorated_text_get_width(tds_selected)) / 2);
 			var _offset_y = floor((tag_decorated_text_get_height(tds) - tag_decorated_text_get_height(tds_selected)) / 2);
-			tag_decorated_text_draw(tds_selected, _x + _offset_x, _y + _offset_y);
-			tag_decorated_text_update(tds);
-			tag_decorated_text_update(tds_highlighted);
-			//return;
-		}
-		if (_highlighted) {
+			tag_decorated_text_draw_no_update(tds_selected, _x + _offset_x, _y + _offset_y);
+		} else if (_highlighted) {
 			var _offset_x = floor((tag_decorated_text_get_width(tds) - tag_decorated_text_get_width(tds_highlighted)) / 2);
 			var _offset_y = floor((tag_decorated_text_get_height(tds) - tag_decorated_text_get_height(tds_highlighted)) / 2);
-			tag_decorated_text_draw(tds_highlighted, _x + _offset_x, _y + _offset_y);
-			tag_decorated_text_update(tds);
-			tag_decorated_text_update(tds_selected);
-			//return;
+			tag_decorated_text_draw_no_update(tds_highlighted, _x + _offset_x, _y + _offset_y);
+		} else {
+			tag_decorated_text_draw_no_update(tds, _x, _y);
 		}
-		if (!_highlighted && !_selected) {
-			tag_decorated_text_draw(tds, _x, _y);
-			tag_decorated_text_update(tds_highlighted);
-			tag_decorated_text_update(tds_selected);	
-		}
-		tag_decorated_text_draw_no_update(tds, _x + 400, _y);
 	}
 };

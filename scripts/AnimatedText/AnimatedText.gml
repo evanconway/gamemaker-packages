@@ -53,6 +53,13 @@ function AnimatedText(_source_string, _width, _height) constructor {
 	 * @ignore
 	 */
 	update = function(_update_time_ms) {
+		// initialize the drawables of the underyling StyleableText instance
+		var _cursor = text.drawables;
+		while (_cursor != undefined) {
+			_cursor.init_styles();
+			_cursor = _cursor.next;
+		}
+		
 		for (var _i = 0; _i < array_length(animations); _i++) {
 			animations[_i].update_merge(_update_time_ms);
 		}
