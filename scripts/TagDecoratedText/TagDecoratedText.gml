@@ -258,7 +258,7 @@ function tag_decorated_text_draw_no_update(_tag_decorated_text, _x, _y, _alignme
 		*/
 		//update_time = 0;
 		pages[page_current].draw(_x, _y, _alignment);
-		//draw_border(_x, _y);
+		draw_border(_x, _y);
 	}
 }
 

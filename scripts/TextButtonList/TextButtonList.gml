@@ -36,6 +36,16 @@ function TextButtonList(_options, _default_effects = "", _highlight_effects = "y
 	reset_selected_animation_on_change = true;
 	
 	reset_default_animation_on_change = false;
+	
+	space_between_options = 0;
+}
+
+/**
+ * @param {Struct.TextButtonList} _text_button_list
+ * @param {real} _space_between_options
+ */
+function text_button_list_set_space_between_options(_text_button_list, _space_between_options) {
+	_text_button_list.space_between_options = _space_between_options;
 }
 
 /**
@@ -147,7 +157,54 @@ function text_button_list_highlight_next(_text_button_list) {
 }
 
 /**
- * Returns the index of the option in the given text button list that's at the given xy.
+ * Returns an array of vertical xy positions of buttons in the given text button list at given position and alignment.
+ * @param {Struct.TextButtonList} _text_button_list
+ * @param {real} _x
+ * @param {real} _y
+ * @param {Constant.HAlign} _alignment
+ */
+function text_button_list_get_button_positions_vertical(_text_button_list, _x, _y, _alignment) {
+	var _result = array_create(array_length(_text_button_list.options), [0]);
+	with (_text_button_list) {
+		for (var _i = 0; _i < array_length(_result); _i++) {
+			if (_alignment == fa_left) _result[_i] = [_x, _y];
+			if (_alignment == fa_right) _result[_i] = [_x - text_button_get_width(options[_i]), _y];
+			if (_alignment == fa_center) _result[_i] = [_x - floor(text_button_get_width(options[_i]) / 2), _y];
+			_y += (text_button_get_height(options[_i]) + space_between_options);
+		}
+	}
+	return _result;
+}
+
+/**
+ * Returns an array of horizontal xy positions of buttons in the given text button list at given position and alignment.
+ * @param {Struct.TextButtonList} _text_button_list
+ * @param {real} _x
+ * @param {real} _y
+ * @param {Constant.HAlign} _alignment
+ */
+function text_button_list_get_button_positions_horizontal(_text_button_list, _x, _y, _alignment) {
+	var _result = array_create(array_length(_text_button_list.options), [0]);
+	with (_text_button_list) {
+		var _width_of_list = (array_length(options) - 1) * space_between_options;
+		for (var _i = 0; _i < array_length(options); _i++) {
+			_width_of_list += text_button_get_width(options[_i]);
+		}
+		
+		// modify starting _x based on alignment
+		if (_alignment == fa_right) _x -= _width_of_list;
+		if (_alignment == fa_center) _x -= floor(_width_of_list / 2);
+		
+		for (var _i = 0; _i < array_length(options); _i++) {
+			_result[_i] = [_x, _y];
+			_x += (text_button_get_width(options[_i]) + space_between_options);
+		}
+	}
+	return _result;
+}
+
+/**
+ * Returns the index of the option in the given text button list that's at the given xy in vertical orientation.
  * Returns -1 if no option as at given xy.
  * @param {Struct.TextButtonList} _text_button_list
  * @param {real} _list_x
@@ -156,26 +213,34 @@ function text_button_list_highlight_next(_text_button_list) {
  * @param {real} _y
  * @param {Constant.HAlign} _alignment
  */
-function text_button_list_get_option_at_xy(_text_button_list, _list_x, _list_y, _x, _y, _alignment = fa_left) {
-	with (_text_button_list) {
-		for (var _d = 0; _d < array_length(options); _d++) {
-			if (_alignment == fa_left) {
-				if (text_button_is_point_on(options[_d], _list_x, _list_y, _x, _y)) return _d;
-			}
-			if (_alignment == fa_right) {
-				if (text_button_is_point_on(options[_d], _list_x - text_button_get_width(options[_d]), _list_y, _x, _y)) return _d;
-			}
-			if (_alignment == fa_center) {
-				if (text_button_is_point_on(options[_d], _list_x - floor(text_button_get_width(options[_d]) / 2), _list_y, _x, _y)) return _d
-			}
-			_list_y += text_button_get_height(options[_d]);
-		}	
+function text_button_list_get_option_at_xy_vertical(_text_button_list, _list_x, _list_y, _x, _y, _alignment = fa_left) {
+	var _positions = text_button_list_get_button_positions_vertical(_text_button_list, _list_x, _list_y, _alignment);
+	for (var _i = 0; _i < array_length(_positions); _i++) {
+		var _button_x = _positions[_i][0];
+		var _button_y = _positions[_i][1];
+		if (text_button_is_point_on(_text_button_list.options[_i], _button_x, _button_y, _x, _y)) return _i;
 	}
+	
+	//with (_text_button_list) {
+	//	for (var _d = 0; _d < array_length(options); _d++) {
+	//		if (_alignment == fa_left) {
+	//			if (text_button_is_point_on(options[_d], _list_x, _list_y, _x, _y)) return _d;
+	//		}
+	//		if (_alignment == fa_right) {
+	//			if (text_button_is_point_on(options[_d], _list_x - text_button_get_width(options[_d]), _list_y, _x, _y)) return _d;
+	//		}
+	//		if (_alignment == fa_center) {
+	//			if (text_button_is_point_on(options[_d], _list_x - floor(text_button_get_width(options[_d]) / 2), _list_y, _x, _y)) return _d
+	//		}
+	//		_list_y += text_button_get_height(options[_d]);
+	//	}	
+	//}
 	return -1;
 }
 
 /**
- * Sets the highlighted option to the option at the given xy, if the given text button list is at the given list xy.
+ * Returns the index of the option in the given text button list that's at the given xy in horizontal orientation.
+ * Returns -1 if no option as at given xy.
  * @param {Struct.TextButtonList} _text_button_list
  * @param {real} _list_x
  * @param {real} _list_y
@@ -183,9 +248,63 @@ function text_button_list_get_option_at_xy(_text_button_list, _list_x, _list_y, 
  * @param {real} _y
  * @param {Constant.HAlign} _alignment
  */
-function text_button_list_set_highlighted_at_xy(_text_button_list, _list_x, _list_y, _x, _y, _alignment = fa_left) {
+function text_button_list_get_option_at_xy_horizontal(_text_button_list, _list_x, _list_y, _x, _y, _alignment = fa_left) {
+	var _positions = text_button_list_get_button_positions_horizontal(_text_button_list, _list_x, _list_y, _alignment);
+	for (var _i = 0; _i < array_length(_positions); _i++) {
+		var _button_x = _positions[_i][0];
+		var _button_y = _positions[_i][1];
+		if (text_button_is_point_on(_text_button_list.options[_i], _button_x, _button_y, _x, _y)) return _i;
+	}
+	
+	//with (_text_button_list) {
+	//	var _width_of_list = (array_length(options) - 1) * space_between_options;
+	//	for (var _i = 0; _i < array_length(options); _i++) {
+	//		_width_of_list += text_button_get_width(options[_i]);
+	//	}
+		
+	//	// modify starting _x based on alignment
+	//	if (_alignment == fa_right) _x -= _width_of_list;
+	//	if (_alignment == fa_center) _x -= floor(_width_of_list / 2);
+		
+	//	for (var _i = 0; _i < array_length(options); _i++) {
+	//		if (text_button_is_point_on(options[_i], _list_x, _list_y, _x, _y)) return _i;
+	//		_x += (text_button_get_width(options[_i]) + space_between_options);
+	//	}
+	//}
+	return -1;
+}
+
+/**
+ * Sets the highlighted option to the option at the given xy, if the given text button list is at the given list xy vertically.
+ * @param {Struct.TextButtonList} _text_button_list
+ * @param {real} _list_x
+ * @param {real} _list_y
+ * @param {real} _x
+ * @param {real} _y
+ * @param {Constant.HAlign} _alignment
+ */
+function text_button_list_set_highlighted_at_xy_vertical(_text_button_list, _list_x, _list_y, _x, _y, _alignment = fa_left) {
 	with (_text_button_list) {
-		var _new_highlight = text_button_list_get_option_at_xy(self, _list_x, _list_y, _x, _y, _alignment);
+		var _new_highlight = text_button_list_get_option_at_xy_vertical(self, _list_x, _list_y, _x, _y, _alignment);
+		if (_new_highlight == highlighted_option) return;
+		var _prev_highlighted = highlighted_option;
+		highlighted_option = _new_highlight;
+		text_button_list_reset_two_animations(self, _prev_highlighted, highlighted_option);
+	}
+}
+
+/**
+ * Sets the highlighted option to the option at the given xy, if the given text button list is at the given list xy horizontally.
+ * @param {Struct.TextButtonList} _text_button_list
+ * @param {real} _list_x
+ * @param {real} _list_y
+ * @param {real} _x
+ * @param {real} _y
+ * @param {Constant.HAlign} _alignment
+ */
+function text_button_list_set_highlighted_at_xy_horizontal(_text_button_list, _list_x, _list_y, _x, _y, _alignment = fa_left) {
+	with (_text_button_list) {
+		var _new_highlight = text_button_list_get_option_at_xy_horizontal(self, _list_x, _list_y, _x, _y, _alignment);
 		if (_new_highlight == highlighted_option) return;
 		var _prev_highlighted = highlighted_option;
 		highlighted_option = _new_highlight;
@@ -215,25 +334,32 @@ function text_button_list_update(_text_button_list, _update_time_ms = 1000 / gam
  */
 function text_button_list_draw_vertical_no_update(_text_button_list, _x, _y, _alignment = fa_left) {
 	with (_text_button_list) {
-		for (var _d = 0; _d < array_length(options); _d++) {
-			var _highlighted = highlighted_option == _d;
-			var _selected = highlighted_option == _d && highlighted_option_selected;
-			if (_alignment == fa_left) {
-				text_button_draw_no_update(options[_d], _x, _y, _highlighted, _selected);
-			}
-			if (_alignment == fa_right) {
-				text_button_draw_no_update(options[_d], _x - text_button_get_width(options[_d]), _y, _highlighted, _selected);
-			}
-			if (_alignment == fa_center) {
-				text_button_draw_no_update(options[_d], _x - floor(text_button_get_width(options[_d]) / 2), _y, _highlighted, _selected);
-			}
-			_y += text_button_get_height(options[_d]);
-		}	
+		var _positions = text_button_list_get_button_positions_vertical(self, _x, _y, _alignment);
+		for (var _i = 0; _i < array_length(positions); _i++) {
+			var _highlighted = highlighted_option == _i;
+			var _selected = highlighted_option == _i && highlighted_option_selected;
+			text_button_draw_no_update(options[_i], _positions[_i][0], _positions[_i][1], _highlighted, _selected);
+		}
+		
+		//for (var _d = 0; _d < array_length(options); _d++) {
+		//	var _highlighted = highlighted_option == _d;
+		//	var _selected = highlighted_option == _d && highlighted_option_selected;
+		//	if (_alignment == fa_left) {
+		//		text_button_draw_no_update(options[_d], _x, _y, _highlighted, _selected);
+		//	}
+		//	if (_alignment == fa_right) {
+		//		text_button_draw_no_update(options[_d], _x - text_button_get_width(options[_d]), _y, _highlighted, _selected);
+		//	}
+		//	if (_alignment == fa_center) {
+		//		text_button_draw_no_update(options[_d], _x - floor(text_button_get_width(options[_d]) / 2), _y, _highlighted, _selected);
+		//	}
+		//	_y += text_button_get_height(options[_d]);
+		//}	
 	}
 }
 
 /**
- * Draw given text button list in vertical fashion.
+ * Draw given text button list in vertical orientation.
  * @param {Struct.TextButtonList} _text_button_list
  * @param {real} _x
  * @param {real} _y
@@ -242,4 +368,51 @@ function text_button_list_draw_vertical_no_update(_text_button_list, _x, _y, _al
 function text_button_list_draw_vertical(_text_button_list, _x, _y, _alignment = fa_left) {
 	text_button_list_update(_text_button_list);
 	text_button_list_draw_vertical_no_update(_text_button_list, _x, _y, _alignment);
+}
+
+/**
+ * Draw given text button list in horizontal orientation, but without updating any animations.
+ * @param {Struct.TextButtonList} _text_button_list
+ * @param {real} _x
+ * @param {real} _y
+ * @param {Constant.HAlign} _alignment
+ */
+function text_button_list_draw_horizontal_no_update(_text_button_list, _x, _y, _alignment = fa_left) {
+	with (_text_button_list) {
+		var _positions = text_button_list_get_button_positions_horizontal(self, _x, _y, _alignment);
+		for (var _i = 0; _i < array_length(options); _i++) {
+			var _highlighted = highlighted_option == _i;
+			var _selected = highlighted_option == _i && highlighted_option_selected;
+			text_button_draw_no_update(options[_i], _positions[_i][0], _positions[_i][1], _highlighted, _selected);
+		}
+		
+		//var _width_of_list = (array_length(options) - 1) * space_between_options;
+		//for (var _i = 0; _i < array_length(options); _i++) {
+		//	_width_of_list += text_button_get_width(options[_i]);
+		//}
+		
+		//// modify starting _x based on alignment
+		//if (_alignment == fa_right) _x -= _width_of_list;
+		//if (_alignment == fa_center) _x -= floor(_width_of_list / 2);
+		
+		//for (var _i = 0; _i < array_length(options); _i++) {
+		//	var _highlighted = highlighted_option == _i;
+		//	var _selected = highlighted_option == _i && highlighted_option_selected;
+			
+		//	text_button_draw_no_update(options[_i], _x, _y, _highlighted, _selected);
+		//	_x += (text_button_get_width(options[_i]) + space_between_options);
+		//}
+	}
+}
+
+/**
+ * Draw given text button list in horizontal orientation.
+ * @param {Struct.TextButtonList} _text_button_list
+ * @param {real} _x
+ * @param {real} _y
+ * @param {Constant.HAlign} _alignment
+ */
+function text_button_list_draw_horizontal(_text_button_list, _x, _y, _alignment = fa_left) {
+	text_button_list_update(_text_button_list);
+	text_button_list_draw_horizontal_no_update(_text_button_list, _x, _y, _alignment);
 }

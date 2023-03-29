@@ -32,6 +32,7 @@
     {"id":{"name":"obj_textsystem_test","path":"objects/obj_textsystem_test/obj_textsystem_test.yy",},},
     {"id":{"name":"fnt_handwriting","path":"fonts/fnt_handwriting/fnt_handwriting.yy",},},
     {"id":{"name":"StyleableTextStyle","path":"scripts/StyleableTextStyle/StyleableTextStyle.yy",},},
+    {"id":{"name":"obj_test_list_horizontal","path":"objects/obj_test_list_horizontal/obj_test_list_horizontal.yy",},},
     {"id":{"name":"fnt_menu","path":"fonts/fnt_menu/fnt_menu.yy",},},
     {"id":{"name":"TagDecoratedText","path":"scripts/TagDecoratedText/TagDecoratedText.yy",},},
     {"id":{"name":"StyleableText","path":"scripts/StyleableText/StyleableText.yy",},},
