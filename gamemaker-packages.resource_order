@@ -18,6 +18,7 @@
     {"name":"snd_chirp","order":6,"path":"sounds/snd_chirp/snd_chirp.yy",},
     {"name":"spr_button","order":7,"path":"sprites/spr_button/spr_button.yy",},
     {"name":"spr_styleable_text_sprite_default","order":5,"path":"sprites/spr_styleable_text_sprite_default/spr_styleable_text_sprite_default.yy",},
+    {"name":"obj_test_files","order":17,"path":"objects/obj_test_files/obj_test_files.yy",},
     {"name":"StyleableTextDrawable","order":2,"path":"scripts/StyleableTextDrawable/StyleableTextDrawable.yy",},
     {"name":"AnimatedTextMisc","order":2,"path":"scripts/AnimatedTextMisc/AnimatedTextMisc.yy",},
     {"name":"Room1","order":14,"path":"rooms/Room1/Room1.yy",},

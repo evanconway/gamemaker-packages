@@ -17,7 +17,9 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"StyleableText","folderPath":"folders/TagDecoratedText/StyleableText.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"TypedText","folderPath":"folders/TagDecoratedText/TypedText.yy",},
   ],
-  "IncludedFiles": [],
+  "IncludedFiles": [
+    {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"read_data.txt","CopyToMask":-1,"filePath":"datafiles",},
+  ],
   "isEcma": false,
   "LibraryEmitters": [],
   "MetaData": {
@@ -39,6 +41,7 @@
     {"id":{"name":"snd_chirp","path":"sounds/snd_chirp/snd_chirp.yy",},},
     {"id":{"name":"spr_button","path":"sprites/spr_button/spr_button.yy",},},
     {"id":{"name":"spr_styleable_text_sprite_default","path":"sprites/spr_styleable_text_sprite_default/spr_styleable_text_sprite_default.yy",},},
+    {"id":{"name":"obj_test_files","path":"objects/obj_test_files/obj_test_files.yy",},},
     {"id":{"name":"AnimatedText","path":"scripts/AnimatedText/AnimatedText.yy",},},
     {"id":{"name":"TextButton","path":"scripts/TextButton/TextButton.yy",},},
     {"id":{"name":"StyleableTextDrawable","path":"scripts/StyleableTextDrawable/StyleableTextDrawable.yy",},},
