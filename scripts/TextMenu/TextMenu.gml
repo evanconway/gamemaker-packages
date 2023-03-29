@@ -44,7 +44,7 @@ function text_menu_set_distance_between_option(_text_menu, _distance) {
 /**
  * Sets if the given text menu is vertical. If _vertical is falst the menu will display horizontal.
  * @param {Struct.TextMenu} _text_menu
- * @param {real} _vertical
+ * @param {bool} _vertical
  */
 function text_menu_set_is_vertical(_text_menu, _vertical) {
 	_text_menu.is_vertical = _vertical
