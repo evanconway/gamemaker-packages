@@ -220,21 +220,6 @@ function text_button_list_get_option_at_xy_vertical(_text_button_list, _list_x, 
 		var _button_y = _positions[_i][1];
 		if (text_button_is_point_on(_text_button_list.options[_i], _button_x, _button_y, _x, _y)) return _i;
 	}
-	
-	//with (_text_button_list) {
-	//	for (var _d = 0; _d < array_length(options); _d++) {
-	//		if (_alignment == fa_left) {
-	//			if (text_button_is_point_on(options[_d], _list_x, _list_y, _x, _y)) return _d;
-	//		}
-	//		if (_alignment == fa_right) {
-	//			if (text_button_is_point_on(options[_d], _list_x - text_button_get_width(options[_d]), _list_y, _x, _y)) return _d;
-	//		}
-	//		if (_alignment == fa_center) {
-	//			if (text_button_is_point_on(options[_d], _list_x - floor(text_button_get_width(options[_d]) / 2), _list_y, _x, _y)) return _d
-	//		}
-	//		_list_y += text_button_get_height(options[_d]);
-	//	}	
-	//}
 	return -1;
 }
 
@@ -255,22 +240,6 @@ function text_button_list_get_option_at_xy_horizontal(_text_button_list, _list_x
 		var _button_y = _positions[_i][1];
 		if (text_button_is_point_on(_text_button_list.options[_i], _button_x, _button_y, _x, _y)) return _i;
 	}
-	
-	//with (_text_button_list) {
-	//	var _width_of_list = (array_length(options) - 1) * space_between_options;
-	//	for (var _i = 0; _i < array_length(options); _i++) {
-	//		_width_of_list += text_button_get_width(options[_i]);
-	//	}
-		
-	//	// modify starting _x based on alignment
-	//	if (_alignment == fa_right) _x -= _width_of_list;
-	//	if (_alignment == fa_center) _x -= floor(_width_of_list / 2);
-		
-	//	for (var _i = 0; _i < array_length(options); _i++) {
-	//		if (text_button_is_point_on(options[_i], _list_x, _list_y, _x, _y)) return _i;
-	//		_x += (text_button_get_width(options[_i]) + space_between_options);
-	//	}
-	//}
 	return -1;
 }
 
@@ -335,26 +304,11 @@ function text_button_list_update(_text_button_list, _update_time_ms = 1000 / gam
 function text_button_list_draw_vertical_no_update(_text_button_list, _x, _y, _alignment = fa_left) {
 	with (_text_button_list) {
 		var _positions = text_button_list_get_button_positions_vertical(self, _x, _y, _alignment);
-		for (var _i = 0; _i < array_length(positions); _i++) {
+		for (var _i = 0; _i < array_length(options); _i++) {
 			var _highlighted = highlighted_option == _i;
 			var _selected = highlighted_option == _i && highlighted_option_selected;
 			text_button_draw_no_update(options[_i], _positions[_i][0], _positions[_i][1], _highlighted, _selected);
 		}
-		
-		//for (var _d = 0; _d < array_length(options); _d++) {
-		//	var _highlighted = highlighted_option == _d;
-		//	var _selected = highlighted_option == _d && highlighted_option_selected;
-		//	if (_alignment == fa_left) {
-		//		text_button_draw_no_update(options[_d], _x, _y, _highlighted, _selected);
-		//	}
-		//	if (_alignment == fa_right) {
-		//		text_button_draw_no_update(options[_d], _x - text_button_get_width(options[_d]), _y, _highlighted, _selected);
-		//	}
-		//	if (_alignment == fa_center) {
-		//		text_button_draw_no_update(options[_d], _x - floor(text_button_get_width(options[_d]) / 2), _y, _highlighted, _selected);
-		//	}
-		//	_y += text_button_get_height(options[_d]);
-		//}	
 	}
 }
 
@@ -385,23 +339,6 @@ function text_button_list_draw_horizontal_no_update(_text_button_list, _x, _y, _
 			var _selected = highlighted_option == _i && highlighted_option_selected;
 			text_button_draw_no_update(options[_i], _positions[_i][0], _positions[_i][1], _highlighted, _selected);
 		}
-		
-		//var _width_of_list = (array_length(options) - 1) * space_between_options;
-		//for (var _i = 0; _i < array_length(options); _i++) {
-		//	_width_of_list += text_button_get_width(options[_i]);
-		//}
-		
-		//// modify starting _x based on alignment
-		//if (_alignment == fa_right) _x -= _width_of_list;
-		//if (_alignment == fa_center) _x -= floor(_width_of_list / 2);
-		
-		//for (var _i = 0; _i < array_length(options); _i++) {
-		//	var _highlighted = highlighted_option == _i;
-		//	var _selected = highlighted_option == _i && highlighted_option_selected;
-			
-		//	text_button_draw_no_update(options[_i], _x, _y, _highlighted, _selected);
-		//	_x += (text_button_get_width(options[_i]) + space_between_options);
-		//}
 	}
 }
 

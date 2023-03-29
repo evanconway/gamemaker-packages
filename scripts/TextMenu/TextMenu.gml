@@ -51,7 +51,7 @@ function text_menu_update(_text_menu, _list_x, _list_y, _alignment = fa_left, _u
 		} else if (using_mouse) {
 			text_button_list_set_highlighted_at_xy_vertical(list, _list_x, _list_y, _current_mx, _current_my, _alignment);
 			if (mouse_check_button_pressed(mb_left)) {
-				var _clicked_option_index = text_button_list_get_option_at_xy(list, _list_x, _list_y, _current_mx, _current_my, _alignment);
+				var _clicked_option_index = text_button_list_get_option_at_xy_vertical(list, _list_x, _list_y, _current_mx, _current_my, _alignment);
 				if (text_button_list_get_highlighted_option(list) == _clicked_option_index) text_button_list_set_highlighted_option_selected(list, true);
 				selected_time = 40;
 			}
