@@ -28,24 +28,25 @@ function TextButtonList(_options, _default_effects = "", _highlight_effects = "y
 	/// @ignore
 	highlighted_option = 0;
 	
-	// experimental different strat
+	/// @ignore
 	highlighted_option_selected = false;
-	
+	/// @ignore
 	reset_highlight_animation_on_change = true;
-	
+	/// @ignore
 	reset_selected_animation_on_change = true;
-	
+	/// @ignore
 	reset_default_animation_on_change = false;
-	
-	space_between_options = 0;
+	/// @ignore
+	distance_between_options = 15;
 }
 
 /**
+ * Sets the distance in pixels between options in the given text_button list.
  * @param {Struct.TextButtonList} _text_button_list
- * @param {real} _space_between_options
+ * @param {real} _distance
  */
-function text_button_list_set_space_between_options(_text_button_list, _space_between_options) {
-	_text_button_list.space_between_options = _space_between_options;
+function text_button_list_set_distance_between_options(_text_button_list, _distance) {
+	_text_button_list.distance_between_options = _distance;
 }
 
 /**
@@ -170,7 +171,7 @@ function text_button_list_get_button_positions_vertical(_text_button_list, _x, _
 			if (_alignment == fa_left) _result[_i] = [_x, _y];
 			if (_alignment == fa_right) _result[_i] = [_x - text_button_get_width(options[_i]), _y];
 			if (_alignment == fa_center) _result[_i] = [_x - floor(text_button_get_width(options[_i]) / 2), _y];
-			_y += (text_button_get_height(options[_i]) + space_between_options);
+			_y += (text_button_get_height(options[_i]) + distance_between_options);
 		}
 	}
 	return _result;
@@ -186,7 +187,7 @@ function text_button_list_get_button_positions_vertical(_text_button_list, _x, _
 function text_button_list_get_button_positions_horizontal(_text_button_list, _x, _y, _alignment) {
 	var _result = array_create(array_length(_text_button_list.options), [0]);
 	with (_text_button_list) {
-		var _width_of_list = (array_length(options) - 1) * space_between_options;
+		var _width_of_list = (array_length(options) - 1) * distance_between_options;
 		for (var _i = 0; _i < array_length(options); _i++) {
 			_width_of_list += text_button_get_width(options[_i]);
 		}
@@ -197,7 +198,7 @@ function text_button_list_get_button_positions_horizontal(_text_button_list, _x,
 		
 		for (var _i = 0; _i < array_length(options); _i++) {
 			_result[_i] = [_x, _y];
-			_x += (text_button_get_width(options[_i]) + space_between_options);
+			_x += (text_button_get_width(options[_i]) + distance_between_options);
 		}
 	}
 	return _result;

@@ -8,3 +8,4 @@ tag_decorated_text_set_on_type(test, function() {
 tag_decorated_text_clear_pause_map(test);
 tag_decorated_text_set_character_pause(test, [".", "!", "?"], 400);
 tag_decorated_text_set_character_pause(test, [",", "-", ";", ":"], 200);
+tag_decorated_text_set_typing_params(test, 100, 2);

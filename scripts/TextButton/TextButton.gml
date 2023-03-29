@@ -52,16 +52,6 @@ function text_button_reset_animations_highlighted(_text_button) {
 function text_button_reset_animations_selected(_text_button) {
 	tag_decorated_text_reset_animations(_text_button.tds_selected);
 }
-
-/**
- * Reset animation state of all effects in given button.
- * @param {Struct.TextButton} _text_button
- */
-function text_button_reset_animations(_text_button) {
-	tag_decorated_text_reset_animations(_text_button.tds);
-	tag_decorated_text_reset_animations(_text_button.tds_highlighted);
-	tag_decorated_text_reset_animations(_text_button.tds_selected);
-}
 	
 /**
  * Returns boolean indicating if given xy is on given text button at given button xy.

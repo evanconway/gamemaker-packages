@@ -6,24 +6,48 @@
  * @param {string} _selected_effects
  */
 function TextMenu(_options, _default_effects = "gray", _highlight_effects = "yellow fade", _selected_effects = "lime") constructor{
+	/// @ignore
 	list = new TextButtonList(_options, _default_effects, _highlight_effects, _selected_effects);
+	/// @ignore
 	get_mouse_x = function() {
 		return window_mouse_get_x();
 	};
-	
+	/// @ignore
 	get_mouse_y = function() {
 		return window_mouse_get_y();
 	};
-	
+	/// @ignore
 	check_other_input = function() {
 		return keyboard_check_pressed(vk_anykey);
 	}
-	
+	/// @ignore
 	previous_mx = get_mouse_x();
+	/// @ignore
 	previous_my = get_mouse_y();
+	/// @ignore
 	using_mouse = false;
-	
+	/// @ignore
 	selected_time = -1;
+	/// @ignore
+	is_vertical = true;
+}
+
+/**
+ * Sets the distance in pixels between options.
+ * @param {Struct.TextMenu} _text_menu
+ * @param {real} _distance
+ */
+function text_menu_set_distance_between_option(_text_menu, _distance) {
+	text_button_list_set_distance_between_options(_text_menu.list, _distance);
+}
+
+/**
+ * Sets if the given text menu is vertical. If _vertical is falst the menu will display horizontal.
+ * @param {Struct.TextMenu} _text_menu
+ * @param {real} _vertical
+ */
+function text_menu_set_is_vertical(_text_menu, _vertical) {
+	_text_menu.is_vertical = _vertical
 }
 
 /**
@@ -37,7 +61,6 @@ function TextMenu(_options, _default_effects = "gray", _highlight_effects = "yel
  */
 function text_menu_update(_text_menu, _list_x, _list_y, _alignment = fa_left, _update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
 	with (_text_menu) {
-		text_button_list_update(list, _update_time_ms);
 		var _current_mx = get_mouse_x();
 		var _current_my = get_mouse_y();
 		if (previous_mx != _current_mx || previous_my != _current_my) using_mouse = true;
@@ -46,12 +69,19 @@ function text_menu_update(_text_menu, _list_x, _list_y, _alignment = fa_left, _u
 		if (selected_time >= 0) {
 			if (--selected_time <= 0) {
 				text_button_list_set_highlighted_option_selected(list, false);
-				if (using_mouse) text_button_list_set_highlighted_at_xy_vertical(list, _list_x, _list_y, _current_mx, _current_my, _alignment);
+				if (using_mouse) {
+					if (is_vertical) text_button_list_set_highlighted_at_xy_vertical(list, _list_x, _list_y, _current_mx, _current_my, _alignment);
+					else text_button_list_set_highlighted_at_xy_horizontal(list, _list_x, _list_y, _current_mx, _current_my, _alignment);
+				}
 			}
 		} else if (using_mouse) {
-			text_button_list_set_highlighted_at_xy_vertical(list, _list_x, _list_y, _current_mx, _current_my, _alignment);
+			if (is_vertical) text_button_list_set_highlighted_at_xy_vertical(list, _list_x, _list_y, _current_mx, _current_my, _alignment);
+			else text_button_list_set_highlighted_at_xy_horizontal(list, _list_x, _list_y, _current_mx, _current_my, _alignment);
 			if (mouse_check_button_pressed(mb_left)) {
-				var _clicked_option_index = text_button_list_get_option_at_xy_vertical(list, _list_x, _list_y, _current_mx, _current_my, _alignment);
+				var _clicked_option_index = is_vertical ? 
+					text_button_list_get_option_at_xy_vertical(list, _list_x, _list_y, _current_mx, _current_my, _alignment) 
+					: 
+					text_button_list_get_option_at_xy_horizontal(list, _list_x, _list_y, _current_mx, _current_my, _alignment);
 				if (text_button_list_get_highlighted_option(list) == _clicked_option_index) text_button_list_set_highlighted_option_selected(list, true);
 				selected_time = 40;
 			}
@@ -67,6 +97,8 @@ function text_menu_update(_text_menu, _list_x, _list_y, _alignment = fa_left, _u
 
 		previous_mx = _current_mx;
 		previous_my = _current_my;
+		
+		text_button_list_update(list, _update_time_ms);
 	}
 }
 
@@ -77,8 +109,11 @@ function text_menu_update(_text_menu, _list_x, _list_y, _alignment = fa_left, _u
  * @param {real} _y
  * @param {Constant.HAlign} _alignment
  */
-function text_menu_draw_vertical_no_update(_text_menu, _x, _y, _alignment = fa_left) {
-	text_button_list_draw_vertical_no_update(_text_menu.list, _x, _y, _alignment);
+function text_menu_draw_no_update(_text_menu, _x, _y, _alignment = fa_left) {
+	with (_text_menu) {
+		if (is_vertical) text_button_list_draw_vertical_no_update(list, _x, _y, _alignment);
+		else text_button_list_draw_horizontal_no_update(list, _x, _y, _alignment);
+	}
 }
 
 /**
@@ -88,7 +123,7 @@ function text_menu_draw_vertical_no_update(_text_menu, _x, _y, _alignment = fa_l
  * @param {real} _y
  * @param {Constant.HAlign} _alignment
  */
-function text_menu_draw_vertical(_text_menu, _x, _y, _alignment = fa_left) {
+function text_menu_draw(_text_menu, _x, _y, _alignment = fa_left) {
 	text_menu_update(_text_menu, _x, _y, _alignment);
-	text_menu_draw_vertical_no_update(_text_menu, _x, _y, _alignment);
+	text_menu_draw_no_update(_text_menu, _x, _y, _alignment);
 }

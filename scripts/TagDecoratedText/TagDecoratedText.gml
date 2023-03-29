@@ -207,16 +207,6 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
 	}
 	
 	/*
-	We want to de-couple updating our animations from from drawing them. This gives us a way to "pause" animated text
-	by simply drawing it without updating it. However, the update logic for animations must still run even if nothing
-	changes. To accomplish we keep track of the update_time in the instance so the animations can always update based
-	on it. The only way to change animations is to set update time to a positive value before drawing.
-	*/
-	/// @ignore
-	update_time = 0;
-	
-	
-	/*
 	Because we want updating and drawing to be decoupled, we use this internal flag to indicate if the animations
 	have been applied (updated). When we call the draw function, if this flag has been set true, then we don't
 	bother updating the animations. If it has not been set, we'll update the animations, but with an update time
@@ -258,7 +248,7 @@ function tag_decorated_text_draw_no_update(_tag_decorated_text, _x, _y, _alignme
 		*/
 		//update_time = 0;
 		pages[page_current].draw(_x, _y, _alignment);
-		draw_border(_x, _y);
+		//draw_border(_x, _y);
 	}
 }
 
