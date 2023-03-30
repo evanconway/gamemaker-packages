@@ -15,17 +15,19 @@ const isObject = (obj) => {
 }
 
 /**
- * @param {String} pathToDirectory path to directory with dialog files
- * @returns {any[]} array of each parsed json file
+ * Returns a mapping of file names in the given directory to json parsed from that file. Non-json files are ignored.
+ * 
+ * @param {String} pathToDirectory Path to directory with dialog files.
+ * @returns {Map} Map of parsed json. Key is file name value is parsed json.
  */
-const readJsonAtDirectory = (pathToDirectory) => {
-    const result = [];
+const getFileToJsonMapAtDirectory = (pathToDirectory) => {
+    const result = new Map();
     fs.readdirSync(pathToDirectory).forEach(fileName => {
         if (!fileName.endsWith(".json")) return;
         try {
             const fileData = fs.readFileSync(`${pathToDirectory}/${fileName}`, 'utf-8');
             const parsedJson = JSON.parse(fileData, 'utf-8');
-            result.push(parsedJson);
+            result.set(fileName, parsedJson);
         } catch (err) {
             console.error(err);
         }
@@ -33,7 +35,44 @@ const readJsonAtDirectory = (pathToDirectory) => {
     return result;
 };
 
-const makeDialogStepValid = (dialogStep) => {
+/**
+ * Given a valid step object, make a copy of it. Shorthand is removed.
+ * 
+ * @param {Object} step 
+ * @returns {Object}
+ */
+const copyValidStep = (step) => {
+    const result = {
+        name: step.name ? step.name : "",
+        text: step.text,
+        options: [],
+        goto: step.goto ? step.goto : "",
+        is_end: Object.keys(step).includes("is_end") ? step.is_end : false
+    };
+
+    if (Array.isArray(step.options)) step.options.forEach(option => {
+        const optionCopy = {
+            text: {},
+            goto: option.goto
+        };
+        Object.keys(option.text).forEach(lang => {
+            optionCopy.text[lang] = option.text[lang];
+        });
+        result.options.push(optionCopy);
+    });
+    return result;
+};
+
+/**
+ * Given a dialog step, return a step with the same properties, but all shorthand removed. This function
+ * does not ensure that dialog step is valid relative to other steps.
+ * 
+ * @param {String} fileName Name of the file this step object comes from.
+ * @param {Number} stepIndex The index number of the given step object.
+ * @param {Object} dialogStep The step object parsed from json.
+ * @returns 
+ */
+const makeDialogStepValid = (fileName, stepIndex, dialogStep) => {
     if (!isObject(dialogStep)) throw new Error("step is not json object");
     const fields = Object.keys(dialogStep);
 
@@ -63,7 +102,7 @@ const makeDialogStepValid = (dialogStep) => {
             if (!optionFields.includes("text")) throwErr("options must include text field");
             if (!optionFields.includes("goto")) throwErr("options must include goto field");
             optionFields.forEach(optionField => {
-                if (!["text", "goto"].includes(optionField)) throwErr(`option has invalid field "${optionField}"`);
+                if (!VALID_OPTION_FIELDS.includes(optionField)) throwErr(`option has invalid field "${optionField}"`);
             });
 
             // validate option text field
@@ -75,20 +114,13 @@ const makeDialogStepValid = (dialogStep) => {
         });
     }
 
-
     // validate is_end
     if (fields.includes("is_end") && typeof(dialogStep.is_end) !== 'boolean') throwErr("is_end must be a boolean");
 
     // begin constructing valid step
-    const result = {
-        name: dialogStep.name ? dialogStep.name : "",
-        text: dialogStep.text,
-        options: fields.includes("options") ? dialogStep.options : [],
-        goto: dialogStep.goto ? dialogStep.goto : "",
-        is_end: fields.includes("is_end") ? dialogStep.is_end : false
-    };
+    const result = copyValidStep(dialogStep);
 
-    // add missing translation for missing languages
+    // add missing translation for missing languages in text
     VALID_LANGUAGES.forEach(lang => {
         if (Object.keys(result.text).includes(lang)) return;
         result.text[lang] = "missing translation for " + lang;
@@ -106,21 +138,66 @@ const makeDialogStepValid = (dialogStep) => {
 }
 
 /**
+ * Given a mapping of filenames to arrays of shorthand step objects. Return a mapping
+ * of same filenames to arrays of full step objects with same properties.
  * 
- * @param {any[][]} json array of array of json, error will be thrown if not a 2D array
+ * @param {Map} jsonMap Mapping of filenames to array of shorthand step objects.
+ * @returns {Map} Mapping of filenames to array of validated, non-shorthand step objects.
  */
-const getValidStepsFromJson = (json) => {
-    const result = [];
-    if (!Array.isArray(json)) throw new Error("json must be array of array");
-    json.forEach(jsonArr => {
-        if (!Array.isArray(jsonArr)) throw new Error("each dialog file must be array of step objects");
-        jsonArr.forEach(step => result.push(makeDialogStepValid(step)));
+const getValidStepFileToJsonMap = (jsonMap) => {
+    const result = new Map();
+    jsonMap.forEach((parsedJson, fileName) => {
+        if (!Array.isArray(parsedJson)) throwErr(`json parsed from ${fileName} must be array of step objects`);
+        result.set(fileName, parsedJson.map((step, i) => makeDialogStepValid(fileName, i, step)));
     });
     return result;
 };
 
-const json = readJsonAtDirectory("c:/Users/Evan/Documents/GameMakerStudio2/gamemaker-packages/dialogbuilder/dialog");
+/**
+ * Given a mapping of fileNames to arrays of validated steps, returns a mapping of same
+ * file names and steps, but with steps validated relative to eachother. Steps are checked 
+ * for unique names, gotos with valid entries, no duplicate names, and auto generated 
+ * names for steps lacking names.
+ * 
+ * @param {Map} fileNameStepArrMap Mapping of filenames to arrays of validated steps.
+ */
+const getStepConnectionsValidated = (fileNameStepArrMap) => {
+    const uniqueNameCheck = new Set();
+    let autoNameIndex = 0;
 
-const validSteps = getValidStepsFromJson(json);
+    const result = new Map();
 
-console.log(validSteps);
+    fileNameStepArrMap.forEach((stepsArr, fileName) => {
+        result.set(fileName, []);
+
+        const fileStepName = new Set();
+
+        // create copy of steps with unique names checked and empty ones auto generated
+        stepsArr.forEach((step, i) => {
+            const copy = copyValidStep(step);
+            if (copy.name === "") copy.name = (AUTO_NAME_PREFIX + autoNameIndex++);
+            if (!uniqueNameCheck.has(copy.name)) uniqueNameCheck.add(copy.name);
+            else throwErr(`step name ${copy.name} in ${fileName} index ${i} is not unique`);
+
+            fileStepName.add(copy.name);
+
+            result.get(fileName).push(copy);
+        });
+
+        // ensure options in steps have valid gotos (gotos should only point to steps in the same file)
+        result.get(fileName).forEach((step, i) => {
+            step.options.forEach(option => {
+                if (!fileStepName.has(option.goto)) throwErr(`goto ${option.goto} for option in step index ${i} file ${fileName} is not the name of any step in that file`);
+            });
+        })
+    });
+    return result;
+};
+
+const fileNameJsonMap = getFileToJsonMapAtDirectory("c:/Users/Evan/Documents/GameMakerStudio2/gamemaker-packages/dialogbuilder/dialog");
+
+const mapStepsValidated = getValidStepFileToJsonMap(fileNameJsonMap);
+
+const mapConnectedSteps = getStepConnectionsValidated(mapStepsValidated);
+
+console.log(mapConnectedSteps);

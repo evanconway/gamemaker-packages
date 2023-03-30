@@ -1,4 +1,33 @@
-{
-    "name": "Person's Name",
-    "location": "Planet Earth"
-}
+[
+	{
+		"name": "basic_conversation",
+		"text": {
+			"eng": "Here's how to move in the game."
+		}
+	},
+    {
+		"text": {
+			"eng": "Press up to go up."
+		}
+	},
+    {
+		"text": {
+			"eng": "Press down to go down."
+		}
+	},
+    {
+		"text": {
+			"eng": "Just guess what you press to go left and right..."
+		}
+	},
+    {
+		"text": {
+			"eng": "And pressing the space bar will execute an attack!"
+		}
+	},
+    {
+		"text": {
+			"eng": "That's all you need to know. Good luck!"
+		}
+	}
+]
