@@ -170,6 +170,12 @@ const getStepConnectionsValidated = (fileNameStepArrMap) => {
     fileNameStepArrMap.forEach((stepsArr, fileName) => {
         result.set(fileName, []);
 
+        /*
+        To help with design and organization, steps in a file can only point to 
+        other steps defined in that same file. But they also can't share names
+        with steps in other files.
+        */
+        // used for checking gotos within this file
         const fileStepName = new Set();
 
         // create copy of steps with unique names checked and empty ones auto generated
@@ -178,16 +184,27 @@ const getStepConnectionsValidated = (fileNameStepArrMap) => {
             if (copy.name === "") copy.name = (AUTO_NAME_PREFIX + autoNameIndex++);
             if (!uniqueNameCheck.has(copy.name)) uniqueNameCheck.add(copy.name);
             else throwErr(`step name ${copy.name} in ${fileName} index ${i} is not unique`);
-
             fileStepName.add(copy.name);
 
             result.get(fileName).push(copy);
         });
 
-        // ensure options in steps have valid gotos (gotos should only point to steps in the same file)
-        result.get(fileName).forEach((step, i) => {
+        /*
+        Set empty gotos to next step, ensure gotos of steps and step options are valid (gotos should only point
+        to steps in the same file), and ensure last step has is_end = true if it doesn't have a goto.
+        */
+        result.get(fileName).forEach((step, i, stepsInFileArr) => {
+            if (i < stepsInFileArr.length - 1) {
+                if (step.is_end === true) step.goto = "";
+                else if (step.options.length > 0) step.goto = "";
+                else step.goto = step.goto === "" ? stepsInFileArr[i + 1].name : step.goto;
+            } else {
+                step.is_end = true;
+                step.goto = "";
+            }
+            if (step.goto !== "" && !fileStepName.has(step.goto)) throwErr(`goto "${step.goto}" for step index ${i} file ${fileName} is not the name of any step in that file`);
             step.options.forEach(option => {
-                if (!fileStepName.has(option.goto)) throwErr(`goto ${option.goto} for option in step index ${i} file ${fileName} is not the name of any step in that file`);
+                if (!fileStepName.has(option.goto)) throwErr(`goto "${option.goto}" for option in step index ${i} file ${fileName} is not the name of any step in that file`);
             });
         })
     });
