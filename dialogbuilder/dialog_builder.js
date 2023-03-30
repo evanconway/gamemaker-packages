@@ -24,6 +24,7 @@ const getFileToJsonMapAtDirectory = (pathToDirectory) => {
     const result = new Map();
     fs.readdirSync(pathToDirectory).forEach(fileName => {
         if (!fileName.endsWith(".json")) return;
+        console.log("reading", fileName);
         try {
             const fileData = fs.readFileSync(`${pathToDirectory}/${fileName}`, 'utf-8');
             const parsedJson = JSON.parse(fileData, 'utf-8');
@@ -211,10 +212,33 @@ const getStepConnectionsValidated = (fileNameStepArrMap) => {
     return result;
 };
 
-const fileNameJsonMap = getFileToJsonMapAtDirectory("c:/Users/Evan/Documents/GameMakerStudio2/gamemaker-packages/dialogbuilder/dialog");
+const stitchValidatedMap = (map) => {
+    const result = [];
+    map.forEach(stepArr => {
+        stepArr.forEach(step => result.push(step));
+    });
+    return result;
+};
 
+const userGivenDialogDir = process.env.DIALOG_DIR;
+const dialogDirectory = userGivenDialogDir ? userGivenDialogDir : "./dialog";
+if (!userGivenDialogDir) console.log(`env DIALOG_DIR not specified, reading from default "./dialog"`);
+
+const fileNameJsonMap = getFileToJsonMapAtDirectory(dialogDirectory);
+
+console.log("validating dialog");
 const mapStepsValidated = getValidStepFileToJsonMap(fileNameJsonMap);
 
+console.log("connecting steps");
 const mapConnectedSteps = getStepConnectionsValidated(mapStepsValidated);
 
-console.log(mapConnectedSteps);
+console.log("preparing output")
+const completeArr = stitchValidatedMap(mapConnectedSteps);
+
+const userGivenOutputName = process.env.OUTPUT_NAME;
+const outputName = userGivenOutputName ? userGivenOutputName : "output.txt";
+if (!userGivenDialogDir) console.log(`env OUTPUT_NAME not specified, using default "output.txt"`);
+
+fs.writeFileSync(outputName, JSON.stringify(completeArr));
+
+console.log("done");
