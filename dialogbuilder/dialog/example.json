@@ -1,3 +1,53 @@
-{
-    "data": "I'm the data!"
-}
+[
+	{
+		"name": "greet_tutorial_person",
+		"text": {
+			"eng": "Hello",
+			"jpn": "こんにちは",
+			"ger": "Hallo"
+		}
+	},
+	{
+		"text": {
+			"eng": "Are you good or bad?",
+			"jpn": "あなたは良いですか悪いですか？",
+			"ger": "Bist du gut oder schlecht?"
+		},
+		"options": [
+			{
+				"text": {
+					"eng": "good",
+					"jpn": "良い",
+					"ger": "gut"
+				},
+				"goto": "good"
+			},
+			{
+				"text": {
+					"eng": "bad",
+					"jpn": "悪い",
+					"ger": "schlecht"
+				},
+				"goto": "bad"
+			}
+		]
+	},
+	{
+		"name": "good",
+		"text": {
+			"eng": "That's boring.",
+			"jpn": "つまらない。",
+			"ger": "Das ist langweilig."
+		},
+		"is_end": true
+	},
+	{
+		"name": "bad",
+		"text": {
+			"eng": "That's evil.",
+			"jpn": "Das ist böse.",
+			"ger": "それは悪だ。"
+		},
+		"is_end": true
+	}
+]
