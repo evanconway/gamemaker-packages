@@ -236,8 +236,8 @@ console.log("preparing output")
 const completeArr = stitchValidatedMap(mapConnectedSteps);
 
 const userGivenOutputName = process.env.OUTPUT_NAME;
-const outputName = userGivenOutputName ? userGivenOutputName : "output.txt";
-if (!userGivenDialogDir) console.log(`env OUTPUT_NAME not specified, using default "output.txt"`);
+const outputName = userGivenOutputName ? userGivenOutputName : "dialog.txt";
+if (!userGivenDialogDir) console.log(`env OUTPUT_NAME not specified, using default "dialog.txt"`);
 
 fs.writeFileSync(outputName, JSON.stringify(completeArr));
 
