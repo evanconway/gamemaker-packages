@@ -45,8 +45,8 @@
 		"name": "bad",
 		"text": {
 			"eng": "That's evil.",
-			"jpn": "Das ist böse.",
-			"ger": "それは悪だ。"
+			"jpn": "それは悪だ。",
+			"ger": "Das ist böse."
 		},
 		"is_end": true
 	}

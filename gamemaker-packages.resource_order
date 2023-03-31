@@ -1,5 +1,6 @@
 {
   "FolderOrderSettings": [
+    {"name":"Dialog","order":18,"path":"folders/Dialog.yy",},
     {"name":"MenuSystem","order":15,"path":"folders/MenuSystem.yy",},
     {"name":"StyleableText","order":1,"path":"folders/TagDecoratedText/StyleableText.yy",},
     {"name":"TypedText","order":2,"path":"folders/TagDecoratedText/TypedText.yy",},
@@ -15,10 +16,10 @@
     {"name":"obj_menusystem_test","order":3,"path":"objects/obj_menusystem_test/obj_menusystem_test.yy",},
     {"name":"fnt_styleable_text_font_default","order":3,"path":"fonts/fnt_styleable_text_font_default/fnt_styleable_text_font_default.yy",},
     {"name":"AnimatedTextAnimation","order":1,"path":"scripts/AnimatedTextAnimation/AnimatedTextAnimation.yy",},
+    {"name":"obj_dialog","order":19,"path":"objects/obj_dialog/obj_dialog.yy",},
     {"name":"snd_chirp","order":6,"path":"sounds/snd_chirp/snd_chirp.yy",},
     {"name":"spr_button","order":7,"path":"sprites/spr_button/spr_button.yy",},
     {"name":"spr_styleable_text_sprite_default","order":5,"path":"sprites/spr_styleable_text_sprite_default/spr_styleable_text_sprite_default.yy",},
-    {"name":"obj_test_files","order":17,"path":"objects/obj_test_files/obj_test_files.yy",},
     {"name":"StyleableTextDrawable","order":2,"path":"scripts/StyleableTextDrawable/StyleableTextDrawable.yy",},
     {"name":"AnimatedTextMisc","order":2,"path":"scripts/AnimatedTextMisc/AnimatedTextMisc.yy",},
     {"name":"Room1","order":14,"path":"rooms/Room1/Room1.yy",},

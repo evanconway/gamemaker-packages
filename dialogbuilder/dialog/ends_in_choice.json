@@ -1,0 +1,48 @@
+[
+	{
+		"name": "ends_in_choice",
+		"text": {
+			"eng": "This is the start of a conversation that ends in options."
+		}
+	},
+    {
+		"text": {
+			"eng": "This dialog here is just filler so that you know it's working."
+		}
+	},
+    {
+		"text": {
+			"eng": "The quick brown fox jumps over the lazy dog."
+		}
+	},
+    {
+		"text": {
+			"eng": "Ok here come your choices."
+		}
+	},
+	{
+		"text": {
+			"eng": "Which path will you choose."
+		},
+		"options": [
+			{
+				"text": {
+					"eng": "cold winding road"
+				},
+				"goto": "test"
+			},
+			{
+				"text": {
+					"eng": "green grass path"
+				},
+				"goto": "shouldn't be here"
+			},
+            {
+				"text": {
+					"eng": "uplifting ladder"
+				},
+				"goto": "another"
+			}
+		]
+	}
+]

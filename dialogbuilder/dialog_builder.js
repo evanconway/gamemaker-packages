@@ -203,10 +203,16 @@ const getStepConnectionsValidated = (fileNameStepArrMap) => {
                 step.is_end = true;
                 step.goto = "";
             }
-            if (step.goto !== "" && !fileStepName.has(step.goto)) throwErr(`goto "${step.goto}" for step index ${i} file ${fileName} is not the name of any step in that file`);
-            step.options.forEach(option => {
-                if (!fileStepName.has(option.goto)) throwErr(`goto "${option.goto}" for option in step index ${i} file ${fileName} is not the name of any step in that file`);
-            });
+
+            // end steps should have empty gotos
+            if (!step.is_end) {
+                if (step.goto !== "" && !fileStepName.has(step.goto)) throwErr(`goto "${step.goto}" for step index ${i} file ${fileName} is not the name of any step in that file`);
+                step.options.forEach(option => {
+                    if (!fileStepName.has(option.goto)) throwErr(`goto "${option.goto}" for option in step index ${i} file ${fileName} is not the name of any step in that file`);
+                });
+            } else {
+                step.options.forEach(option => option.goto = "");
+            }
         })
     });
     return result;
