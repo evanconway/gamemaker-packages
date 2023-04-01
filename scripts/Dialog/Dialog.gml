@@ -1,9 +1,3 @@
-/*
-Eventually we should rework this so the parsing logic done in the javascript file is done here. There's not
-really a reason it had to be a separate application outside GameMaker. But for now, this constructor will
-accept a filename which will have to be at the root of the datafiles folder.
-*/
-
 /**
  * Get a new dialog instance created from the given dialog filename
  *
@@ -25,6 +19,26 @@ function Dialog(_dialog_file_name) constructor {
 	current_step_name = ""; // name of step in step map
 	
 	valid_languages = ["eng", "zho", "fre", "ger", "ita", "jpn", "kor", "pol", "por", "rus", "spa"];
+	
+	/**
+	 * @param {struct} _new_step
+	 * @param {struct} _previous_step
+	 */
+	on_step_change = function(_new_step, _previous_step) {
+		var _new_name = variable_struct_exists(_new_step, "name") ? _new_step.name : "undefined_step"
+		var _previous_name = variable_struct_exists(_previous_step, "name") ? _previous_step.name : "undefined_step"
+		show_debug_message("dialog on step change invoked: " + _new_name + ", " + _previous_name);
+	};
+}
+
+/**
+ * Set on_step_change callback for given dialog.
+ *
+ * @param {Struct.Dialog} _dialog
+ * @param {function}
+ */
+function dialog_set_on_step_change(_dialog, _on_step_change) {
+	_dialog._on_step_change = _on_step_change;
 }
 
 /**
@@ -55,6 +69,7 @@ function dialog_get_is_at_end(_dialog) {
 	with (_dialog) {
 		if (!dialog_get_is_active(self)) return false;
 		var _step = ds_map_find_value(step_map, current_step_name);
+		// Feather disable once GM1035
 		return _step.is_end;
 	}
 }
@@ -65,6 +80,10 @@ function dialog_get_is_at_end(_dialog) {
  * @param {Struct.Dialog} _dialog
  */
 function dialog_set_inactive(_dialog) {
+	with (_dialog) {
+		var _previous_step = ds_map_exists(step_map, current_step_name) ? ds_map_find_value(step_map, current_step_name) : {};
+		on_step_change({}, _previous_step);
+	}
 	_dialog.current_step_name = "";
 }
 
@@ -76,7 +95,12 @@ function dialog_set_inactive(_dialog) {
  */
 function dialog_set_step(_dialog, _step_name) {
 	if (!ds_map_exists(_dialog.step_map, _step_name)) return false;
-	_dialog.current_step_name = _step_name;
+	with (_dialog) {
+		var _new_step = ds_map_exists(step_map, _step_name) ? ds_map_find_value(step_map, _step_name) : {};
+		var _previous_step = ds_map_exists(step_map, current_step_name) ? ds_map_find_value(step_map, current_step_name) : {};
+		on_step_change(_new_step, _previous_step)
+		current_step_name = _step_name;	
+	}
 	return true;
 }
 
