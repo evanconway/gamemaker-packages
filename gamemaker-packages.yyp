@@ -20,7 +20,6 @@
   ],
   "IncludedFiles": [
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"dialog.txt","CopyToMask":-1,"filePath":"datafiles",},
-    {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"read_data.txt","CopyToMask":-1,"filePath":"datafiles",},
   ],
   "isEcma": false,
   "LibraryEmitters": [],
@@ -48,6 +47,7 @@
     {"id":{"name":"TextButton","path":"scripts/TextButton/TextButton.yy",},},
     {"id":{"name":"Dialog","path":"scripts/Dialog/Dialog.yy",},},
     {"id":{"name":"StyleableTextDrawable","path":"scripts/StyleableTextDrawable/StyleableTextDrawable.yy",},},
+    {"id":{"name":"Conversation","path":"scripts/Conversation/Conversation.yy",},},
     {"id":{"name":"AnimatedTextMisc","path":"scripts/AnimatedTextMisc/AnimatedTextMisc.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
   ],

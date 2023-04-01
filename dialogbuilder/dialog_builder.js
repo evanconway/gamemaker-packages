@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const VALID_STEP_FIELDS = ["name", "text", "options", "goto", "is_end"];
+const VALID_STEP_FIELDS = ["name", "text", "options", "goto", "data", "is_end"];
 const VALID_LANGUAGES = ["eng", "zho", "fre", "ger", "ita", "jpn", "kor", "pol", "por", "rus", "spa"];
 const VALID_OPTION_FIELDS = ["text", "goto"];
 
@@ -48,8 +48,16 @@ const copyValidStep = (step) => {
         text: step.text,
         options: [],
         goto: step.goto ? step.goto : "",
+        data: step.data ? step.data : {}, // see comment below
         is_end: Object.keys(step).includes("is_end") ? step.is_end : false
     };
+
+    /*
+    data
+    This field allows the inclusion of any custom data with each step. This could
+    be things like indexes of character portraits, information about text stylings,
+    or information about sound chirps while typing.
+    */
 
     if (Array.isArray(step.options)) step.options.forEach(option => {
         const optionCopy = {
