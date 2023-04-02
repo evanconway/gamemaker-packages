@@ -2,10 +2,9 @@
  * Get a new StyleableText instance.
  * @param {string} _source source string
  * @param {real} _width max width of text before line breaks occur
- * @param {real} _height max height of text before pagination occurs (not implemented yet)
  * @ignore
  */
-function StyleableText(_source, _width = -1, _height = -1) constructor {
+function StyleableText(_source, _width = -1) constructor {
 	if (string_length(_source) == 0) {
 		show_error("Cannot create StyleableText with empty string!", true);
 	}
@@ -16,14 +15,16 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 	}
 	
 	/*
-	Later we should re-work width/height to be something that's calculated automatically if not
-	defined by the user, or adjusts the text if given by the user. We should add pagination
-	if the user defines width and height and the text is too large for the given values.
+	Width is determined automatically if not given by the user. If width is specified then
+	the width will be used to determine line breaks. Heigh is always automatically
+	calculated.
 	*/
+	auto_calculate_width = _width < 0;
+	
 	/// @ignore
 	width = _width;
 	/// @ignore
-	height = _height; // calculated automatically (for now)
+	height = 0; // calculated automatically
 	/// @ignore
 	get_width = function() {
 		return width;
@@ -71,7 +72,7 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 			// if space or new line, word is over
 			if (_char.character == " " || _char.new_line) {
 				// if word is too big for line, start new line
-				if (width >= 0 && _line_width + _word_width > width) {
+				if (!auto_calculate_width && _line_width + _word_width > width) {
 					_line_index++;
 					_line_width = 0;
 				}
@@ -113,7 +114,7 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 		
 		// set last word line index
 		// if word is too big for line, start new line
-		if (width >= 0 && _line_width + _word_width > width) {
+		if (!auto_calculate_width && _line_width + _word_width > width) {
 			_line_index++;
 		}
 		
@@ -128,6 +129,7 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 		var _line_widths = ds_map_create();
 		var _width = 0;
 		var _current_line_index = 0;
+		var _max_width = 0;
 		for (var _i = 0; _i < array_length(character_array); _i++) {
 			var _char = character_array[_i];
 			// heights
@@ -142,18 +144,20 @@ function StyleableText(_source, _width = -1, _height = -1) constructor {
 			// width
 			if (_char.line_index == _current_line_index) {
 				_width += _char.get_width();
+				_max_width = max(_max_width, _width);
 			} else {
 				ds_map_set(_line_widths, _current_line_index, _width);
 				_width = _char.get_width();
+				_max_width = max(_max_width, _width);
 				_current_line_index = _char.line_index;
 			}
 		}
 		
 		ds_map_set(_line_widths, _current_line_index, _width);
 		
-		// set width and height if given values are less than 0
-		if (width < 0) {
-			width = ds_map_find_value(_line_widths, 0);
+		// set width if auto calculating
+		if (auto_calculate_width) {
+			width = _max_width;
 		}
 		
 		// calculate height

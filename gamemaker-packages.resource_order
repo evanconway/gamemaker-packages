@@ -8,6 +8,7 @@
   "ResourceOrderSettings": [
     {"name":"TextButtonList","order":1,"path":"scripts/TextButtonList/TextButtonList.yy",},
     {"name":"obj_textsystem_test","order":5,"path":"objects/obj_textsystem_test/obj_textsystem_test.yy",},
+    {"name":"f_big_menu","order":21,"path":"fonts/f_big_menu/f_big_menu.yy",},
     {"name":"fnt_handwriting","order":4,"path":"fonts/fnt_handwriting/fnt_handwriting.yy",},
     {"name":"Object5","order":20,"path":"objects/Object5/Object5.yy",},
     {"name":"obj_test_conversation","order":19,"path":"objects/obj_test_conversation/obj_test_conversation.yy",},

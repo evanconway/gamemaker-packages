@@ -39,7 +39,7 @@
 			"jpn": "つまらない。",
 			"ger": "Das ist langweilig."
 		},
-		"is_end": true
+		"goto": "continue"
 	},
 	{
 		"name": "bad",
@@ -48,6 +48,57 @@
 			"jpn": "それは悪だ。",
 			"ger": "Das ist böse."
 		},
-		"is_end": true
+		"goto": "continue"
+	},
+	{
+		"name": "continue",
+		"text": {
+			"eng": "Let's see what back to back decisions look like."
+		}
+	},
+	{
+		"text": {
+			"eng": "Choose A or B"
+		},
+		"options": [
+			{
+				"text": {
+					"eng": "A"
+				},
+				"goto": "choose_left_right"
+			},
+			{
+				"text": {
+					"eng": "B"
+				},
+				"goto": "choose_left_right"
+			}
+		]
+	},
+	{
+		"name": "choose_left_right",
+		"text": {
+			"eng": "Now choose left or right."
+		},
+		"options": [
+			{
+				"text": {
+					"eng": "Left"
+				},
+				"goto": "final"
+			},
+			{
+				"text": {
+					"eng": "Right"
+				},
+				"goto": "final"
+			}
+		]
+	},
+	{
+		"name": "final",
+		"text": {
+			"eng": "fascinating"
+		}
 	}
 ]

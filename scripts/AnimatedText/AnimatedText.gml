@@ -1,7 +1,7 @@
 /// @ignore
 function AnimatedText(_source_string, _width, _height) constructor {
 	/// @ignore
-	text = new StyleableText(_source_string, _width, _height);
+	text = new StyleableText(_source_string, _width);
 	/// @ignore
 	get_character_count = function() {
 		return array_length(text.character_array);

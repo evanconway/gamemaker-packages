@@ -18,7 +18,7 @@ function Conversation(_dialog_file_name, _width, _height) constructor {
 	
 	/// @param {struct} _dialog_step
 	get_text_effect_default = function(_dialog_step) {
-		return "";
+		return ""; // f:f_big_menu
 	};
 	/// @param {struct} _dialog_step
 	get_option_effect_default = function(_dialog_step) {
@@ -30,7 +30,7 @@ function Conversation(_dialog_file_name, _width, _height) constructor {
 	};
 	/// @param {struct} _dialog_step
 	get_option_effect_selected = function(_dialog_step) {
-		return "green";
+		return "lime";
 	};
 	
 	// input handling
@@ -116,6 +116,10 @@ function conversation_start(_conversation, _step_name) {
 function conversation_update(_conversation, _x, _y, _alignment = fa_left, _update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
 	with (_conversation) {
 		if (!dialog_get_is_active(dialog)) return;
+		
+		if (keyboard_check_pressed(ord("D"))) {
+			show_debug_message("");
+		}
 		
 		var _current_step_name = dialog_get_current_step_name(dialog);
 		

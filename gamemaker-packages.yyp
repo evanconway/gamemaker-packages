@@ -30,6 +30,7 @@
     {"id":{"name":"TextButtonList","path":"scripts/TextButtonList/TextButtonList.yy",},},
     {"id":{"name":"TypedAnimatedText","path":"scripts/TypedAnimatedText/TypedAnimatedText.yy",},},
     {"id":{"name":"obj_textsystem_test","path":"objects/obj_textsystem_test/obj_textsystem_test.yy",},},
+    {"id":{"name":"f_big_menu","path":"fonts/f_big_menu/f_big_menu.yy",},},
     {"id":{"name":"fnt_handwriting","path":"fonts/fnt_handwriting/fnt_handwriting.yy",},},
     {"id":{"name":"Object5","path":"objects/Object5/Object5.yy",},},
     {"id":{"name":"obj_test_conversation","path":"objects/obj_test_conversation/obj_test_conversation.yy",},},

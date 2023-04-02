@@ -45,7 +45,7 @@ function TextMenu(_options, _default_effects = "gray", _highlight_effects = "yel
 	/// @ignore
 	selected_time = -1;
 	/// @ignore
-	selected_time_max = 40;
+	selected_time_max = 25;
 	/// @ignore
 	is_vertical = true;
 
