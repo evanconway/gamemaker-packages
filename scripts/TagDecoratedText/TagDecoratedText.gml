@@ -35,14 +35,10 @@ function TagDecoratedTextCommand(_command, _index_start) constructor {
 
 /**
  * Creates a new TagDecoratedText instance from the given source string.
+ *
  * @param {string} _source_string the string with decorative tags
  */
-function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _height = -1) constructor {
-	/// @ignore
-	width = _width;
-	/// @ignore
-	height = _height;
-	
+function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _height = -1) constructor {	
 	/*
 	The source string contains both the tags and the text to actually display. From
 	this we need to build an array of commands and their index ranges as well as 
@@ -191,7 +187,7 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
 		if (_cmd == "s" || _cmd == "sprite") _typed_animated_text.animated_text.text.set_default_sprite(_s, _aargs[0]);
 	}
 	/// @ignore
-	pages = height >= 0 ? _typed_animated_text.paginate(_width, _height) : [_typed_animated_text];
+	pages = _height >= 0 ? _typed_animated_text.paginate(_width, _height) : [_typed_animated_text];
 	
 	// default to typed pages
 	for (var _i = 0; _i < array_length(pages); _i++) {
@@ -219,6 +215,7 @@ function TagDecoratedText(_source_string, _default_effects = "", _width = -1, _h
 /**
  * Updates the given tag decorated text instance by the given time in ms. If no time is specified
  * the tag decorated text instance is updated by time in ms of 1 frame of the current game speed.
+ *
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  * @param {real} _update_time_ms
  */
@@ -231,6 +228,7 @@ function tag_decorated_text_update(_tag_decorated_text, _update_time_ms = 1000 /
 
 /**
  * Draws the given tag decorated text instance without updating it.
+ *
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  * @param {real} _x
  * @param {real} _y
@@ -248,12 +246,13 @@ function tag_decorated_text_draw_no_update(_tag_decorated_text, _x, _y, _alignme
 		*/
 		//update_time = 0;
 		pages[page_current].draw(_x, _y, _alignment);
-		draw_border(_x, _y);
+		//draw_border(_x, _y);
 	}
 }
 
 /**
  * Updates and draws the given tag decorated text instance.
+ *
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  * @param {real} _x
  * @param {real} _y
@@ -280,6 +279,7 @@ function tag_decorated_text_reset_animations(_tag_decorated_text) {
  * Resets the typing status of all pages in the given tag decorated text instance.
  * Tag decorated text instances have their typing set to finished by default so this
  * must be called in order to see typing effects on a tag decorated text instance.
+ *
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  */
 function tag_decorated_text_reset_typing(_tag_decorated_text) {
@@ -291,7 +291,48 @@ function tag_decorated_text_reset_typing(_tag_decorated_text) {
 }
 
 /**
+ * Resets the typing state of all pages and goes to first page of
+ * given tag decorated text instance.
+ *
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ */
+function tag_decorated_text_reset(_tag_decorated_text) {
+	tag_decorated_text_reset_typing(_tag_decorated_text);
+	_tag_decorated_text.page_current = 0;
+}
+
+/**
+ * Get the current page index of the given tag decorated text instance.
+ *
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ */
+function tag_decorated_text_get_page_current_index(_tag_decorated_text) {
+	return _tag_decorated_text.page_current;
+}
+
+/**
+ * Get if the given tag decorated text instance has finished typing the current page.
+ *
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ */
+function tag_decorated_text_get_typing_finished(_tag_decorated_text) {
+	return _tag_decorated_text.pages[_tag_decorated_text.page_current].get_typed();
+}
+
+/**
+ * Get if the given tag decorated text instance is on last page and has finished typing.
+ *
+ * @param {Struct.TagDecoratedText} _tag_decorated_text
+ */
+function tag_decorated_text_get_finished(_tag_decorated_text) {
+	var _last_page_index = array_length(_tag_decorated_text.pages) - 1;
+	var _on_last_page = _last_page_index == tag_decorated_text_get_page_current_index(_tag_decorated_text);
+	return _on_last_page && tag_decorated_text_get_typing_finished(_tag_decorated_text);
+}
+
+/**
  * Go to the next page of given tag decorated text instance.
+ *
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  */
 function tag_decorated_text_page_next(_tag_decorated_text) {
@@ -304,6 +345,7 @@ function tag_decorated_text_page_next(_tag_decorated_text) {
 
 /**
  * Go to the previous page of given tag decorated text instance.
+ *
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  */
 function tag_decorated_text_page_previous(_tag_decorated_text) {
@@ -315,17 +357,8 @@ function tag_decorated_text_page_previous(_tag_decorated_text) {
 }
 
 /**
- * Resets the typing state of all pages and goes to first page of
- * given tag decorated text instance.
- * @param {Struct.TagDecoratedText} _tag_decorated_text
- */
-function tag_decorated_text_reset(_tag_decorated_text) {
-	tag_decorated_text_reset_typing(_tag_decorated_text);
-	_tag_decorated_text.page_current = 0;
-}
-
-/**
  * Type current page of given tag decorated text.
+ *
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  */
 function tag_decorated_text_type_current_page(_tag_decorated_text) {
@@ -336,6 +369,7 @@ function tag_decorated_text_type_current_page(_tag_decorated_text) {
 
 /**
  * Advances the typing state of the given tag decorated text instance.
+ *
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  */
 function tag_decorated_text_advance(_tag_decorated_text) {
@@ -347,26 +381,29 @@ function tag_decorated_text_advance(_tag_decorated_text) {
 
 /**
  * Returns the width of the given tag decorated text instance.
+ *
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  */
 function tag_decorated_text_get_width(_tag_decorated_text) {
 	with (_tag_decorated_text) {
-		return width >= 0 ? width : pages[0].animated_text.text.get_width();
+		return pages[0].animated_text.text.get_width();
 	}
 }
 
 /**
  * Returns the height of the given tag decorated text instance.
+ *
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  */
 function tag_decorated_text_get_height(_tag_decorated_text) {
 	with (_tag_decorated_text) {
-		return height >= 0 ? height : pages[0].animated_text.text.get_height();
+		return pages[0].animated_text.text.get_height();
 	}
 }
 
 /**
  * Set the callback function that's invoked whenever a type event occurs.
+ *
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  * @param {function}
  */
@@ -380,6 +417,7 @@ function tag_decorated_text_set_on_type(_tag_decorated_text, _new_on_type) {
 
 /**
  * Set specific typing pauses for given characters.
+ *
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  * @param {array<string>} _characters
  * @param {real} _pause_time_ms
@@ -399,6 +437,7 @@ function tag_decorated_text_set_character_pause(_tag_decorated_text, _characters
 
 /**
  * Removes all mappings between characters and pause timings.
+ *
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  */
 function tag_decorated_text_clear_pause_map(_tag_decorated_text) {
@@ -411,6 +450,7 @@ function tag_decorated_text_clear_pause_map(_tag_decorated_text) {
 
 /**
  * Set the time between types and characters per type.
+ *
  * @param {Struct.TagDecoratedText} _tag_decorated_text
  * @param {real} _time_ms_between_types
  * @param {real} _chars_per_type

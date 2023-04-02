@@ -30,7 +30,7 @@ function Conversation(_dialog_file_name, _width, _height) constructor {
 	};
 	/// @param {struct} _dialog_step
 	get_option_effect_selected = function(_dialog_step) {
-		return "lime";
+		return "wave lime";
 	};
 	
 	// input handling
@@ -50,6 +50,8 @@ function Conversation(_dialog_file_name, _width, _height) constructor {
 		return mouse_check_button_pressed(mb_left);
 	};
 	
+	distance_between_options = 30;
+	
 	/// @param {struct} _new_step
 	/// @param {struct} _previous_step
 	var _f = function(_new_step, _previous_step) {
@@ -59,6 +61,7 @@ function Conversation(_dialog_file_name, _width, _height) constructor {
 		
 		var _text = variable_struct_exists(_new_step, "name") ? dialog_step_get_text(dialog, _new_step.name, language) : "";
 		current_step_tag_decorated_text = new TagDecoratedText(_text, get_text_effect_default(_new_step), width, height);
+		tag_decorated_text_reset(current_step_tag_decorated_text);
 		
 		var _map_options = function(_option) {
 			return _option.text[$ language];
@@ -90,6 +93,15 @@ function Conversation(_dialog_file_name, _width, _height) constructor {
 }
 
 /**
+ * Set distance in pixels between text body and options of given conversation instance.
+ *
+ * @param {Struct.Conversation} _conversation
+ */
+function conversation_set_distance_between_options(_conversation, _new_distance) {
+	_conversation.distance_between_options = _new_distance;
+}
+
+/**
  * @param {Struct.Conversation} _conversation
  */
 function conversation_get_is_active(_conversation) {
@@ -117,19 +129,13 @@ function conversation_update(_conversation, _x, _y, _alignment = fa_left, _updat
 	with (_conversation) {
 		if (!dialog_get_is_active(dialog)) return;
 		
-		if (keyboard_check_pressed(ord("D"))) {
-			show_debug_message("");
-		}
-		
-		var _current_step_name = dialog_get_current_step_name(dialog);
-		
-		text_menu_update(current_step_options_menu, _x, _y + tag_decorated_text_get_height(current_step_tag_decorated_text), _alignment);
-		
-		// handle input
-		if (array_length(dialog_get_options(dialog)) > 0) {
-			// Recall that because of the callbacks established above, the text menu can change the dialog state by itself.
-			//text_menu_update(current_step_options_menu, _x, _y + tag_decorated_text_get_height(current_step_tag_decorated_text), _alignment);
-		} else if (check_select_pressed() || check_mouse_select_pressed()) dialog_set_step_next(dialog);
+		if (tag_decorated_text_get_finished(current_step_tag_decorated_text)) {
+			text_menu_update(current_step_options_menu, _x, _y + tag_decorated_text_get_height(current_step_tag_decorated_text) + distance_between_options, _alignment);
+			if (array_length(dialog_get_options(dialog)) > 0) {
+				// Recall that because of the callbacks established above, the text menu can change the dialog state by itself.
+				//text_menu_update(current_step_options_menu, _x, _y + tag_decorated_text_get_height(current_step_tag_decorated_text), _alignment);
+			} else if (check_select_pressed() || check_mouse_select_pressed()) dialog_set_step_next(dialog);
+		} else if (check_select_pressed() || check_mouse_select_pressed()) tag_decorated_text_advance(current_step_tag_decorated_text);
 		
 		tag_decorated_text_update(current_step_tag_decorated_text, _update_time_ms);
 	}
@@ -144,9 +150,9 @@ function conversation_draw(_conversation, _x, _y, _alignment = fa_left) {
 	with (_conversation) {
 		if (!dialog_get_is_active(dialog)) return;
 		tag_decorated_text_draw_no_update(current_step_tag_decorated_text, _x, _y, _alignment);
-		_y += tag_decorated_text_get_height(current_step_tag_decorated_text);
-		if (array_length(dialog_get_options(dialog)) > 0) {
-			text_menu_draw_no_update(current_step_options_menu, _x, _y, _alignment)
+		var _options_y = _y + tag_decorated_text_get_height(current_step_tag_decorated_text) + distance_between_options;
+		if (array_length(dialog_get_options(dialog)) > 0 && tag_decorated_text_get_finished(current_step_tag_decorated_text)) {
+			text_menu_draw_no_update(current_step_options_menu, _x, _options_y, _alignment)
 		}
 	}
 }

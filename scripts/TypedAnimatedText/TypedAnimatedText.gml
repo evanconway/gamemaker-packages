@@ -7,9 +7,9 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 	animated_text = new AnimatedText(_source, _width, _height);
 	animated_text.text.set_characters_hidden(0, animated_text.get_character_count() - 1, true);
 	/// @ignore
-	time_between_types_ms = 100;
+	time_between_types_ms = 60;
 	/// @ignore
-	chars_per_type = 4;
+	chars_per_type = 2.4;
 	/// @ignore
 	char_index_to_type = 0;
 	/// @ignore
@@ -115,7 +115,7 @@ function TypedAnimatedText(_source, _width, _height) constructor {
 	};
 	/// @ignore
 	get_typed = function() {
-		return char_index_to_type = animated_text.get_character_count();
+		return char_index_to_type >= animated_text.get_character_count();
 	}
 	
 	/**
