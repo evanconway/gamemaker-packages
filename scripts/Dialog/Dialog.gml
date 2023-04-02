@@ -25,8 +25,8 @@ function Dialog(_dialog_file_name) constructor {
 	 * @param {struct} _previous_step
 	 */
 	on_step_change = function(_new_step, _previous_step) {
-		var _new_name = variable_struct_exists(_new_step, "name") ? _new_step.name : "undefined_step"
-		var _previous_name = variable_struct_exists(_previous_step, "name") ? _previous_step.name : "undefined_step"
+		var _new_name = variable_struct_exists(_new_step, "name") ? string(_new_step.name) : "undefined_step";
+		var _previous_name = variable_struct_exists(_previous_step, "name") ? string(_previous_step.name) : "undefined_step";
 		show_debug_message("dialog on step change invoked: " + _new_name + ", " + _previous_name);
 	};
 }
@@ -38,7 +38,7 @@ function Dialog(_dialog_file_name) constructor {
  * @param {function}
  */
 function dialog_set_on_step_change(_dialog, _on_step_change) {
-	_dialog._on_step_change = _on_step_change;
+	_dialog.on_step_change = _on_step_change;
 }
 
 /**
@@ -147,16 +147,27 @@ function dialog_choose_option(_dialog, _option_index) {
 /**
  * Get the text of the current dialog step. Language can be specified.
  *
- * @param {Struct.Dialog} _dialog dialog instance to get language of
+ * @param {Struct.Dialog} _dialog dialog instance to get text of
  * @param {string} _lang the language of text to get
  * @return {string}
  */
 function dialog_get_text(_dialog, _lang = "eng") {
+	return dialog_step_get_text(_dialog, dialog_get_current_step_name(_dialog), _lang);
+}
+
+/**
+ * Get the text of the given dialog step. Language can be specified.
+ *
+ * @param {Struct.Dialog} _dialog dialog instance to get text of
+ * @param {string} _step_name name of step to get text for
+ * @param {string} _lang the language of text to get
+ * @return {string}
+ */
+function dialog_step_get_text(_dialog, _step_name, _lang = "eng") {
 	with (_dialog) {
 		if (!array_contains(valid_languages, _lang)) show_error("invalid language for get text", true);
-		if (!dialog_get_is_active(self)) return "";
-		var _name = dialog_get_current_step_name(_dialog);
-		return ds_map_find_value(step_map, _name).text[$ _lang];
+		if (!ds_map_exists(step_map, _step_name)) return "";
+		return ds_map_find_value(step_map, _step_name).text[$ _lang];
 	}
 }
 

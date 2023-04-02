@@ -61,6 +61,32 @@ function TextMenu(_options, _default_effects = "gray", _highlight_effects = "yel
 }
 
 /**
+ * Gets the using_mouse state of the given text menu.
+ *
+ * @param {Struct.TextMenu} _text_menu
+ */
+function text_menu_get_using_mouse(_text_menu) {
+	return _text_menu.using_mouse;
+}
+
+/**
+ * Sets the using_mouse state of the given text menu. Note that this
+ * setting is set in the update function.
+ *
+ * @param {Struct.TextMenu} _text_menu
+ * @param {bool} _using_mouse
+ */
+function text_menu_set_using_mouse(_text_menu, _using_mouse) {
+	with (_text_menu) {
+		using_mouse = _using_mouse;
+		if (using_mouse) {
+			text_button_list_reset_option_animations(list, text_button_list_get_highlighted_option(list));
+			list.highlighted_option = -1;
+		}
+	}
+}
+
+/**
  * Sets the distance in pixels between options.
  *
  * @param {Struct.TextMenu} _text_menu
@@ -185,7 +211,7 @@ function text_menu_update(_text_menu, _list_x, _list_y, _alignment = fa_left, _u
 	with (_text_menu) {
 		var _current_mx = get_mouse_x();
 		var _current_my = get_mouse_y();
-		if (previous_mx != _current_mx || previous_my != _current_my) using_mouse = true;
+		if (previous_mx != _current_mx || previous_my != _current_my || check_mouse_select_pressed()) using_mouse = true;
 		else if (check_other_input()) using_mouse = false;
 		
 		var _highlighted_option_index = text_button_list_get_highlighted_option(list);

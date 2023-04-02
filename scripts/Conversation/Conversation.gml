@@ -16,10 +16,84 @@ function Conversation(_dialog_file_name, _width, _height) constructor {
 	current_step_tag_decorated_text = new TagDecoratedText("$");
 	current_step_options_menu = new TextMenu([]);
 	
-	text_effects_default = "";
-	option_effects_default = "";
-	option_effects_highlighted = "";
-	option_effects_selected = "";
+	/// @param {struct} _dialog_step
+	get_text_effect_default = function(_dialog_step) {
+		return "";
+	};
+	/// @param {struct} _dialog_step
+	get_option_effect_default = function(_dialog_step) {
+		return "gray";
+	};
+	/// @param {struct} _dialog_step
+	get_option_effect_highlighted = function(_dialog_step) {
+		return "yellow fade";
+	};
+	/// @param {struct} _dialog_step
+	get_option_effect_selected = function(_dialog_step) {
+		return "green";
+	};
+	
+	// input handling
+	check_next_pressed = function() {
+		return keyboard_check_pressed(vk_right) || keyboard_check_pressed(vk_down);
+	};
+	
+	check_previous_pressed = function() {
+		return keyboard_check_pressed(vk_left) || keyboard_check_pressed(vk_up);
+	}
+	
+	check_select_pressed = function() {
+		return keyboard_check_pressed(vk_enter);
+	};
+	
+	check_mouse_select_pressed = function() {
+		return mouse_check_button_pressed(mb_left);
+	};
+	
+	/// @param {struct} _new_step
+	/// @param {struct} _previous_step
+	var _f = function(_new_step, _previous_step) {
+		// using name to determine if dialog is active. on step change is called before dialog state actually changes
+		// if new step is not valid it will an empty object
+		if (!variable_struct_exists(_new_step, "name")) return;
+		
+		var _text = variable_struct_exists(_new_step, "name") ? dialog_step_get_text(dialog, _new_step.name, language) : "";
+		current_step_tag_decorated_text = new TagDecoratedText(_text, get_text_effect_default(_new_step), width, height);
+		
+		var _map_options = function(_option) {
+			return _option.text[$ language];
+		};
+		
+		var _option_effect_default = get_option_effect_default(_new_step);
+		var _option_effect_highlighted = get_option_effect_highlighted(_new_step);
+		var _option_effect_selected = get_option_effect_selected(_new_step);
+		var _options = array_map(_new_step.options, _map_options);
+		
+		// ensure new menu has same mouse state
+		var _previous_using_mouse = text_menu_get_using_mouse(current_step_options_menu);
+		current_step_options_menu = new TextMenu(_options, _option_effect_default, _option_effect_highlighted, _option_effect_selected);
+		text_menu_set_using_mouse(current_step_options_menu, _previous_using_mouse);
+		
+		/// @param {real} _option_selected_index
+		var _on_option_selected = function(_option_selected_index) {
+			dialog_choose_option(dialog, _option_selected_index);
+		};
+		
+		text_menu_set_on_option_selected_animation_finished(current_step_options_menu, _on_option_selected);
+		text_menu_set_check_next_pressed(current_step_options_menu, check_next_pressed);
+		text_menu_set_check_previous_pressed(current_step_options_menu, check_previous_pressed);
+		text_menu_set_check_select_pressed(current_step_options_menu, check_select_pressed);
+		text_menu_set_mouse_check_pressed(current_step_options_menu, check_mouse_select_pressed);
+	};
+	
+	dialog_set_on_step_change(dialog, _f);
+}
+
+/**
+ * @param {Struct.Conversation} _conversation
+ */
+function conversation_get_is_active(_conversation) {
+	return dialog_get_is_active(_conversation.dialog);
 }
 
 /**
@@ -27,20 +101,8 @@ function Conversation(_dialog_file_name, _width, _height) constructor {
  * @param {string} _step_name
  */
 function conversation_start(_conversation, _step_name) {
-	var _step_name_valid = dialog_set_step(_conversation.dialog, _step_name);
-	if (!_step_name_valid) return;
-	
 	with (_conversation) {
-		current_step_tag_decorated_text = new TagDecoratedText(dialog_get_text(dialog, language), text_effects_default, width, height);
-		var _options = dialog_get_options(dialog);
-		if (array_length(_options) > 0) {
-			current_step_options_menu = new TextMenu(_options, option_effects_default, option_effects_highlighted, option_effects_selected);
-			// setup menu callbacks
-			var _f = function(_option_index_selected) {
-				dialog_choose_option(dialog, _option_index_selected);
-			};
-			text_menu_set_on_option_selected_animation_finished(current_step_options_menu, _f);
-		}
+		dialog_set_step(dialog, _step_name);
 	}
 }
 
@@ -51,23 +113,19 @@ function conversation_start(_conversation, _step_name) {
  * @param {Constant.HAlign} _alignment
  * @param {real} _update_time_ms
  */
-function conversation_update(_conversation, _x, _y, _alignment =fa_left, _update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
+function conversation_update(_conversation, _x, _y, _alignment = fa_left, _update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
 	with (_conversation) {
 		if (!dialog_get_is_active(dialog)) return;
 		
 		var _current_step_name = dialog_get_current_step_name(dialog);
 		
+		text_menu_update(current_step_options_menu, _x, _y + tag_decorated_text_get_height(current_step_tag_decorated_text), _alignment);
+		
 		// handle input
 		if (array_length(dialog_get_options(dialog)) > 0) {
-			text_menu_update(current_step_options_menu, _x, _y, _alignment);
-		}
-		
-		// if 
-		
-		// set conversation elements if step has changed
-		if (dialog_get_current_step_name(dialog) != _current_step_name) {
-			current_step_tag_decorated_text = new TagDecoratedText(dialog_get_text(dialog, language))
-		}
+			// Recall that because of the callbacks established above, the text menu can change the dialog state by itself.
+			//text_menu_update(current_step_options_menu, _x, _y + tag_decorated_text_get_height(current_step_tag_decorated_text), _alignment);
+		} else if (check_select_pressed() || check_mouse_select_pressed()) dialog_set_step_next(dialog);
 		
 		tag_decorated_text_update(current_step_tag_decorated_text, _update_time_ms);
 	}
@@ -82,6 +140,7 @@ function conversation_draw(_conversation, _x, _y, _alignment = fa_left) {
 	with (_conversation) {
 		if (!dialog_get_is_active(dialog)) return;
 		tag_decorated_text_draw_no_update(current_step_tag_decorated_text, _x, _y, _alignment);
+		_y += tag_decorated_text_get_height(current_step_tag_decorated_text);
 		if (array_length(dialog_get_options(dialog)) > 0) {
 			text_menu_draw_no_update(current_step_options_menu, _x, _y, _alignment)
 		}
