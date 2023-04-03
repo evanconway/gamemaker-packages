@@ -1,4 +1,4 @@
-var _v = 4;
+var _v = 0.13;
 
 var _idle = new StateIdle();
 var _move_right = new StateInstanceMoveRightApproachObj(id, obj_state_test_wall, _v);
