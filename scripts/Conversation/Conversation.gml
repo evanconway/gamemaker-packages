@@ -18,7 +18,7 @@ function Conversation(_dialog_file_name, _width, _height) constructor {
 	
 	/// @param {struct} _dialog_step
 	get_text_effect_default = function(_dialog_step) {
-		return ""; // f:f_big_menu
+		return "";
 	};
 	/// @param {struct} _dialog_step
 	get_option_effect_default = function(_dialog_step) {
