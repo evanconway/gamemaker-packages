@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "States",
+  "name": "StateExamples",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "State",
-    "path": "folders/State.yy",
+    "name": "test",
+    "path": "folders/State/test.yy",
   },
 }

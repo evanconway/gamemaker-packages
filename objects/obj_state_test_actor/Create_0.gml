@@ -1,11 +1,13 @@
-var _v = 0.13;
+var _idle = new StateExampleIdle();
+var _up = new StateExampleMoveUp(id);
+var _down = new StateExampleMoveDown(id);
+var _left = new StateExampleMoveLeft(id);
+var _right = new StateExampleMoveRight(id);
 
-var _idle = new StateIdle();
-var _move_right = new StateInstanceMoveRightApproachObj(id, obj_state_test_wall, _v);
-var _move_left = new StateInstanceMoveLeftApproachObj(id, obj_state_test_wall, _v);
-
-state_add_connections(_idle, [_move_right, _move_left]);
-state_add_connections(_move_right, [_idle, _move_left]);
-state_add_connections(_move_left, [_idle, _move_right]);
+state_add_connections(_idle, [_up, _down, _left, _right]);
+state_add_connections(_up, [_idle, _down, _left, _right]);
+state_add_connections(_down, [_up, _idle, _left, _right]);
+state_add_connections(_left, [_up, _down, _idle, _right]);
+state_add_connections(_right, [_up, _down, _left, _idle]);
 
 state_machine = new StateMachine(_idle);

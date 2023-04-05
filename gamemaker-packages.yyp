@@ -43,8 +43,7 @@
     {"id":{"name":"State_testing","path":"rooms/State_testing/State_testing.yy",},},
     {"id":{"name":"Sprite7","path":"sprites/Sprite7/Sprite7.yy",},},
     {"id":{"name":"obj_state_test_wall","path":"objects/obj_state_test_wall/obj_state_test_wall.yy",},},
-    {"id":{"name":"States","path":"scripts/States/States.yy",},},
-    {"id":{"name":"StateUtils","path":"scripts/StateUtils/StateUtils.yy",},},
+    {"id":{"name":"StateExamples","path":"scripts/StateExamples/StateExamples.yy",},},
     {"id":{"name":"StyleableTextCharacter","path":"scripts/StyleableTextCharacter/StyleableTextCharacter.yy",},},
     {"id":{"name":"TextMenu","path":"scripts/TextMenu/TextMenu.yy",},},
     {"id":{"name":"Sprite5","path":"sprites/Sprite5/Sprite5.yy",},},
@@ -69,9 +68,9 @@
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
   ],
   "RoomOrderNodes": [
+    {"roomId":{"name":"State_testing","path":"rooms/State_testing/State_testing.yy",},},
     {"roomId":{"name":"movement_test","path":"rooms/movement_test/movement_test.yy",},},
     {"roomId":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
-    {"roomId":{"name":"State_testing","path":"rooms/State_testing/State_testing.yy",},},
   ],
   "TextureGroups": [
     {"resourceType":"GMTextureGroup","resourceVersion":"1.3","name":"Default","autocrop":true,"border":2,"compressFormat":"bz2","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"targets":-1,},
