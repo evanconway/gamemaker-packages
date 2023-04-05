@@ -13,13 +13,13 @@
   "Folders": [
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Dialog","folderPath":"folders/Dialog.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"MenuSystem","folderPath":"folders/MenuSystem.yy",},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"SmoothMovement","folderPath":"folders/SmoothMovement.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"State","folderPath":"folders/State.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"test","folderPath":"folders/State/test.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"TagDecoratedText","folderPath":"folders/TagDecoratedText.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"AnimatedText","folderPath":"folders/TagDecoratedText/AnimatedText.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"StyleableText","folderPath":"folders/TagDecoratedText/StyleableText.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"TypedText","folderPath":"folders/TagDecoratedText/TypedText.yy",},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"SmoothMovement","folderPath":"folders/SmoothMovement.yy",},
   ],
   "IncludedFiles": [
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"dialog.txt","CopyToMask":-1,"filePath":"datafiles",},

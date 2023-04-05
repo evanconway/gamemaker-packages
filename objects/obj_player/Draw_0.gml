@@ -1,8 +1,25 @@
-var _vel = 1.5;
-if (keyboard_check(vk_up)) y -= _vel;
-if (keyboard_check(vk_down)) y += _vel;
-if (keyboard_check(vk_left)) x -= _vel;
-if (keyboard_check(vk_right)) x += _vel;
+var _up = keyboard_check(vk_up);
+var _dn = keyboard_check(vk_down);
+var _lt = keyboard_check(vk_left);
+var _rt = keyboard_check(vk_right);
+
+var _angle = -1;
+if (_up && !_rt && !_dn && !_lt) _angle = 0;
+if (!_up && _rt && !_dn && !_lt) _angle = pi/2;
+if (!_up && !_rt && _dn && !_lt) _angle = pi;
+if (!_up && !_rt && !_dn && _lt) _angle = 3*pi/2;
+
+if (_up && _rt && !_dn && !_lt) _angle = pi/4;
+if (!_up && _rt && _dn && !_lt) _angle = 3*pi/4;
+if (!_up && !_rt && _dn && _lt) _angle = 5*pi/4;
+if (_up && !_rt && !_dn && _lt) _angle = 7*pi/4;
+
+var _vel = _angle >= 0 ? 1 : 0;
+
+smooth_move_vector(smooth_move, _angle, _vel);
+
+x = smooth_move_get_x(smooth_move);
+y = smooth_move_get_y(smooth_move);
 
 draw_self();
 draw_set_color(c_fuchsia);
