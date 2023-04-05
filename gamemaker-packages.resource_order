@@ -6,6 +6,7 @@
     {"name":"test","order":1,"path":"folders/State/test.yy",},
     {"name":"StyleableText","order":1,"path":"folders/TagDecoratedText/StyleableText.yy",},
     {"name":"TypedText","order":2,"path":"folders/TagDecoratedText/TypedText.yy",},
+    {"name":"SmoothMovement","order":26,"path":"folders/SmoothMovement.yy",},
   ],
   "ResourceOrderSettings": [
     {"name":"TextButtonList","order":1,"path":"scripts/TextButtonList/TextButtonList.yy",},
@@ -16,7 +17,7 @@
     {"name":"obj_test_conversation","order":3,"path":"objects/obj_test_conversation/obj_test_conversation.yy",},
     {"name":"StyleableTextStyle","order":4,"path":"scripts/StyleableTextStyle/StyleableTextStyle.yy",},
     {"name":"TagDecoratedText","order":3,"path":"scripts/TagDecoratedText/TagDecoratedText.yy",},
-    {"name":"Sprite4","order":3,"path":"sprites/Sprite4/Sprite4.yy",},
+    {"name":"spr_state_test_actor","order":3,"path":"sprites/spr_state_test_actor/spr_state_test_actor.yy",},
     {"name":"State_testing","order":4,"path":"rooms/State_testing/State_testing.yy",},
     {"name":"Sprite7","order":25,"path":"sprites/Sprite7/Sprite7.yy",},
     {"name":"StateExamples","order":5,"path":"scripts/StateExamples/StateExamples.yy",},

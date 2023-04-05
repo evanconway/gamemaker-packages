@@ -19,6 +19,7 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"AnimatedText","folderPath":"folders/TagDecoratedText/AnimatedText.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"StyleableText","folderPath":"folders/TagDecoratedText/StyleableText.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"TypedText","folderPath":"folders/TagDecoratedText/TypedText.yy",},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"SmoothMovement","folderPath":"folders/SmoothMovement.yy",},
   ],
   "IncludedFiles": [
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"dialog.txt","CopyToMask":-1,"filePath":"datafiles",},
@@ -38,10 +39,11 @@
     {"id":{"name":"obj_test_conversation","path":"objects/obj_test_conversation/obj_test_conversation.yy",},},
     {"id":{"name":"StyleableTextStyle","path":"scripts/StyleableTextStyle/StyleableTextStyle.yy",},},
     {"id":{"name":"TagDecoratedText","path":"scripts/TagDecoratedText/TagDecoratedText.yy",},},
-    {"id":{"name":"Sprite4","path":"sprites/Sprite4/Sprite4.yy",},},
+    {"id":{"name":"spr_state_test_actor","path":"sprites/spr_state_test_actor/spr_state_test_actor.yy",},},
     {"id":{"name":"StyleableText","path":"scripts/StyleableText/StyleableText.yy",},},
     {"id":{"name":"State_testing","path":"rooms/State_testing/State_testing.yy",},},
     {"id":{"name":"Sprite7","path":"sprites/Sprite7/Sprite7.yy",},},
+    {"id":{"name":"SmoothMove","path":"scripts/SmoothMove/SmoothMove.yy",},},
     {"id":{"name":"obj_state_test_wall","path":"objects/obj_state_test_wall/obj_state_test_wall.yy",},},
     {"id":{"name":"StateExamples","path":"scripts/StateExamples/StateExamples.yy",},},
     {"id":{"name":"StyleableTextCharacter","path":"scripts/StyleableTextCharacter/StyleableTextCharacter.yy",},},
@@ -68,8 +70,8 @@
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
   ],
   "RoomOrderNodes": [
-    {"roomId":{"name":"State_testing","path":"rooms/State_testing/State_testing.yy",},},
     {"roomId":{"name":"movement_test","path":"rooms/movement_test/movement_test.yy",},},
+    {"roomId":{"name":"State_testing","path":"rooms/State_testing/State_testing.yy",},},
     {"roomId":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
   ],
   "TextureGroups": [

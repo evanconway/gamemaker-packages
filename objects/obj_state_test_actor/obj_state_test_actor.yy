@@ -30,8 +30,8 @@
   "properties": [],
   "solid": false,
   "spriteId": {
-    "name": "Sprite4",
-    "path": "sprites/Sprite4/Sprite4.yy",
+    "name": "spr_state_test_actor",
+    "path": "sprites/spr_state_test_actor/spr_state_test_actor.yy",
   },
   "spriteMaskId": null,
   "visible": true,
