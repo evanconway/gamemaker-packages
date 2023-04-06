@@ -11,6 +11,7 @@
   },
   "defaultScriptType": 1,
   "Folders": [
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Camera","folderPath":"folders/Camera.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Dialog","folderPath":"folders/Dialog.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"MenuSystem","folderPath":"folders/MenuSystem.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"SmoothMovement","folderPath":"folders/SmoothMovement.yy",},
@@ -20,7 +21,7 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"AnimatedText","folderPath":"folders/TagDecoratedText/AnimatedText.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"StyleableText","folderPath":"folders/TagDecoratedText/StyleableText.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"TypedText","folderPath":"folders/TagDecoratedText/TypedText.yy",},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Camera","folderPath":"folders/Camera.yy",},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Boxes","folderPath":"folders/Boxes.yy",},
   ],
   "IncludedFiles": [
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"dialog.txt","CopyToMask":-1,"filePath":"datafiles",},
@@ -69,6 +70,7 @@
     {"id":{"name":"obj_wall","path":"objects/obj_wall/obj_wall.yy",},},
     {"id":{"name":"AnimatedTextMisc","path":"scripts/AnimatedTextMisc/AnimatedTextMisc.yy",},},
     {"id":{"name":"StateMachine","path":"scripts/StateMachine/StateMachine.yy",},},
+    {"id":{"name":"Boxes","path":"scripts/Boxes/Boxes.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
   ],
   "RoomOrderNodes": [

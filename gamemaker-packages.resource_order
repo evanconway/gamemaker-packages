@@ -1,5 +1,6 @@
 {
   "FolderOrderSettings": [
+    {"name":"Camera","order":27,"path":"folders/Camera.yy",},
     {"name":"Dialog","order":18,"path":"folders/Dialog.yy",},
     {"name":"MenuSystem","order":15,"path":"folders/MenuSystem.yy",},
     {"name":"SmoothMovement","order":26,"path":"folders/SmoothMovement.yy",},
@@ -7,7 +8,7 @@
     {"name":"test","order":1,"path":"folders/State/test.yy",},
     {"name":"StyleableText","order":1,"path":"folders/TagDecoratedText/StyleableText.yy",},
     {"name":"TypedText","order":2,"path":"folders/TagDecoratedText/TypedText.yy",},
-    {"name":"Camera","order":27,"path":"folders/Camera.yy",},
+    {"name":"Boxes","order":28,"path":"folders/Boxes.yy",},
   ],
   "ResourceOrderSettings": [
     {"name":"TextButtonList","order":1,"path":"scripts/TextButtonList/TextButtonList.yy",},
