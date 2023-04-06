@@ -20,6 +20,7 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"AnimatedText","folderPath":"folders/TagDecoratedText/AnimatedText.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"StyleableText","folderPath":"folders/TagDecoratedText/StyleableText.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"TypedText","folderPath":"folders/TagDecoratedText/TypedText.yy",},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Camera","folderPath":"folders/Camera.yy",},
   ],
   "IncludedFiles": [
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"dialog.txt","CopyToMask":-1,"filePath":"datafiles",},
@@ -40,6 +41,7 @@
     {"id":{"name":"StyleableTextStyle","path":"scripts/StyleableTextStyle/StyleableTextStyle.yy",},},
     {"id":{"name":"TagDecoratedText","path":"scripts/TagDecoratedText/TagDecoratedText.yy",},},
     {"id":{"name":"spr_state_test_actor","path":"sprites/spr_state_test_actor/spr_state_test_actor.yy",},},
+    {"id":{"name":"Camera","path":"scripts/Camera/Camera.yy",},},
     {"id":{"name":"StyleableText","path":"scripts/StyleableText/StyleableText.yy",},},
     {"id":{"name":"State_testing","path":"rooms/State_testing/State_testing.yy",},},
     {"id":{"name":"Sprite7","path":"sprites/Sprite7/Sprite7.yy",},},
