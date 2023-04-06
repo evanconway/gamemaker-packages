@@ -1,13 +1,13 @@
 {
   "resourceType": "GMRoom",
   "resourceVersion": "1.0",
-  "name": "boxes_test",
+  "name": "rm_boxes_test",
   "creationCodeFile": "",
   "inheritCode": false,
   "inheritCreationOrder": false,
   "inheritLayers": false,
   "instanceCreationOrder": [
-    {"name":"inst_787C7864","path":"rooms/boxes_test/boxes_test.yy",},
+    {"name":"inst_787C7864","path":"rooms/rm_boxes_test/rm_boxes_test.yy",},
   ],
   "isDnd": false,
   "layers": [

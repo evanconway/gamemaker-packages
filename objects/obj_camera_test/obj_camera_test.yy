@@ -11,8 +11,8 @@
   "managed": true,
   "overriddenProperties": [],
   "parent": {
-    "name": "gamemaker-packages",
-    "path": "gamemaker-packages.yyp",
+    "name": "test",
+    "path": "folders/Camera/test.yy",
   },
   "parentObjectId": null,
   "persistent": false,

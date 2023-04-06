@@ -1,14 +1,14 @@
 {
   "resourceType": "GMRoom",
   "resourceVersion": "1.0",
-  "name": "movement_test",
+  "name": "rm_smooth_movement_test",
   "creationCodeFile": "",
   "inheritCode": false,
   "inheritCreationOrder": false,
   "inheritLayers": false,
   "instanceCreationOrder": [
-    {"name":"inst_5E21C458","path":"rooms/movement_test/movement_test.yy",},
-    {"name":"inst_4ACB8EA5","path":"rooms/movement_test/movement_test.yy",},
+    {"name":"inst_5E21C458","path":"rooms/rm_smooth_movement_test/rm_smooth_movement_test.yy",},
+    {"name":"inst_4ACB8EA5","path":"rooms/rm_smooth_movement_test/rm_smooth_movement_test.yy",},
   ],
   "isDnd": false,
   "layers": [

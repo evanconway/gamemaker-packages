@@ -25,8 +25,8 @@
   "nineSlice": null,
   "origin": 0,
   "parent": {
-    "name": "gamemaker-packages",
-    "path": "gamemaker-packages.yyp",
+    "name": "test",
+    "path": "folders/Camera/test.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {
