@@ -10,12 +10,12 @@ global.boxes_group_name_map = ds_map_create();
 /**
  * @param {real} _x X position of this box.
  * @param {real} _y Y position of this box.
- * @param {real} _width Box width.
- * @param {real} _height Box height.
+ * @param {real} _width Boxes width.
+ * @param {real} _height Boxes height.
  * @param {string, real} _name Name of the box. Boxes with the same name are collision checked together.
  * @param {string, real} _group Group of the box. Boxes with same group can be collision checked together.
  */
-function Box(_x, _y, _width, _height, _name, _group) constructor {
+function Boxes(_x, _y, _width, _height, _name, _group) constructor {
 	position_x = _x;
 	position_y = _y;
 	
@@ -30,24 +30,24 @@ function Box(_x, _y, _width, _height, _name, _group) constructor {
 /**
  * @param {string} _box_name name of the box to get
  */
-function box_get_by_name(_box_name) {
+function boxes_get_by_name(_box_name) {
 	if (!ds_map_exists(global.boxes_map, _box_name)) show_error("unknown box name referenced: " + _box_name, true);
 	return ds_map_find_value(global.boxes_map, _box_name);
 }
 
-function box_place(_x, _y, _width, _height, _name = "box", _group = "default") {
+function boxes_place(_x, _y, _width, _height, _name = "box", _group = "default") {
 	if (!ds_map_exists(global.boxes_map, _name)) {
 		ds_map_set(global.boxes_map, _name, []);
 		ds_map_set(global.boxes_group_name_map, _group, [_name]);
 	}
 	var _box_arr = ds_map_find_value(global.boxes_map, _name);
-	array_push(_box_arr, new Box(_x, _y, _width, _height, _name, _group));
+	array_push(_box_arr, new Boxes(_x, _y, _width, _height, _name, _group));
 	var _name_arr = ds_map_find_value(global.boxes_group_name_map, _group);
 	if (!array_contains(_name_arr, _name)) array_push(_name_arr, _name);
 }
 
-function box_draw(_name, _color = c_fuchsia) {
-	var _box_arr = box_get_by_name(_name);
+function boxes_draw(_name, _color = c_fuchsia) {
+	var _box_arr = boxes_get_by_name(_name);
 	draw_set_color(_color);
 	draw_set_alpha(1);
 	for (var _i = 0; _i < array_length(_box_arr); _i++) {
@@ -74,8 +74,8 @@ function box_draw(_name, _color = c_fuchsia) {
  * @param {string} _name_colliding
  */
 function boxes_get_name_collides_name(_name, _name_colliding) {
-	var _arr_checking = box_get_by_name(_name);
-	var _arr_colliding = box_get_by_name(_name_colliding);
+	var _arr_checking = boxes_get_by_name(_name);
+	var _arr_colliding = boxes_get_by_name(_name_colliding);
 	
 	if (keyboard_check_pressed(vk_space)) {
 		show_debug_message("debug");
@@ -106,7 +106,7 @@ function boxes_get_name_collides_name(_name, _name_colliding) {
 	return false;
 }
 
-function box_clear_all() {
+function boxes_clear_all() {
 	ds_map_clear(global.boxes_map);
 	ds_map_clear(global.boxes_group_name_map);
 }
