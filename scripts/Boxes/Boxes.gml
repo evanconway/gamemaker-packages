@@ -27,8 +27,11 @@ function Box(_x, _y, _width, _height, _name, _group) constructor {
 	group = _group;
 }
 
+/**
+ * @param {string} _box_name name of the box to get
+ */
 function box_get_by_name(_box_name) {
-	if (!ds_map_exists(global.boxes_map, _box_name)) show_error("unknown box name referenced", true);
+	if (!ds_map_exists(global.boxes_map, _box_name)) show_error("unknown box name referenced: " + _box_name, true);
 	return ds_map_find_value(global.boxes_map, _box_name);
 }
 
@@ -59,15 +62,48 @@ function box_draw(_name, _color = c_fuchsia) {
 		not normally respect line thickness in regards to resolution in the
 		gui layer.
 		*/
-		// left vertical
 		draw_rectangle(_x, _y, _x, _y + _height, false);
-		// right vertical
 		draw_rectangle(_x + _width, _y, _x + _width, _y + _height, false);
-		// top horizontal
 		draw_rectangle(_x + 1, _y, _x + _width - 1, _y, false);
-		// bottom horizontal
 		draw_rectangle(_x + 1, _y + _height, _x + _width - 1, _y + _height, false);
 	}
+}
+
+/**
+ * @param {string} _name
+ * @param {string} _name_colliding
+ */
+function boxes_get_name_collides_name(_name, _name_colliding) {
+	var _arr_checking = box_get_by_name(_name);
+	var _arr_colliding = box_get_by_name(_name_colliding);
+	
+	if (keyboard_check_pressed(vk_space)) {
+		show_debug_message("debug");
+	}
+	
+	for (var _i = 0; _i < array_length(_arr_checking); _i++) {
+		var _box_checking = _arr_checking[_i];
+		for (var _k = 0; _k < array_length(_arr_colliding); _k++) {
+			var _box_colliding = _arr_colliding[_k];
+			var _bbox_check_left = _box_checking.position_x;
+			var _bbox_collide_left = _box_colliding.position_x;
+			var _bbox_check_right = _box_checking.position_x + _box_checking.width - 1;
+			var _bbox_collide_right = _box_colliding.position_x + _box_colliding.width - 1;
+			var _bbox_check_bottom = _box_checking.position_y + _box_checking.height - 1;
+			var _bbox_collide_bottom = _box_colliding.position_y + _box_colliding.height - 1;
+			var _bbox_check_top = _box_checking.position_y;
+			var _bbox_collide_top = _box_colliding.position_y;
+			
+			if (_bbox_check_left <= _bbox_collide_right &&
+				_bbox_check_right >= _bbox_collide_left &&
+				_bbox_check_top <= _bbox_collide_bottom &&
+				_bbox_check_bottom >= _bbox_collide_top
+			) {
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 function box_clear_all() {
