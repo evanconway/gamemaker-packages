@@ -9,7 +9,7 @@ global.boxes_group_name_map = ds_map_create();
 
 /**
  * @param {real} _x X position of this box.
- * @param {real} _y Y position of this box..
+ * @param {real} _y Y position of this box.
  * @param {real} _width Box width.
  * @param {real} _height Box height.
  * @param {string, real} _name Name of the box. Boxes with the same name are collision checked together.
@@ -27,6 +27,11 @@ function Box(_x, _y, _width, _height, _name, _group) constructor {
 	group = _group;
 }
 
+function box_get_by_name(_box_name) {
+	if (!ds_map_exists(global.boxes_map, _box_name)) show_error("unknown box name referenced", true);
+	return ds_map_find_value(global.boxes_map, _box_name);
+}
+
 function box_place(_x, _y, _width, _height, _name = "box", _group = "default") {
 	if (!ds_map_exists(global.boxes_map, _name)) {
 		ds_map_set(global.boxes_map, _name, []);
@@ -38,17 +43,34 @@ function box_place(_x, _y, _width, _height, _name = "box", _group = "default") {
 	if (!array_contains(_name_arr, _name)) array_push(_name_arr, _name);
 }
 
-function box_draw(_name, _x, _y, _color = c_fuchsia) {
-	if (!ds_map_exists(global.boxes_map, _name)) show_error("unknown box name cannot be drawn", true);
-	var _box_arr = ds_map_find_value(global.boxes_map, _name);
-	draw_set_color(_color)
+function box_draw(_name, _color = c_fuchsia) {
+	var _box_arr = box_get_by_name(_name);
+	draw_set_color(_color);
 	draw_set_alpha(1);
 	for (var _i = 0; _i < array_length(_box_arr); _i++) {
-		var _box = _box_arr[_i];
-		draw_rectangle(_x, _y, _x + _box.width - 1, _y + _box.height - 1, true);
+		var _x = _box_arr[_i].position_x;
+		var _y = _box_arr[_i].position_y;
+		var _width = _box_arr[_i].width - 1;
+		var _height = _box_arr[_i].height - 1;
+		
+		/*
+		We draw rectangles 1 pixel in width to draw the boxes, this ensures
+		that boxes look correct in the draw or gui layer. GameMaker does
+		not normally respect line thickness in regards to resolution in the
+		gui layer.
+		*/
+		// left vertical
+		draw_rectangle(_x, _y, _x, _y + _height, false);
+		// right vertical
+		draw_rectangle(_x + _width, _y, _x + _width, _y + _height, false);
+		// top horizontal
+		draw_rectangle(_x + 1, _y, _x + _width - 1, _y, false);
+		// bottom horizontal
+		draw_rectangle(_x + 1, _y + _height, _x + _width - 1, _y + _height, false);
 	}
 }
 
 function box_clear_all() {
-
+	ds_map_clear(global.boxes_map);
+	ds_map_clear(global.boxes_group_name_map);
 }
